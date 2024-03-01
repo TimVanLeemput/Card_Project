@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
-  m_Name: GreenDragonCard
+  m_Name: Dark Dragon
   m_EditorClassIdentifier: 
-  resourceType: 3
-  cardTitle: Green Forest Dragon
-  allCardSkills: 0300000001000000
-  cardArtSprite: {fileID: 21300000, guid: 8831453a1a0f3874c8aad3e7520de81c, type: 3}
-  cardAttack: 4
-  cardHealth: 7
-  cardResourceCost: 6
-  cardType: 1
+  resourceType: 0
+  cardTitle: 
+  allCardSkills: 
+  cardArtSprite: {fileID: 0}
+  cardAttack: 0
+  cardHealth: 0
+  cardResourceCost: 0
+  cardType: 0

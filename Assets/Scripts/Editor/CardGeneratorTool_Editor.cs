@@ -6,31 +6,53 @@ using UnityEditor;
 using UnityEditor.EditorTools;
 using UnityEditor.TerrainTools;
 using UnityEngine;
+using UnityEngine.UI;
 
-[CustomEditor(typeof(CardInfo))]
+//[CustomEditor(typeof(CardCreator))]
 
-public class CardInfo_Editor : Editor
+public class CardGeneratorTool_Editor : Editor
 {
-    [SerializeField] public event Action<string> onFolderCreated = null;
-    [SerializeField] public event Action<string> onPathCreated = null;
-    [SerializeField] GameObject cardToGenerate = null;
+    public event Action<string> onFolderCreated = null;
+    public event Action<string> onPathCreated = null;
+    
+    GameObject cardToGenerate = null;
+
+    string cardPrefabName = "";
+
+    //GUIStyle labelStyle = new GUIStyle(GUI.skin.label);
+
+    private void OnEnable()
+    {
+        //labelStyle.alignment = TextAnchor.UpperCenter;
+        //labelStyle.normal.textColor = Color.white;
+        
+        //labelStyle.normal
+        //labelStyle.normal.textColor = Color.white;
+    }
+    private void OnDisable()
+    {
+        
+    }
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
+
+        GUILayout.BeginVertical();
+        //GUILayout.Label("Card Prefab File Name", labelStyle); //        classSearchString = EditorGUILayout.TextField("Class:", classSearchString);
+        GUILayout.FlexibleSpace();
+        cardPrefabName = EditorGUILayout.TextField("Card Prefab File Name", cardPrefabName);
+        GUILayout.FlexibleSpace();
+        GUILayout.EndVertical();
+
         bool _prefabFolder = GUILayout.Button("Generate Card");
         if (_prefabFolder)
-        { 
+        {
             CreateFolder("Prefabs", "CardPrefabs");
 
         }
-        cardToGenerate = (GameObject)EditorGUILayout.ObjectField("Card to create", cardToGenerate, typeof(GameObject),true);
+        cardToGenerate = (GameObject)EditorGUILayout.ObjectField("Card to create", cardToGenerate, typeof(GameObject), true);
 
-        bool _generateCard = GUILayout.Button("Generate Card");
-        if (_generateCard)
-        {
-            //GenerateCardPrefab();
-        }
     }
 
 
@@ -40,7 +62,7 @@ public class CardInfo_Editor : Editor
         {
             AssetDatabase.CreateFolder($"Assets", $"{_subFolder}");
         }
-           
+
 
         if (!AssetDatabase.IsValidFolder($"Assets/{_subFolder}/{_folderName}"))
             AssetDatabase.CreateFolder($"Assets/{_subFolder}", $"{_folderName}");
@@ -54,8 +76,8 @@ public class CardInfo_Editor : Editor
     private void GeneratePrefabPath(string _folderName)
     {
         //string _gameObjectPath = $"Assets/GameObjects/{_folderName}/MyGameObject01.gameobject";
-        string _prefabPath = $"Assets/Prefabs/{_folderName}/myCard1.prefab";
-        
+        string _prefabPath = $"Assets/Prefabs/{_folderName}/{cardPrefabName}.prefab";
+
         onPathCreated?.Invoke(_prefabPath);
         onPathCreated += DeleteIfExists;
         onPathCreated += SaveCreatedAssets;
@@ -76,8 +98,11 @@ public class CardInfo_Editor : Editor
                 Debug.Log("Created card");
                 // Create a prefab variant from the GameObject
                 //GameObject prefabVariant = PrefabUtility.SaveAsPrefabAssetAndConnect(cardToGenerate, $"Assets/GameObjects/CardGameObjects/new.prefab", InteractionMode.UserAction);
-                GameObject prefabVariant = PrefabUtility.SaveAsPrefabAssetAndConnect(cardToGenerate, $"{_prefabPath}", InteractionMode.UserAction);
-            }
+                GameObject _cardPrefabVariant = PrefabUtility.SaveAsPrefabAssetAndConnect(cardToGenerate, $"{_prefabPath}", InteractionMode.AutomatedAction);
+                _cardPrefabVariant.name = cardPrefabName;
+                PrefabUtility.InstantiatePrefab(_cardPrefabVariant);
+                PrefabUtility.UnpackPrefabInstance(_cardPrefabVariant,PrefabUnpackMode.Completely,InteractionMode.UserAction);
+            }//
         }
         //    //// Save the card as an asset.
         //    AssetDatabase.CreateAsset(cardToGenerate, _prefabPath);
@@ -87,12 +112,12 @@ public class CardInfo_Editor : Editor
 
     private void GenerateCard()
     {
-        
+
         //// Create the mesh somehow.
         //Mesh mesh = GetMyMesh();
 
-      
-            
+
+
         //// Create a transform somehow, using the mesh that was previously saved.
         //Transform trans = GetMyTransform(mesh);
 

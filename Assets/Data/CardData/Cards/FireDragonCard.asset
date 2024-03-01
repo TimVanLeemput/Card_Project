@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
-  m_Name: BlueDragonCard_Template
+  m_Name: FireDragonCard
   m_EditorClassIdentifier: 
-  resourceType: 3
-  cardTitle: Blue Frost Dragon
+  resourceType: 1
+  cardTitle: Fire Dragon
   allCardSkills: 0100000002000000
-  cardArtSprite: {fileID: 21300000, guid: 6266c24ed9a24344f9c032a0bc987257, type: 3}
+  cardArtSprite: {fileID: 21300000, guid: a28cb0b0940499e4eba33a73ea93ae43, type: 3}
   cardAttack: 5
-  cardHealth: 6
-  cardResourceCost: 5
+  cardHealth: 7
+  cardResourceCost: 6
   cardType: 1

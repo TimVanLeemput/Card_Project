@@ -7,8 +7,11 @@ public class CardResourceIcons_SO : ScriptableObject
 {
 
     [SerializeField] public Sprite fireIconSprite = null;
+    [SerializeField] public Sprite airIconSprite = null;
     [SerializeField] public Sprite waterIconSprite = null;
     [SerializeField] public Sprite earthIconSprite = null;
+    [SerializeField] public Sprite darknessIconSprite = null;
+    [SerializeField] public Sprite lightIconSprite = null;
 
     //public Sprite FireIconSprite
     //{

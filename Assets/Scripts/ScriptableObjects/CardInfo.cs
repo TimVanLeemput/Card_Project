@@ -23,7 +23,7 @@ public enum CardType
     Sorcery,
     Resource
 }
-[CreateAssetMenu(menuName = "CardInfoService")]
+[CreateAssetMenu(menuName = "New Card")]
 public class CardInfo : ScriptableObject
 {
     //Strings
@@ -38,11 +38,7 @@ public class CardInfo : ScriptableObject
 
     [SerializeField] Sprite cardArtSprite = null;
 
-    //[SerializeField] Image imageColor = null;
-    //[SerializeField] Image imageSecondaryColor = null;
 
-    //[SerializeField] Color cardColor;
-    //[SerializeField] Color cardSecondaryColor;
     [Header("Stats")]
 
     [SerializeField] private int cardAttack = 0;
@@ -103,34 +99,7 @@ public class CardInfo : ScriptableObject
         set { cardType = value; }
     }
 
-    //[ContextMenu("SetCardInfo")]
-    //public void SetCardInfo(string _cardName,
-    //        int _cardAttack, int _cardHealth, int _cardResourceCost, ResourceType _resourceType, CardType _cardType)
-    //{
-    //    _cardName = cardTitle;
-    //    _cardType = cardType;
-    //    _cardAttack = cardAttack;
-    //    _cardHealth = cardHealth;
-    //    _cardResourceCost = cardResourceCost;
-    //    _resourceType = resourceType;
-
-    //}
-
-    //public void SetCardArt(Sprite _sprite)
-    //{ 
-
-    //}
-
-    //public void SetCardColors(Color _cardColor, Color _cardSecondaryColor)
-    //{
-
-    //}
-
-    //[ContextMenu("SetCardNameTitle")]
-    //public void SetCardTitleName(string _titleName)
-    //{ 
-
-    //}
+ 
 
 
 

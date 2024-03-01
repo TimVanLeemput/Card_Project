@@ -13,7 +13,9 @@ public class CardCreator : MonoBehaviour
     CardResourceIcon cardResourceIcon = null;
 
     CardName titleCardName = null;
+
     CardSkillDescription cardSkillDescription = null;
+    CardTypeName cardTypeName = null;
     ResourceCostText resourceCostText = null;
     CardAttackAmount cardAttackAmount = null;
     CardHealthAmount cardHealthAmount = null;
@@ -23,7 +25,7 @@ public class CardCreator : MonoBehaviour
     CardTypeBackGroundColor cardTypeBackGroundColor = null;
     CardStatsBackGroundColor cardStatsBackGroundColor = null;
 
-
+    public event Action onInit = null;
     private void Awake()
     {
 
@@ -36,6 +38,7 @@ public class CardCreator : MonoBehaviour
     {
         Invoke(nameof(Init), 0.1f);
         Invoke(nameof(InitCard), 0.11f);
+
     }
 
     public void Init()
@@ -44,6 +47,7 @@ public class CardCreator : MonoBehaviour
         art = GetComponentInChildren<Art>();
 
         titleCardName = GetComponentInChildren<CardName>();
+        cardTypeName = GetComponentInChildren<CardTypeName>();
 
         cardSkillDescription = GetComponentInChildren<CardSkillDescription>();
         resourceCostText = GetComponentInChildren<ResourceCostText>();
@@ -55,9 +59,11 @@ public class CardCreator : MonoBehaviour
         cardTitleBackGroundColor = GetComponentInChildren<CardTitleBackGroundColor>();
         cardTypeBackGroundColor = GetComponentInChildren<CardTypeBackGroundColor>();
         cardStatsBackGroundColor = GetComponentInChildren<CardStatsBackGroundColor>();
+        cardSkillDescription.Tmp.text = string.Empty;
+
     }
 
-    void InitCard()
+    public void InitCard()
     {
         if (cardInfo == null)
         {
@@ -72,16 +78,13 @@ public class CardCreator : MonoBehaviour
         SetSprite(art, cardInfo.CardArtSpriteRef);
         SwitchCardColor();
 
-        titleCardName.SetTitleName(cardInfo.CardTitle);
-        //SetCardTitleName(cardInfo.CardTitle);
-
-
+        //titleCardName.SetTitleName(cardInfo.CardTitle);
+        SetCardTitleName(titleCardName, cardInfo.CardTitle);
         SwitchCardSkills();
+        SwitchCardTypeName();
 
-        //Debug.Log($"cardinfo sprite = {cardInfo.CardArtSpriteRef}");
 
     }
-
     private void SwitchCardSkills()
     {
         int _size = cardInfo.AllCardSkills.Count;
@@ -91,30 +94,56 @@ public class CardCreator : MonoBehaviour
             {
                 case API_CardSkills.CardSkill.Burn:
                     SetCardSkillText(API_CardSkills.burnString);
-                    continue;
+                    break;
                 case API_CardSkills.CardSkill.Fly:
                     SetCardSkillText(API_CardSkills.flyString);
-                    continue;
+                    break;
                 case API_CardSkills.CardSkill.Poison:
                     SetCardSkillText(API_CardSkills.poisonString);
-                    continue;
+                    break;
                 case API_CardSkills.CardSkill.DeathTouch:
                     SetCardSkillText(API_CardSkills.deathTouchString);
-                    continue;
+                    break;
                 case API_CardSkills.CardSkill.LifeTouch:
                     SetCardSkillText(API_CardSkills.lifeTouchString);
-                    continue;
+                    break;
                 case API_CardSkills.CardSkill.FirstAttack:
                     SetCardSkillText(API_CardSkills.firstAttackString);
-                    continue;
+                    break;
                 case API_CardSkills.CardSkill.NONE:
                     SetCardSkillText(API_CardSkills.none);
-                    continue;
+                    break;
 
             }
 
         }
     }
+    private void SwitchCardTypeName()
+    {
+
+        switch (cardInfo.CardTypeRef)
+        {
+            case CardType.Instant:
+                SetCardTitleName(cardTypeName, CardType.Instant.ToString());
+                break;
+            case CardType.Sorcery:
+                SetCardTitleName(cardTypeName, CardType.Sorcery.ToString());
+                break;
+            case CardType.Creature:
+                SetCardTitleName(cardTypeName, CardType.Creature.ToString());
+                break;
+                case CardType.Resource:
+                SetCardTitleName(cardTypeName, CardType.Resource.ToString());
+                break;
+             
+
+            
+        }
+    }
+            
+
+        
+    
     private void SwitchCardColor()
     {
         switch (cardInfo.ResourceTypeRef)
@@ -127,6 +156,8 @@ public class CardCreator : MonoBehaviour
                 break;
             case ResourceType.Air:
                 SetAllCardBackGroundColors(API_CardColors.airColor);
+                SetSprite(cardResourceIcon, allCardResourceIcons.airIconSprite);
+
                 break;
             case ResourceType.Earth:
                 SetAllCardBackGroundColors(API_CardColors.earthColor);
@@ -138,9 +169,13 @@ public class CardCreator : MonoBehaviour
                 break;
             case ResourceType.Darkness:
                 SetAllCardBackGroundColors(API_CardColors.darknessColor);
+                SetSprite(cardResourceIcon, allCardResourceIcons.darknessIconSprite);
+
                 break;
             case ResourceType.Light:
                 SetAllCardBackGroundColors(API_CardColors.lightColor);
+                SetSprite(cardResourceIcon, allCardResourceIcons.lightIconSprite);
+
                 break;
 
 
@@ -163,10 +198,10 @@ public class CardCreator : MonoBehaviour
 
     }
 
-    private void SetCardTitleName(string _title)
+    private void SetCardTitleName(Title _title,string _titleString)
     {
 
-        titleCardName.SetTitleName(cardInfo.CardTitle);
+        _title.SetTitleName(_titleString);
     }
 
     private void SetCardResourceCost(int _cost)
@@ -190,19 +225,17 @@ public class CardCreator : MonoBehaviour
 
     private void SetCardSkillText(string _cardSkill)
     {
-        //string _skillDesc = cardSkillDescription.Tmp.text;
-        //if (_skillDesc == cardSkillDescription.PlaceHolderText)
-        //    _skillDesc = string.Empty;
-        //_skillDesc += "";
-        //_skillDesc += _cardSkill;
+        
         bool _isEmpty = false;
         if (cardSkillDescription.Tmp.text == cardSkillDescription.PlaceHolderText)
-        { 
+        {
             cardSkillDescription.Tmp.text = "";
             _isEmpty = true;
         }
-        cardSkillDescription.Tmp.text += _isEmpty ? "" + _cardSkill : "<br>" + _cardSkill;
-        //cardSkillDescription.Tmp.text += _cardSkill;
+        cardSkillDescription.Tmp.text += _isEmpty ? "" + _cardSkill : "<br>";  // + _cardSkill
+        if (cardSkillDescription.Tmp.text.Contains($"{_cardSkill}")) return;
+        cardSkillDescription.Tmp.text += _cardSkill;
+
 
 
     }
