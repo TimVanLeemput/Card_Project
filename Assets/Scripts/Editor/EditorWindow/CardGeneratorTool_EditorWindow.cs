@@ -17,38 +17,52 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
 {
     public event Action<string> onFolderCreated = null;
     public event Action<string> onPathCreated = null;
+    public string folder = "";
+    public string subFolder = "";
+    GameObject gameObjectToGenerate = null;
 
-    GameObject cardToGenerate = null;
-
-    string cardPrefabName = "";
-    [MenuItem("Tools/Card Generator")]
+    string prefabName = "";
+    [MenuItem("Tools/Prefab Generator")]
     public static void ShowWindow()
     {
-        GetWindow<CardGeneratorTool_EditorWindow>("Card Generator").Show();
+        GetWindow<CardGeneratorTool_EditorWindow>("Prefab Generator").Show();
 
     }
 
     private void OnGUI()
     {
-
+ 
         
         GUILayout.BeginVertical();
 
-        cardPrefabName = EditorGUILayout.TextField("Card Prefab File Name", cardPrefabName);
+        folder = EditorGUILayout.TextField("Folder Name", folder);
         
         GUILayout.EndVertical();
+         
+        GUILayout.BeginVertical();
 
-        bool _createCard = GUILayout.Button("Generate Card");
+        subFolder = EditorGUILayout.TextField("SubFolder Name", subFolder);
+        
+        GUILayout.EndVertical();
+            
+        EditorGUILayout.BeginVertical();
+
+        prefabName = EditorGUILayout.TextField("Prefab File Name", prefabName);
+        
+        EditorGUILayout.EndVertical();
+
+        bool _createCard = GUILayout.Button("Generate Prefab");
         if (_createCard)
         {
-            CreateFolder("Prefabs", "CardPrefabs");
-            Selection.activeGameObject = cardToGenerate;
+            //Prefabs // CardPrefabs instead of folder and subfolder 
+            CreateFolder(folder, subFolder);
+            Selection.activeGameObject = gameObjectToGenerate;
             UnpackToolEditor.UnpackCompletely();
 
 
         }
 
-        cardToGenerate = (GameObject)EditorGUILayout.ObjectField("Card to create", cardToGenerate, typeof(GameObject), true);
+        gameObjectToGenerate = (GameObject)EditorGUILayout.ObjectField("Prefab to create", gameObjectToGenerate, typeof(GameObject), true);
         GUIUtility.ExitGUI();
     }
 
@@ -64,7 +78,7 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
         if (!AssetDatabase.IsValidFolder($"Assets/{_subFolder}/{_folderName}"))
             AssetDatabase.CreateFolder($"Assets/{_subFolder}", $"{_folderName}");
 
-        string _prefabPath = $"Assets/Prefabs/{_folderName}/{cardPrefabName}.prefab";
+        string _prefabPath = $"Assets/Prefabs/{_folderName}/{prefabName}.prefab";
 
         SaveCreatedAssets(_prefabPath);
 
@@ -72,7 +86,7 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
 
     private void GeneratePrefabPath(string _folderName)
     {
-        string _prefabPath = $"Assets/Prefabs/{_folderName}/{cardPrefabName}.prefab";
+        string _prefabPath = $"Assets/Prefabs/{_folderName}/{prefabName}.prefab";
 
         onPathCreated?.Invoke(_prefabPath);
         onPathCreated -= DeleteIfExists;
@@ -88,12 +102,12 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
 
     private void SaveCreatedAssets(string _prefabPath)
     {
-        if (cardToGenerate != null)
+        if (gameObjectToGenerate != null)
         {
-            if (!PrefabUtility.IsPartOfPrefabAsset(cardToGenerate) && !PrefabUtility.IsAnyPrefabInstanceRoot(cardToGenerate))
+            if (!PrefabUtility.IsPartOfPrefabAsset(gameObjectToGenerate) && !PrefabUtility.IsAnyPrefabInstanceRoot(gameObjectToGenerate))
             {
-                Debug.Log("Created card");
-                GameObject _cardPrefabVariant = PrefabUtility.SaveAsPrefabAsset(cardToGenerate, $"{_prefabPath}");
+                Debug.Log("Created prefab");
+                GameObject _cardPrefabVariant = PrefabUtility.SaveAsPrefabAsset(gameObjectToGenerate, $"{_prefabPath}");
                 PrefabUtility.InstantiatePrefab(_cardPrefabVariant);
                 //Selection.activeGameObject = _cardPrefabVariant;
                 UnpackToolEditor.UnpackCompletely();
