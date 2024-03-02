@@ -1,0 +1,15 @@
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\bin\Debug\netstandard2.0\OpenAI_API.deps.json
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\bin\Debug\netstandard2.0\OpenAI_API.dll
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\bin\Debug\netstandard2.0\OpenAI_API.pdb
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\bin\Debug\netstandard2.0\OpenAI_API.xml
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.csproj.AssemblyReference.cache
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.AssemblyInfoInputs.cache
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.AssemblyInfo.cs
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.csproj.CoreCompileInputs.cache
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.sourcelink.json
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.dll
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\refint\OpenAI_API.dll
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.xml
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\OpenAI_API.pdb
+C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\obj\Debug\netstandard2.0\ref\OpenAI_API.dll

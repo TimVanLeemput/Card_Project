@@ -1,0 +1,5 @@
+is_global = true
+build_property.RootNamespace = OpenAI_API
+build_property.ProjectDir = C:\Users\timmo\Downloads\OpenAI-API-dotnet-1.10\OpenAI-API-dotnet-1.10\OpenAI_API\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
