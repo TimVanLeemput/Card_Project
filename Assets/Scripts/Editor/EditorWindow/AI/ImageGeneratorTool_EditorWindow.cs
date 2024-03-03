@@ -259,16 +259,12 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             {
                 Debug.Log("Download successful");
                 var _texture = DownloadHandlerTexture.GetContent(_webRequest);               
-                string path = "Assets/Materials/AI_Mats/2DTextures/Downloaded2DTexture.asset";
-                string _newMatPath = "Assets/Materials/AI_Mats/Materials/GameObjectMaterialDynamic.mat";
+                string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
+                string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
                 path = AssetDatabase.GenerateUniqueAssetPath(path);
                 _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
                 // Save the material as an asset
                 AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
-
-                //string _currentGOMaterialPath = AssetDatabase.GetAssetPath(goImageTarget.GetComponent<MeshRenderer>().sharedMaterial);
-                //Debug.Log($" current game object material path is  = {_currentGOMaterialPath}");
-
           
                 Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
 
