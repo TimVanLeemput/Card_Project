@@ -128,16 +128,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    //private void RawImageTest()
-    //{
-    //    // GameObject to apply image on 
-    //    GUILayout.BeginHorizontal();
-    //    EditorGUI.BeginChangeCheck();
-    //    goImageTarget = (GameObject)EditorGUILayout.ObjectField("RAWIMAGE", goImageTarget, typeof(GameObject), true);
-    //    if (EditorGUI.EndChangeCheck())
-    //    { rawImage = goImageTarget.GetComponent<RawImage>(); }
-    //    GUILayout.EndHorizontal();
-    //}
+
     private void GenerateImageButton()
     {
 
@@ -268,8 +259,8 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             {
                 Debug.Log("Download successful");
                 var _texture = DownloadHandlerTexture.GetContent(_webRequest);               
-                string path = "Assets/Materials/AI_Mats/Downloaded2DTexture.asset";
-                string _newMatPath = "Assets/Materials/AI_Mats/GameObjectMaterialDynamic.mat";
+                string path = "Assets/Materials/AI_Mats/2DTextures/Downloaded2DTexture.asset";
+                string _newMatPath = "Assets/Materials/AI_Mats/Materials/GameObjectMaterialDynamic.mat";
                 path = AssetDatabase.GenerateUniqueAssetPath(path);
                 _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
                 // Save the material as an asset
