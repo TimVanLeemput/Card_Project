@@ -15,7 +15,7 @@ MonoBehaviour:
   resourceType: 4
   cardTitle: Blue Frost Dragon
   allCardSkills: 02000000
-  cardArtSprite: {fileID: 21300000, guid: 6266c24ed9a24344f9c032a0bc987257, type: 3}
+  cardArtSprite: {fileID: 21300000, guid: a5b6ea514c591a147ac66be333f1730e, type: 3}
   cardAttack: 5
   cardHealth: 6
   cardResourceCost: 5

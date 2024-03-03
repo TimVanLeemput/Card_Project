@@ -33,24 +33,20 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
     {
  
         
-        GUILayout.BeginVertical();
-
+       
+        GUILayout.FlexibleSpace();
         folder = EditorGUILayout.TextField("Folder Name", folder);
-        
-        GUILayout.EndVertical();
-         
-        GUILayout.BeginVertical();
+        GUILayout.FlexibleSpace();
+
+        GUILayout.FlexibleSpace();
 
         subFolder = EditorGUILayout.TextField("SubFolder Name", subFolder);
         
-        GUILayout.EndVertical();
-            
-        EditorGUILayout.BeginVertical();
-
+        GUILayout.FlexibleSpace();
+        GUILayout.FlexibleSpace();
         prefabName = EditorGUILayout.TextField("Prefab File Name", prefabName);
-        
-        EditorGUILayout.EndVertical();
 
+        GUILayout.FlexibleSpace();
         bool _createCard = GUILayout.Button("Generate Prefab");
         if (_createCard)
         {

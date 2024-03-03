@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 153806142}
   - component: {fileID: 153806141}
   m_Layer: 5
-  m_Name: Plane
+  m_Name: AI_Art
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -151,7 +151,7 @@ RectTransform:
   m_GameObject: {fileID: 153806139}
   m_LocalRotation: {x: 0, y: 0.70710677, z: -0.70710677, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: -0.010007517}
-  m_LocalScale: {x: 76.33309, y: 73.13, z: 87.29527}
+  m_LocalScale: {x: 77.95001, y: 74.39165, z: 88.80131}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 6992313538283124452}
