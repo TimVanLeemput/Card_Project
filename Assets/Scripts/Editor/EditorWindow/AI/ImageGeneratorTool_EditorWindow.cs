@@ -266,11 +266,10 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 // Save the material as an asset
                 AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
 
-                string _currentGOMaterialPath = AssetDatabase.GetAssetPath(goImageTarget.GetComponent<MeshRenderer>().sharedMaterial);
-                Debug.Log($" current game object material path is  = {_currentGOMaterialPath}");
+                //string _currentGOMaterialPath = AssetDatabase.GetAssetPath(goImageTarget.GetComponent<MeshRenderer>().sharedMaterial);
+                //Debug.Log($" current game object material path is  = {_currentGOMaterialPath}");
 
-                //Material _newGoImageMat = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;   // looks useless
-                //_newGoImageMat.mainTexture = _texture;
+          
                 Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
 
                 AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
@@ -280,10 +279,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 material.mainTexture = _texture;
 
                 AssetDatabase.SaveAssets();
-                // Save
-                //SaveMaterial();
-                //rawImage.texture = _texture;
-                //
+          
             }
             else
             {
