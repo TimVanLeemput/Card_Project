@@ -77,6 +77,7 @@ public class CardInfo : ScriptableObject
 
     public int CardHealthRef
     {
+        
         get { return cardHealth; }
         set { cardHealth = value; }
     }
@@ -98,7 +99,6 @@ public class CardInfo : ScriptableObject
         get { return cardType; }
         set { cardType = value; }
     }
-
  
 
 

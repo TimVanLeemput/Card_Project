@@ -36,14 +36,14 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
        
         GUILayout.FlexibleSpace();
         folder = EditorGUILayout.TextField("Folder Name", folder);
-        GUILayout.FlexibleSpace();
+        //GUILayout.FlexibleSpace();
 
-        GUILayout.FlexibleSpace();
+        //GUILayout.FlexibleSpace();
 
         subFolder = EditorGUILayout.TextField("SubFolder Name", subFolder);
-        
-        GUILayout.FlexibleSpace();
-        GUILayout.FlexibleSpace();
+
+        //GUILayout.FlexibleSpace();
+        //GUILayout.FlexibleSpace();
         prefabName = EditorGUILayout.TextField("Prefab File Name", prefabName);
 
         GUILayout.FlexibleSpace();

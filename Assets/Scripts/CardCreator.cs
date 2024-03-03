@@ -4,12 +4,14 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 using System.Linq;
+
 public class CardCreator : MonoBehaviour
 {
     [SerializeField] CardInfo cardInfo = null;
     [SerializeField] CardResourceIcons_SO allCardResourceIcons = null;
     //Art
     Art art = null;
+    AI_Art aI_Art = null;
     CardResourceIcon cardResourceIcon = null;
 
     CardName titleCardName = null;
@@ -25,26 +27,51 @@ public class CardCreator : MonoBehaviour
     CardTypeBackGroundColor cardTypeBackGroundColor = null;
     CardStatsBackGroundColor cardStatsBackGroundColor = null;
 
-    public event Action onInit = null;
+    public bool canStartUpdate = false;
+    public event Action<bool> onInit = null;
     private void Awake()
     {
 
     }
     void Start()
     {
+        InitEvents();
         LateInit();
     }
+
+    private void InitEvents()
+    {
+        onInit += SetCanLateUpdate;
+    }
+
+    private void SetCanLateUpdate(bool _value)
+    {
+        canStartUpdate = _value;
+    }
+
     private void LateInit()
     {
         Invoke(nameof(Init), 0.1f);
         Invoke(nameof(InitCard), 0.11f);
 
     }
+    private void LateUpdate()
+    {
+        if (!canStartUpdate) return;
+        
+        if (cardInfo.CardArtSpriteRef == null)
+            aI_Art.gameObject.SetActive(true);
+        else if (cardInfo.CardArtSpriteRef != null)
+            aI_Art.gameObject.SetActive(false);
+    }
 
     public void Init()
     {
         artBackGround = GetComponentInChildren<ArtBackGround>();
         art = GetComponentInChildren<Art>();
+        aI_Art = GetComponentInChildren<AI_Art>();
+   
+
 
         titleCardName = GetComponentInChildren<CardName>();
         cardTypeName = GetComponentInChildren<CardTypeName>();
@@ -60,7 +87,7 @@ public class CardCreator : MonoBehaviour
         cardTypeBackGroundColor = GetComponentInChildren<CardTypeBackGroundColor>();
         cardStatsBackGroundColor = GetComponentInChildren<CardStatsBackGroundColor>();
         cardSkillDescription.Tmp.text = string.Empty;
-
+        onInit?.Invoke(true);
     }
 
     public void InitCard()
@@ -132,18 +159,18 @@ public class CardCreator : MonoBehaviour
             case CardType.Creature:
                 SetCardTitleName(cardTypeName, CardType.Creature.ToString());
                 break;
-                case CardType.Resource:
+            case CardType.Resource:
                 SetCardTitleName(cardTypeName, CardType.Resource.ToString());
                 break;
-             
 
-            
+
+
         }
     }
-            
 
-        
-    
+
+
+
     private void SwitchCardColor()
     {
         switch (cardInfo.ResourceTypeRef)
@@ -198,7 +225,7 @@ public class CardCreator : MonoBehaviour
 
     }
 
-    private void SetCardTitleName(Title _title,string _titleString)
+    private void SetCardTitleName(Title _title, string _titleString)
     {
 
         _title.SetTitleName(_titleString);
@@ -225,7 +252,7 @@ public class CardCreator : MonoBehaviour
 
     private void SetCardSkillText(string _cardSkill)
     {
-        
+
         bool _isEmpty = false;
         if (cardSkillDescription.Tmp.text == cardSkillDescription.PlaceHolderText)
         {

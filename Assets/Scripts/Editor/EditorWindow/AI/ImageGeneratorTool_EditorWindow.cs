@@ -182,13 +182,12 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         bool _browserButton = GUILayout.Button("Open in browser");
         if (_browserButton)
             Application.OpenURL(generatedImageURL);
-        //bool _editURL = GUILayout.Button("Manual Edit URL");
-        //if (_editURL)
-        //{
-        //    generatedImageURL = null;
-        //    manualURL = null;
-        //    Debug.Log("edit url");
-        //}
+        bool _editURL = GUILayout.Button("Reset URL");
+        if (_editURL)
+        {
+            generatedImageURL = null;
+            Debug.Log("reset url");
+        }
         GUILayout.EndVertical();
     }
 

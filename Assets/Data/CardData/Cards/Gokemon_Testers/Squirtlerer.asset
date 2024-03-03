@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
+  m_Name: Squirtlerer
+  m_EditorClassIdentifier: 
+  resourceType: 4
+  cardTitle: Squirtlererer
+  allCardSkills: 06000000
+  cardArtSprite: {fileID: 0}
+  cardAttack: 1
+  cardHealth: 3
+  cardResourceCost: 2
+  cardType: 1
