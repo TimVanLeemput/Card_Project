@@ -67,7 +67,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         GeneratedURLField();
         GenerateImageButton();
         ApplyImageToGameObjectButton();
-        SaveMaterialButton();
+        //SaveMaterialButton();
 
     }
     private void Authenticate()
