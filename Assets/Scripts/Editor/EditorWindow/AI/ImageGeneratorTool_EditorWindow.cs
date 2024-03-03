@@ -284,11 +284,8 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         }
 
 
-        Debug.Log($"{_fullPathTextures}");
-        //string _mainPathAIMaterials = FolderCreator.CreateFolder($"Materials/AI_Mats/Materials/{userInputPrompt}");
         string _newTexturePath = $"{_fullPathTextures}/{userInputPrompt}_Downloaded_2D_Texture.asset";
-        //string _newMatPath = $"{_mainPathAIMaterials}/{userInputPrompt}_GameObjectMaterialDynamic.mat";
-        //string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
+
         string _newMatPath = $"{_fullPathMaterials}/{userInputPrompt}_Downloaded_Material.mat";
         _newTexturePath = AssetDatabase.GenerateUniqueAssetPath(_newTexturePath);
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
