@@ -36,21 +36,16 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
        
         GUILayout.FlexibleSpace();
         folder = EditorGUILayout.TextField("Folder Name", folder);
-        //GUILayout.FlexibleSpace();
-
-        //GUILayout.FlexibleSpace();
+     
 
         subFolder = EditorGUILayout.TextField("SubFolder Name", subFolder);
 
-        //GUILayout.FlexibleSpace();
-        //GUILayout.FlexibleSpace();
         prefabName = EditorGUILayout.TextField("Prefab File Name", prefabName);
 
         GUILayout.FlexibleSpace();
         bool _createCard = GUILayout.Button("Generate Prefab");
         if (_createCard)
         {
-            //Prefabs // CardPrefabs instead of folder and subfolder 
             CreateFolder(folder, subFolder);
             Selection.activeGameObject = gameObjectToGenerate;
             UnpackToolEditor.UnpackCompletely();
@@ -63,7 +58,7 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
     }
 
 
-    private void CreateFolder(string _subFolder, string _folderName)
+    public void CreateFolder(string _subFolder, string _folderName)
     {
         if (!AssetDatabase.IsValidFolder($"Assets/{_subFolder}"))
         {

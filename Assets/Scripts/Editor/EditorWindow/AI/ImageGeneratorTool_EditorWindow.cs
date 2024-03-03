@@ -35,7 +35,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     public string userInputPrompt = "";
     public string generatedImageURL = "";
     public string manualURL = "";
-    
+
 
     public bool urlHasBeenGenerated = false;
     public bool openImageInBrowser = false;
@@ -71,10 +71,13 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         //SaveMaterialButton();
 
     }
-    private void Authenticate()
+    private async void Authenticate()
     {
 
-        openAIAPI = new OpenAIAPI("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");
+        openAIAPI = new OpenAIAPI("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");
+        //while (openAIAPI.Auth == null)
+        //{
+        //}
         if (openAIAPI.Auth != null)
         {
 
@@ -221,7 +224,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                     Application.OpenURL(generatedImageURL);
                 GetURLTexture();
             }
-  
+
         }
 
         catch (Exception e)
@@ -242,7 +245,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
             while (!_webRequest.isDone)
             {
-                await Task.Delay(8000); 
+                await Task.Delay(8000);
 
             }
 
@@ -250,7 +253,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             {
                 Debug.Log("Download successful");
                 var _texture = DownloadHandlerTexture.GetContent(_webRequest);
-                onTextureLoadedFromURL?.Invoke(_texture);  
+                onTextureLoadedFromURL?.Invoke(_texture);
             }
             else
             {
@@ -266,14 +269,32 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
     private void SetGameObjectMaterial(Texture2D _texture)
     {
-        FolderCreator.CreateFolder($"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}");
-        string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
-        string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
-        path = AssetDatabase.GenerateUniqueAssetPath(path);
+        string _userInputNoSpace = $"{userInputPrompt.Replace(" ", "_")}";  // Replacing spaces with underscores
+
+        string _fullPathTextures = $"Assets/Materials/AI_Mats/Textures/{_userInputNoSpace}_Textures";
+        if (!AssetDatabase.IsValidFolder(_fullPathTextures))
+        {
+            AssetDatabase.CreateFolder("Assets/Materials/AI_Mats/Textures", $"{_userInputNoSpace}_Textures"); // Doesn't allow numbers in path!
+        }
+
+        string _fullPathMaterials = $"Assets/Materials/AI_Mats/Materials/{_userInputNoSpace}_Material";
+        if (!AssetDatabase.IsValidFolder(_fullPathMaterials))
+        {
+            AssetDatabase.CreateFolder("Assets/Materials/AI_Mats/Materials", $"{_userInputNoSpace}_Material"); // Doesn't allow numbers in path!
+        }
+
+
+        Debug.Log($"{_fullPathTextures}");
+        //string _mainPathAIMaterials = FolderCreator.CreateFolder($"Materials/AI_Mats/Materials/{userInputPrompt}");
+        string _newTexturePath = $"{_fullPathTextures}/{userInputPrompt}_Downloaded_2D_Texture.asset";
+        //string _newMatPath = $"{_mainPathAIMaterials}/{userInputPrompt}_GameObjectMaterialDynamic.mat";
+        //string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
+        string _newMatPath = $"{_fullPathMaterials}/{userInputPrompt}_Downloaded_Material.mat";
+        _newTexturePath = AssetDatabase.GenerateUniqueAssetPath(_newTexturePath);
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
 
         // Save the material as an asset
-        AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
+        AssetDatabase.CreateAsset(_texture, _newTexturePath);   // Creates 2DTextureFile
 
         Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
 

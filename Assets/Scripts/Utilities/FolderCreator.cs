@@ -5,22 +5,7 @@ using UnityEngine;
 
 public static class FolderCreator 
 {
-    //public static void CreateFolder(string _subFolder, string _folderName, string _fileName)
-    //{
-
-    //    if (!AssetDatabase.IsValidFolder($"Assets/{_subFolder}"))
-    //    {
-    //        AssetDatabase.CreateFolder($"Assets", $"{_subFolder}");
-    //    }
-
-
-    //    if (!AssetDatabase.IsValidFolder($"Assets/{_subFolder}/{_folderName}"))
-    //        AssetDatabase.CreateFolder($"Assets/{_subFolder}", $"{_folderName}");
-
-    //    string _prefabPath = $"Assets/Prefabs/{_folderName}/{_fileName}.prefab";
-
-
-    //}
+   
     public static string CreateFolder(params string[] _folderNames)
     {
         string _folderPath = "Assets";
