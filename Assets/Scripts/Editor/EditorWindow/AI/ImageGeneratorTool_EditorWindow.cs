@@ -65,7 +65,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     private void Authenticate()
     {
 
-        openAIAPI = new OpenAIAPI("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");
+        openAIAPI = new OpenAIAPI("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");
         if (openAIAPI.Auth != null)
         {
 
