@@ -39,6 +39,9 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     public bool urlHasBeenGenerated = false;
     public bool openImageInBrowser = false;
 
+    //Events
+    public event Action<Texture2D> onTextureLoadedFromURL = null;
+
 
     // Styles
 
@@ -47,6 +50,11 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     {
         GetWindow<ImageGeneratorTool_EditorWindow>("AI Image Generator").Show();
 
+    }
+
+    private void OnEnable()
+    {
+        onTextureLoadedFromURL += SetGameObjectMaterial;
     }
 
     private void OnGUI()
@@ -258,23 +266,25 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             if (_webRequest.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log("Download successful");
-                var _texture = DownloadHandlerTexture.GetContent(_webRequest);               
-                string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
-                string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
-                path = AssetDatabase.GenerateUniqueAssetPath(path);
-                _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
-                // Save the material as an asset
-                AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
+                var _texture = DownloadHandlerTexture.GetContent(_webRequest);
+                onTextureLoadedFromURL?.Invoke( _texture );
+
+                //string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
+                //string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
+                //path = AssetDatabase.GenerateUniqueAssetPath(path);
+                //_newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
+                //// Save the material as an asset
+                //AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
           
-                Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+                //Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
 
-                AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
-                goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
-                goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
-                material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
-                material.mainTexture = _texture;
+                //AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
+                //goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
+                //goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
+                //material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
+                //material.mainTexture = _texture;
 
-                AssetDatabase.SaveAssets();
+                //AssetDatabase.SaveAssets();
           
             }
             else
@@ -288,6 +298,26 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         }
 
 
+    }
+
+    private void SetGameObjectMaterial(Texture2D _texture)
+    {
+        string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
+        string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
+        path = AssetDatabase.GenerateUniqueAssetPath(path);
+        _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
+        // Save the material as an asset
+        AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
+
+        Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+
+        AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
+        goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
+        goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
+        material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
+        material.mainTexture = _texture;
+
+        AssetDatabase.SaveAssets();
     }
 
     private void SaveMaterialButton()
