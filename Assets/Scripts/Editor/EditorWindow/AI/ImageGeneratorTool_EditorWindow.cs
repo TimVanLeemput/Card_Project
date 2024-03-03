@@ -75,9 +75,12 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     {
 
         openAIAPI = new OpenAIAPI("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");
-        //while (openAIAPI.Auth == null)
-        //{
-        //}
+       
+
+        while (openAIAPI.Auth == null)
+        {
+            await Task.Delay(5000);
+        }
         if (openAIAPI.Auth != null)
         {
 
