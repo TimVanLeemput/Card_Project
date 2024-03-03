@@ -34,6 +34,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     RawImage rawImage = null;
     public string userInputPrompt = "";
     public string generatedImageURL = "";
+    public string manualURL = "";
     
 
     public bool urlHasBeenGenerated = false;
@@ -73,7 +74,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     private void Authenticate()
     {
 
-        openAIAPI = new OpenAIAPI("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");
+        openAIAPI = new OpenAIAPI("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");
         if (openAIAPI.Auth != null)
         {
 
@@ -125,14 +126,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     {
         // GameObject to apply image on 
         GUILayout.BeginHorizontal();
-        EditorGUI.BeginChangeCheck();
         goImageTarget = (GameObject)EditorGUILayout.ObjectField("GameObject to place Image on", goImageTarget, typeof(GameObject), true);
-        if (EditorGUI.EndChangeCheck())
-        {
-
-            //material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
-            //Debug.Log($"material is = > {material}");
-        }
         GUILayout.EndHorizontal();
     }
 
@@ -145,27 +139,6 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         if (_generateImageButton)
         {
             CreateImageURL();
-            //string _url = "https://tinyurl.com/y92xdw8z";
-            //string _url1 = "https://tinyurl.com/y92xdw8z";
-            //float _rand = UnityEngine.Random.Range(1, 3);
-            //switch (_rand)
-            //{
-            //    case 1:
-            //        generatedImageURL = _url;
-            //        break;
-            //    case 2:
-            //        generatedImageURL = _url1;
-            //        break;
-            //}
-            //GetURLTexture();
-
-            // TO DO 
-            // Grab image from URL
-            // Apply to GameObject
-            // Save GameObject as Prefab
-
-
-
         }
         GUILayout.EndHorizontal();
     }
@@ -178,25 +151,45 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     }
     private void GeneratedURLField()
     {
-
+        GUIStyle _labelStyle = new GUIStyle(EditorStyles.helpBox);
+        GUILayout.Label("generated URL", _labelStyle);
         Space();
         GUILayout.BeginHorizontal();
 
-        GUILayout.Label("generated URL");
+        GUILayout.BeginVertical();
         OpenInBrowserButton();
+
+
+        GUILayout.EndHorizontal();
+
+
+
         if (generatedImageURL != null)
             GUILayout.TextArea(generatedImageURL, 200);
 
-        GUILayout.TextArea("", 200);
-        GUILayout.EndHorizontal();
+        if (generatedImageURL == null)
+            GUILayout.TextArea("", 200);
+
+        GUILayout.EndVertical();
         Space();
+
+
     }
 
     private void OpenInBrowserButton()
     {
+        GUILayout.BeginVertical();
         bool _browserButton = GUILayout.Button("Open in browser");
         if (_browserButton)
             Application.OpenURL(generatedImageURL);
+        //bool _editURL = GUILayout.Button("Manual Edit URL");
+        //if (_editURL)
+        //{
+        //    generatedImageURL = null;
+        //    manualURL = null;
+        //    Debug.Log("edit url");
+        //}
+        GUILayout.EndVertical();
     }
 
     public async void CreateImageURL()
@@ -211,9 +204,6 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 Debug.Log("Null result");
                 return;
             }
-
-            // Access the result after awaiting the task
-
 
             while (!_result.IsCompleted)
             {
@@ -231,11 +221,8 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 if (openImageInBrowser)  //Optional opening 
                     Application.OpenURL(generatedImageURL);
                 GetURLTexture();
-
-
             }
-            //Application.OpenURL(generatedImageURL);   // open on generation
-            return;
+  
         }
 
         catch (Exception e)
@@ -246,7 +233,6 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     }
 
 
-
     public async void GetURLTexture()
     {
         if (generatedImageURL == null) return;
@@ -255,37 +241,17 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             UnityWebRequest _webRequest = UnityWebRequestTexture.GetTexture(generatedImageURL);
             _webRequest.SendWebRequest();
 
-            //Wait until the web request is complete
             while (!_webRequest.isDone)
             {
-                await Task.Delay(8000); // Delay to avoid busy waiting
+                await Task.Delay(8000); 
 
             }
 
-            // Check if the web request was successful
             if (_webRequest.result == UnityWebRequest.Result.Success)
             {
                 Debug.Log("Download successful");
                 var _texture = DownloadHandlerTexture.GetContent(_webRequest);
-                onTextureLoadedFromURL?.Invoke( _texture );
-
-                //string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
-                //string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
-                //path = AssetDatabase.GenerateUniqueAssetPath(path);
-                //_newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
-                //// Save the material as an asset
-                //AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
-          
-                //Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-
-                //AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
-                //goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
-                //goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
-                //material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
-                //material.mainTexture = _texture;
-
-                //AssetDatabase.SaveAssets();
-          
+                onTextureLoadedFromURL?.Invoke(_texture);  
             }
             else
             {
@@ -297,15 +263,16 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             Debug.Log($"Error loading website image: {e.Message}");
         }
 
-
     }
 
     private void SetGameObjectMaterial(Texture2D _texture)
     {
+        FolderCreator.CreateFolder($"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}");
         string path = $"Assets/Materials/AI_Mats/2DTextures/{userInputPrompt}_Downloaded2DTexture.asset";
         string _newMatPath = $"Assets/Materials/AI_Mats/Materials/{userInputPrompt}_GameObjectMaterialDynamic.mat";
         path = AssetDatabase.GenerateUniqueAssetPath(path);
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
+
         // Save the material as an asset
         AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
 
