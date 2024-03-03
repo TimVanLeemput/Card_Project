@@ -16,6 +16,8 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 using System.Net;
 using UnityEngine.Events;
+using UnityEngine.Rendering;
+using NUnit.Framework;
 
 
 public class ImageGeneratorTool_EditorWindow : EditorWindow
@@ -26,19 +28,19 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     //IImageGenerationEndpoint iImageGenerationEndpoint = null;
     ImageGenerationEndpoint imageGenerationEndpoint = null;
     ImageResult imageResult = null;
-    GameObject goImageTarget = null;
-    Material material = null;
+    [SerializeField] GameObject goImageTarget = null;
+    [SerializeField] Material material = null;
+    [SerializeField] Shader shader = null;
     RawImage rawImage = null;
     public string userInputPrompt = "";
     public string generatedImageURL = "";
+    
+
     public bool urlHasBeenGenerated = false;
+    public bool openImageInBrowser = false;
 
-    public bool OpenAIAPISet = false;
-
-    public UnityEvent onURLgenerated = null;
 
     // Styles
-
 
     [MenuItem("Tools/AI Image Generator")]
     public static void ShowWindow()
@@ -56,7 +58,32 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         //RawImageTest();
         GeneratedURLField();
         GenerateImageButton();
+        ApplyImageToGameObjectButton();
+        SaveMaterialButton();
 
+    }
+    private void Authenticate()
+    {
+
+        openAIAPI = new OpenAIAPI("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");
+        if (openAIAPI.Auth != null)
+        {
+
+            Debug.Log("Authentication to OpenAI successfull");
+            Debug.Log($"user input is {userInputPrompt}");
+
+        }
+    }
+
+    private void ApplyImageToGameObjectButton()
+    {
+        GUILayout.BeginHorizontal();
+        bool _applyButton = GUILayout.Button("Apply image");
+        if (_applyButton)
+        {
+            GetURLTexture();
+        }
+        GUILayout.EndHorizontal();
     }
 
     private void AuthenticateButton()
@@ -66,14 +93,13 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         if (_loginButton)
         {
             Authenticate();
+            generatedImageURL = null;
         }
         GUILayout.EndHorizontal();
     }
     private void OnURLGeneratedField()
-    { 
-        
-    
-    
+    {
+
         GUILayout.BeginHorizontal();
         GUILayout.Label("Prompt");
         userInputPrompt = GUILayout.TextField(userInputPrompt, 200);
@@ -94,20 +120,24 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         EditorGUI.BeginChangeCheck();
         goImageTarget = (GameObject)EditorGUILayout.ObjectField("GameObject to place Image on", goImageTarget, typeof(GameObject), true);
         if (EditorGUI.EndChangeCheck())
-        { material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial; }
+        {
+
+            //material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
+            //Debug.Log($"material is = > {material}");
+        }
         GUILayout.EndHorizontal();
     }
 
-    private void RawImageTest()
-    {
-        // GameObject to apply image on 
-        GUILayout.BeginHorizontal();
-        EditorGUI.BeginChangeCheck();
-        goImageTarget = (GameObject)EditorGUILayout.ObjectField("RAWIMAGE", goImageTarget, typeof(GameObject), true);
-        if (EditorGUI.EndChangeCheck())
-        { rawImage = goImageTarget.GetComponent<RawImage>(); }
-        GUILayout.EndHorizontal();
-    }
+    //private void RawImageTest()
+    //{
+    //    // GameObject to apply image on 
+    //    GUILayout.BeginHorizontal();
+    //    EditorGUI.BeginChangeCheck();
+    //    goImageTarget = (GameObject)EditorGUILayout.ObjectField("RAWIMAGE", goImageTarget, typeof(GameObject), true);
+    //    if (EditorGUI.EndChangeCheck())
+    //    { rawImage = goImageTarget.GetComponent<RawImage>(); }
+    //    GUILayout.EndHorizontal();
+    //}
     private void GenerateImageButton()
     {
 
@@ -115,7 +145,6 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         bool _generateImageButton = GUILayout.Button("Generate image");
         if (_generateImageButton)
         {
-            //generatedImageURL = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-O3yZZz930FbEkusOa3wvE4Dz/user-0p8tN5py9OatcO60UhF8lK7B/img-YPPAivQtaZNBo3UFjz7szk8D.png?st=2024-03-02T21%3A15%3A15Z&se=2024-03-02T23%3A15%3A15Z&sp=r&sv=2021-08-06&sr=b&rscd=inline&rsct=image/png&skoid=6aaadede-4fb3-4698-a8f6-684d7786b067&sktid=a48cca56-e6da-484e-a814-9c849652bcb3&skt=2024-03-02T18%3A24%3A19Z&ske=2024-03-03T18%3A24%3A19Z&sks=b&skv=2021-08-06&sig=wyEb5i64eXpwUlNgUhUhf8zy/GmNHVQQHgQUPY/Zqcg%3D";
             CreateImageURL();
             //string _url = "https://tinyurl.com/y92xdw8z";
             //string _url1 = "https://tinyurl.com/y92xdw8z";
@@ -129,8 +158,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             //        generatedImageURL = _url1;
             //        break;
             //}
-           // generatedImageURL = "https://oaidalleapiprodscus.blob.core.windows.net/private/org-O3yZZz930FbEkusOa3wvE4Dz/user-0p8tN5py9OatcO60UhF8lK7B/img-jWdfKgUP1o7c5sLrLc0o3wT5.png?st=2024-03-02T21%3A07%3A29Z&se=2024-03-02T23%3A07%";
-            GetURLTexture();
+            //GetURLTexture();
 
             // TO DO 
             // Grab image from URL
@@ -142,41 +170,6 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
     }
-    public async void GetURLTexture()
-    {
-        if (generatedImageURL == null) return;
-        try
-        {
-            UnityWebRequest _webRequest = UnityWebRequestTexture.GetTexture(generatedImageURL);
-            _webRequest.SendWebRequest();
-
-            //Wait until the web request is complete
-            while (!_webRequest.isDone)
-            {
-                await Task.Delay(8000); // Delay to avoid busy waiting
-            }
-
-            // Check if the web request was successful
-            if (_webRequest.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Download successful");
-                var _texture = DownloadHandlerTexture.GetContent(_webRequest);
-                material.mainTexture = _texture;
-                //rawImage.texture = _texture;
-            }
-            else
-            {
-                Debug.Log($"Failed to load web request: {_webRequest.error}");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log($"Error loading website image: {e.Message}");
-        }
-
-
-    }
-
 
     private void Space(float _value = 20)
     {
@@ -192,9 +185,10 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
         GUILayout.Label("generated URL");
         OpenInBrowserButton();
-       
+        if (generatedImageURL != null)
             GUILayout.TextArea(generatedImageURL, 200);
-        
+
+        GUILayout.TextArea("", 200);
         GUILayout.EndHorizontal();
         Space();
     }
@@ -234,8 +228,10 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 if (_imageUrl == null) return;
                 Debug.Log($"Image URL: {_imageUrl}");
                 generatedImageURL = _imageUrl;
-                Application.OpenURL(generatedImageURL);
-                onURLgenerated?.Invoke();
+
+                if (openImageInBrowser)  //Optional opening 
+                    Application.OpenURL(generatedImageURL);
+                GetURLTexture();
 
 
             }
@@ -252,16 +248,78 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
 
 
-    private void Authenticate()
+    public async void GetURLTexture()
     {
-
-        openAIAPI = new OpenAIAPI("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");
-        if (openAIAPI.Auth != null)
+        if (generatedImageURL == null) return;
+        try
         {
+            UnityWebRequest _webRequest = UnityWebRequestTexture.GetTexture(generatedImageURL);
+            _webRequest.SendWebRequest();
 
-            Debug.Log("Authentication to OpenAI successfull");
-            Debug.Log($"user input is {userInputPrompt}");
+            //Wait until the web request is complete
+            while (!_webRequest.isDone)
+            {
+                await Task.Delay(8000); // Delay to avoid busy waiting
+
+            }
+
+            // Check if the web request was successful
+            if (_webRequest.result == UnityWebRequest.Result.Success)
+            {
+                Debug.Log("Download successful");
+                var _texture = DownloadHandlerTexture.GetContent(_webRequest);               
+                string path = "Assets/Materials/AI_Mats/Downloaded2DTexture.asset";
+                string _newMatPath = "Assets/Materials/AI_Mats/GameObjectMaterialDynamic.mat";
+                path = AssetDatabase.GenerateUniqueAssetPath(path);
+                _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
+                // Save the material as an asset
+                AssetDatabase.CreateAsset(_texture, path);   // Creates 2DTextureFile
+
+                string _currentGOMaterialPath = AssetDatabase.GetAssetPath(goImageTarget.GetComponent<MeshRenderer>().sharedMaterial);
+                Debug.Log($" current game object material path is  = {_currentGOMaterialPath}");
+
+                //Material _newGoImageMat = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;   // looks useless
+                //_newGoImageMat.mainTexture = _texture;
+                Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
+
+                AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
+                goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
+                goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
+                material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
+                material.mainTexture = _texture;
+
+                AssetDatabase.SaveAssets();
+                // Save
+                //SaveMaterial();
+                //rawImage.texture = _texture;
+                //
+            }
+            else
+            {
+                Debug.Log($"Failed to load web request: {_webRequest.error}");
+            }
         }
+        catch (Exception e)
+        {
+            Debug.Log($"Error loading website image: {e.Message}");
+        }
+
+
     }
 
+    private void SaveMaterialButton()
+    {
+        GUILayout.BeginHorizontal();
+        bool _loginButton = GUILayout.Button("Save material");
+        if (_loginButton)
+        {
+            SaveMaterial();
+        }
+        GUILayout.EndHorizontal();
+    }
+    private void SaveMaterial()
+    {
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+    }
 }
