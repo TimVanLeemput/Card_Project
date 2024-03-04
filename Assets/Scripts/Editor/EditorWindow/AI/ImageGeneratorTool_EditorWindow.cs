@@ -19,6 +19,8 @@ using UnityEngine.Events;
 using UnityEngine.Rendering;
 using NUnit.Framework;
 using Unity.VisualScripting.YamlDotNet.Core.Tokens;
+using OpenAI_API.Models;
+using Unity.Plastic.Antlr3.Runtime;
 
 
 public class ImageGeneratorTool_EditorWindow : EditorWindow
@@ -74,6 +76,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         onPasswordEntered += Authenticate;
         onRevealPasswordButtonClicked += SetCanRevealPassword;
         Init2DTextures();
+        
 
     }
 
@@ -90,7 +93,8 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 ImageGeneratorTab();
                 break;
             case 1:
-                APIKeyField();                
+                APIKeyField();
+                GetModel();
                 break;
             case 2:
                 ImagePromptField();
@@ -133,6 +137,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             else
             {
                 Debug.LogError("Invalid API key provided");
+                FailedAuthentication_EditorWindow.ShowWindow();
                 // OpenAI_Login_Pop_Up_EditorWindow.ShowWindow();
                 tabs = 1;
             }
@@ -140,6 +145,8 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         catch (Exception ex)
         {
             Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
+            FailedAuthentication_EditorWindow.ShowWindow();
+
         }
     }
     private async void Authenticate(string _apiKey)
@@ -178,7 +185,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         if (!canRevealPassword)
         {
             tempKey = GUILayout.PasswordField(API_KEY, '*');
-            Debug.Log($"{tempKey}");
+                Debug.Log($"{tempKey}");
         }
         else tempKey = GUILayout.TextField(API_KEY);
 
@@ -198,6 +205,16 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         AuthenticateButton();
 
         GUILayout.EndHorizontal();
+    }
+
+    private async void GetModel()
+    {
+        //Task<List<Model>> _models =   await openAIAPI.Models.GetModelsAsync();
+        Model _ada = Model.AdaText;
+        //await openAIAPI.Models.GetModelsAsync();
+        Debug.Log($"Model path is = {_ada}");
+        Debug.Log($"Current model is = {_ada.ModelID}");
+        //Debug.Log($"{await openAIAPI.Models.GetModelsAsync()}");
     }
     private void RevealPasswordButton()
     {
@@ -330,6 +347,17 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
     public async void CreateImageURL()
     {
+        if (openAIAPI == null)
+        {
+            Debug.Log("Failed authentication, please login");
+            FailedAuthentication_EditorWindow.ShowWindow();
+            tabs = 1;
+            return;
+        }
+        bool _checkAuth = await openAIAPI.Auth.ValidateAPIKey();
+        if (_checkAuth)
+        { tabs = 0; }
+        else tabs = 1;
         try
         {
             Task<ImageResult> _result = openAIAPI.ImageGenerations.CreateImageAsync(userInputPrompt);  // This is using the prompt
@@ -401,8 +429,35 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
     }
 
+    private void CreateDefaultFolders()
+    {
+        if (!AssetDatabase.IsValidFolder("Assets/Materials"))
+        {
+            AssetDatabase.CreateFolder("Assets","Materials"); 
+        }
+
+        if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats"))
+        {
+            AssetDatabase.CreateFolder("Assets/Materials", "AI_Mats"); 
+        }
+
+        if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats/Textures"))
+        {
+            AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Textures");
+        }
+
+        if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats/Materials"))
+        {
+            AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Materials");
+        }
+
+
+
+    }
     private void SetGameObjectMaterial(Texture2D _texture)
     {
+
+        CreateDefaultFolders();
         string _userInputNoSpace = $"{userInputPrompt.Replace(" ", "_")}";  // Replacing spaces with underscores
 
         string _fullPathTextures = $"Assets/Materials/AI_Mats/Textures/{_userInputNoSpace}_Textures";

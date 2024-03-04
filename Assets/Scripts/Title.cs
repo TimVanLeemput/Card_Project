@@ -10,7 +10,7 @@ public class Title : MonoBehaviour
     protected TextMeshProUGUI tmp = null;
     protected string tmpString = null;
 
-    public event Action<TextMeshProUGUI> onInit = null;
+    public event Action<TextMeshProUGUI>onInit = null;
     //
     public virtual TextMeshProUGUI Tmp
     {
