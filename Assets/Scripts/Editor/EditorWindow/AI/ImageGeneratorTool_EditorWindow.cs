@@ -18,6 +18,7 @@ using System.Net;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
 using NUnit.Framework;
+using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 
 
 public class ImageGeneratorTool_EditorWindow : EditorWindow
@@ -32,36 +33,81 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     [SerializeField] Material material = null;
     [SerializeField] Shader shader = null;
     RawImage rawImage = null;
+
     public string userInputPrompt = "";
     public string generatedImageURL = "";
     public string manualURL = "";
-
+    public string API_KEY = "";
+    public string tempKey = "";
 
     public bool urlHasBeenGenerated = false;
     public bool openImageInBrowser = false;
+    public bool canRevealPassword = false;
+
+    //2D icons
+    private Texture2D revealPassWordIcon = null;
+
 
     //Events
     public event Action<Texture2D> onTextureLoadedFromURL = null;
+    public event Action<string> onPasswordEntered = null;
+    public event Action<bool> onRevealPasswordButtonClicked = null;
+    
+    //Tabs
+    public int tabs = 3;
+    string[] tabSelection = new string[] { "Image Generation", "Credentials", "Chat" };
 
 
     // Styles
 
-    [MenuItem("Tools/AI Image Generator")]
+    [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
     {
-        GetWindow<ImageGeneratorTool_EditorWindow>("AI Image Generator").Show();
-
+        //GetWindow<ImageGeneratorTool_EditorWindow>("AI Image Generator").Show();
+        ImageGeneratorTool_EditorWindow t = GetWindow<ImageGeneratorTool_EditorWindow>(typeof(ImageGeneratorTool_EditorWindow));
     }
+
 
     private void OnEnable()
     {
         onTextureLoadedFromURL += SetGameObjectMaterial;
+        onPasswordEntered += Authenticate;
+        onRevealPasswordButtonClicked += SetCanRevealPassword;
+        Init2DTextures();
+
     }
+
 
     private void OnGUI()
     {
+        tabs = GUILayout.Toolbar(tabs, tabSelection);
+        Space();
 
-        AuthenticateButton();
+
+        switch (tabs)
+        {
+            case 0:
+                ImageGeneratorTab();
+                break;
+            case 1:
+                APIKeyField();                
+                break;
+            case 2:
+                ImagePromptField();
+                break;
+
+        }
+
+    }
+    private void Init2DTextures()
+    {
+        // Load the eye icon texture
+        revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white"); 
+    }
+
+    private void ImageGeneratorTab()
+    {
+        //AuthenticateButton();
         ImagePromptField();
         GameObjectToApplyImageOn();
         //RawImageTest();
@@ -69,28 +115,112 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         GenerateImageButton();
         ApplyImageToGameObjectButton();
         //SaveMaterialButton();
-
     }
     private async void Authenticate()
     {
-
-        //openAIAPI = new OpenAIAPI("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");
+        // openAIAPI = new OpenAIAPI("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");
         openAIAPI = new OpenAIAPI(API_OpenAI_Authentication.OPENAI_API_KEY);
-       
+        Debug.Log("Authenticate called");
 
-        while (openAIAPI.Auth == null)
+        try
         {
-            await Task.Delay(5000);
+            bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();
+            if (isValidKey)
+            {
+                Debug.Log("Authentication to OpenAI successful");
+                tabs = 0;
+            }
+            else
+            {
+                Debug.LogError("Invalid API key provided");
+                // OpenAI_Login_Pop_Up_EditorWindow.ShowWindow();
+                tabs = 1;
+            }
         }
-        if (openAIAPI.Auth != null)
+        catch (Exception ex)
         {
+            Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
+        }
+    }
+    private async void Authenticate(string _apiKey)
+    {
+        openAIAPI = new OpenAIAPI(_apiKey);
+        Debug.Log("Authenticate with event called");
 
-            Debug.Log("Authentication to OpenAI successfull");
-            Debug.Log($"user input is {userInputPrompt}");
-
+        try
+        {
+            bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();
+            if (isValidKey)
+            {
+                Debug.Log("Authentication to OpenAI successful");
+                tabs = 0;
+                Repaint();
+            }
+            else
+            {
+                Debug.LogError("Invalid API key provided");
+                // OpenAI_Login_Pop_Up_EditorWindow.ShowWindow();
+                tabs = 1;
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
         }
     }
 
+    private void APIKeyField()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("OpenAI API Key :");
+        //API_KEY = GUILayout.TextField(API_KEY, 400);
+        EditorGUI.BeginChangeCheck();
+        if (!canRevealPassword)
+        {
+            tempKey = GUILayout.PasswordField(API_KEY, '*');
+            Debug.Log($"{tempKey}");
+        }
+        else tempKey = GUILayout.TextField(API_KEY);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            API_KEY = tempKey;
+        }
+        if (Event.current != null && Event.current.isKey)
+        {
+            if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
+            {
+                onPasswordEntered?.Invoke(tempKey);
+                Event.current.Use(); // Consume the event to prevent other actions
+            }
+        }
+        RevealPasswordButton();
+        AuthenticateButton();
+
+        GUILayout.EndHorizontal();
+    }
+    private void RevealPasswordButton()
+    {
+        GUILayout.BeginHorizontal();
+        GUIStyle _style = new GUIStyle(GUI.skin.button);
+        _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
+        _style.fixedWidth = 15; // Set a fixed width for the button
+        _style.fixedHeight = 20; // Set a fixed height for the button
+        _style.normal.background = revealPassWordIcon;
+        _style.active.background = revealPassWordIcon;
+        
+        bool _revealPasswordButton = GUILayout.Button(revealPassWordIcon, _style);
+        if (_revealPasswordButton)
+        {
+                onRevealPasswordButtonClicked?.Invoke(!canRevealPassword);
+        }
+        GUILayout.EndHorizontal();
+    }
+
+    private void SetCanRevealPassword(bool _value)
+    {
+        canRevealPassword = _value;
+    }
     private void ApplyImageToGameObjectButton()
     {
         GUILayout.BeginHorizontal();
