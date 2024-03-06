@@ -1,35 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
+using NUnit.Framework;
+using OpenAI_API;
+using OpenAI_API.Chat;
+using OpenAI_API.Images;
+using OpenAI_API.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
 using UnityEditor;
 using UnityEngine;
-using OpenAI_API.Images;
-using System.Threading.Tasks;
-using UnityEngine.UIElements;
-using UnityEditor.UIElements;
-using OpenAI_API;
-using System;
-using static System.Net.WebRequestMethods;
-using TMPro;
 using UnityEngine.Networking;
 using UnityEngine.UI;
-using System.Net;
-using UnityEngine.Events;
-using UnityEngine.Rendering;
-using OpenAI_API.Models;
-using OpenAI_API.Chat;
-using Unity.VisualScripting;
 
 public class ImageGeneratorTool_EditorWindow : EditorWindow
 {
-    OpenAIAPI openAIAPI = null;
+    [SerializeField]OpenAIAPI openAIAPI = null;
+  
+    [SerializeField] GameObject goImageTarget = null;
+    [SerializeField] Material material = null;
+    [SerializeField] Shader shader = null;
+    [SerializeField] CardInfo cardInfo = null;
+    [SerializeField] CardCreator cardCreator = null;
 
     ImageGenerationRequest imageGeneration = null;
     //IImageGenerationEndpoint iImageGenerationEndpoint = null;
     ImageGenerationEndpoint imageGenerationEndpoint = null;
     ImageResult imageResult = null;
-    [SerializeField] GameObject goImageTarget = null;
-    [SerializeField] Material material = null;
-    [SerializeField] Shader shader = null;
     RawImage rawImage = null;
 
     public string userInputPrompt = "";
@@ -50,13 +45,18 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     public event Action<Texture2D> onTextureLoadedFromURL = null;
     public event Action<string> onPasswordEntered = null;
     public event Action<bool> onRevealPasswordButtonClicked = null;
+    // Chat events
+    public event Action<string> onFlavourTextGenerated = null;
     
     //Tabs
     public int tabs = 3;
     string[] tabSelection = new string[] { "Image Generation", "Credentials", "Chat" };
 
     // AI Properties
-    [Range(0.4f, 1.6f)] public float temperature = 0.8f;
+    [UnityEngine.Range(0.4f, 1.6f)] public float temperature = 0.8f;
+    public string flavorTextStyle = "";
+    public string currentFlavorText = "";
+    public string[] allFlavorTexts = null;
 
 
     //
@@ -92,6 +92,8 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     {
         onTextureLoadedFromURL += SetGameObjectMaterial;
         onPasswordEntered += Authenticate;
+        onFlavourTextGenerated += SetFlavorText;
+
     }
 
 
@@ -112,6 +114,9 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             case 2:
                 ChatTestField();
                 AI_TemperatureSlider();
+                CardInfoField();
+                FlavorTextStyleField();
+                FlavorTextField();
                 break;
 
         }
@@ -528,7 +533,6 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         if (openAIAPI == null)
         {
             Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
-            Debug.Log("chat failed to find api");
             //tabs = 1;
         return;
         }
@@ -578,19 +582,31 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
             "Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
             " type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
             " and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
-            " incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Give the result within quotes and no other information, " +
-            "no flavor in the text and no just name of the card/type ");
+            " incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Do not limit yourself" +
+            "to only these types of flavor texts. Give the result within quotes and NO other information, " +
+            "NO flavor in the text and NOT just name of the card/type ");
 
-        string _cardName = "Purge the ancients";    // return string from cardInfo.cardTitle 
-        string _cardType = "ritual"; // same for card type description 
-        string _cardResourceType = "light";
-        string _flavorTextType = "spell";
+        if (!cardInfo)
+        { 
+        string _cardNameTest = "TEST";    // return string from cardInfo.cardTitle 
+        string _cardTypeTest = "TEST"; // same for card type description 
+        string _cardResourceTypeTest = "TEST";
+        string _flavorTextTypeTest = "TEST";
+        _chat.AppendUserInput($"Flavor text failed, defaulting to : {_cardNameTest},{_cardTypeTest},{_cardResourceTypeTest},{_flavorTextTypeTest}");
+        return;
+        }
+
+        string _cardName = cardInfo.CardTitle;    // return string from cardInfo.cardTitle 
+        string _cardType = cardInfo.CardTypeRef.ToString(); // same for card type description 
+        string _cardResourceType = cardInfo.ResourceTypeRef.ToString();
+        string _flavorTextType = flavorTextStyle;
 
         _chat.AppendUserInput($"Here are the flavor text variables : {_cardName},{_cardType},{_cardResourceType},{_flavorTextType}");
         string _response = await _chat.GetResponseFromChatbot();
         bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
-  
         Debug.Log(_response);
+        
+        onFlavourTextGenerated?.Invoke(_response);
     }
 
     private void AI_TemperatureSlider()
@@ -613,15 +629,70 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    private void SaveMaterialButton()
+    private void FlavorTextStyleField()
     {
         GUILayout.BeginHorizontal();
-        bool _loginButton = GUILayout.Button("Save material");
-        if (_loginButton)
-        {
-            SaveMaterial();
-        }
+        
+        flavorTextStyle = GUILayout.TextField(flavorTextStyle);
         GUILayout.EndHorizontal();
+
+    }
+
+    /// <summary>
+    /// Call this method to display the flavor text prompt result
+    /// </summary>
+    /// <param name="_flavorTextPromptResult"></param>
+    /// 
+    private void FlavorTextField()
+    {
+        if (currentFlavorText == string.Empty || currentFlavorText == "No flavor text generated")
+        {
+            currentFlavorText = "No flavor text generated";
+            GUILayout.BeginHorizontal();
+
+            GUILayout.TextField(currentFlavorText);
+            GUILayout.EndHorizontal();
+        }
+        else 
+        {
+            GUILayout.BeginHorizontal();
+
+            GUILayout.TextArea(currentFlavorText);
+            GUILayout.EndHorizontal();
+        }
+    }
+
+ 
+    private void FlavorTextField(string _flavorTextPromptResult)
+    {
+        if(_flavorTextPromptResult == string.Empty)
+            _flavorTextPromptResult = "No result generated";
+        GUILayout.BeginHorizontal();
+
+        GUILayout.TextArea(_flavorTextPromptResult);
+        GUILayout.EndHorizontal();
+
+    }
+
+    private void CardInfoField()
+    {   
+        //Card info to collect to create prompt
+        GUILayout.BeginHorizontal();
+        cardInfo = (CardInfo)EditorGUILayout.ObjectField("CardInfo to collect for flavor text prompt", cardInfo, typeof(CardInfo), true);
+        GUILayout.EndHorizontal();
+        //GUILayout.BeginHorizontal();
+        //cardCreator = (CardCreator)EditorGUILayout.ObjectField("CardCreator to collect for flavor text prompt", cardCreator, typeof(CardCreator), true);
+        //GUILayout.EndHorizontal();
+    }
+
+    private void AddFlavorTextToArray(string _flavorText)
+    {
+        allFlavorTexts.Append(_flavorText);
+    }
+
+    private void SetFlavorText(string _flavorText)
+    { 
+        currentFlavorText = _flavorText;
     }
     private void SaveMaterial()
     {
@@ -630,3 +701,19 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     }
 }
 
+
+
+
+
+
+
+    //private void SaveMaterialButton()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    bool _loginButton = GUILayout.Button("Save material");
+    //    if (_loginButton)
+    //    {
+    //        SaveMaterial();
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
