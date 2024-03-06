@@ -6,9 +6,7 @@ using OpenAI_API.Images;
 using System.Threading.Tasks;
 using UnityEngine.UIElements;
 using UnityEditor.UIElements;
-using System.Security.Policy;
 using OpenAI_API;
-using Codice.Client.Common;
 using System;
 using static System.Net.WebRequestMethods;
 using TMPro;
@@ -17,11 +15,9 @@ using UnityEngine.UI;
 using System.Net;
 using UnityEngine.Events;
 using UnityEngine.Rendering;
-using NUnit.Framework;
-using Unity.VisualScripting.YamlDotNet.Core.Tokens;
 using OpenAI_API.Models;
-using Unity.Plastic.Antlr3.Runtime;
-
+using OpenAI_API.Chat;
+using Unity.VisualScripting;
 
 public class ImageGeneratorTool_EditorWindow : EditorWindow
 {
@@ -59,8 +55,18 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
     public int tabs = 3;
     string[] tabSelection = new string[] { "Image Generation", "Credentials", "Chat" };
 
+    // AI Properties
+    [Range(0.4f, 1.6f)] public float temperature = 0.8f;
 
+
+    //
     // Styles
+    // Serialized Properties
+    // SerializedObjects
+
+    // Accessors
+    public OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
+    public float Temperature => temperature;
 
     [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
@@ -72,12 +78,20 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
 
     private void OnEnable()
     {
-        onTextureLoadedFromURL += SetGameObjectMaterial;
-        onPasswordEntered += Authenticate;
+        InitEvents();
+
         onRevealPasswordButtonClicked += SetCanRevealPassword;
         Init2DTextures();
         
 
+    }
+
+ 
+
+    private void InitEvents()
+    {
+        onTextureLoadedFromURL += SetGameObjectMaterial;
+        onPasswordEntered += Authenticate;
     }
 
 
@@ -94,14 +108,20 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
                 break;
             case 1:
                 APIKeyField();
-                GetModel();
                 break;
             case 2:
-                ImagePromptField();
+                ChatTestField();
+                AI_TemperatureSlider();
                 break;
 
         }
 
+    }
+
+    public OpenAIAPI GetAPI()
+    {
+        if (openAIAPI == null) return null;
+        return openAIAPI;
     }
     private void Init2DTextures()
     {
@@ -207,15 +227,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    private async void GetModel()
-    {
-        //Task<List<Model>> _models =   await openAIAPI.Models.GetModelsAsync();
-        Model _ada = Model.AdaText;
-        //await openAIAPI.Models.GetModelsAsync();
-        Debug.Log($"Model path is = {_ada}");
-        Debug.Log($"Current model is = {_ada.ModelID}");
-        //Debug.Log($"{await openAIAPI.Models.GetModelsAsync()}");
-    }
+
     private void RevealPasswordButton()
     {
         GUILayout.BeginHorizontal();
@@ -255,7 +267,7 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         bool _loginButton = GUILayout.Button("Login to OpenAI");
         if (_loginButton)
         {
-            Authenticate();
+            Authenticate(tempKey);
             generatedImageURL = null;
         }
         GUILayout.EndHorizontal();
@@ -493,6 +505,114 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         AssetDatabase.SaveAssets();
     }
 
+
+    /// <summary>
+    /// Call this method to test the chat
+    /// </summary>
+    private void ChatTestField()
+    {
+
+        GUILayout.BeginHorizontal();
+        bool _chatTestButton = GUILayout.Button("Chat tester");
+        if (_chatTestButton)
+        {
+            StartChat();
+            //ChatGeneratorTool_EditorWindow.StartChat(openAIAPI, ChatModel.Ada);
+
+        }
+        GUILayout.EndHorizontal();
+    }
+    //
+    private async void StartChat()
+    {
+        if (openAIAPI == null)
+        {
+            Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
+            Debug.Log("chat failed to find api");
+            //tabs = 1;
+        return;
+        }
+        Conversation _chat = openAIAPI.Chat.CreateConversation();
+        _chat.Model = Model.ChatGPTTurbo;
+        //_chat.RequestParameters.Temperature = 2f;  //0 --> 2
+
+        
+        //switch (_model)
+        //{
+        //    case ChatModel.Ada:
+        //        _chat.Model = Model.AdaText;
+        //        break;
+        //    case ChatModel.AdaEmbedding:
+        //        _chat.Model = Model.AdaTextEmbedding;
+        //        break;
+        //    case ChatModel.Babbage:
+        //        _chat.Model = Model.BabbageText;
+        //        break;
+        //    case ChatModel.Curie:
+        //        _chat.Model = Model.CurieText;
+        //        break;
+        //    case ChatModel.Davinci:
+        //        _chat.Model = Model.DavinciText;
+        //        break;
+        //    case ChatModel.CushmanCode:
+        //        _chat.Model = Model.CushmanCode;
+        //        break;
+        //    case ChatModel.DavinciCode:
+        //        _chat.Model = Model.DavinciCode;
+        //        break;
+        //    case ChatModel.ChatGPTTurbo:
+        //        _chat.Model = Model.ChatGPTTurbo;
+        //        break;
+        //    case ChatModel.TextModerationLatest:
+        //        _chat.Model = Model.TextModerationLatest;
+        //        break;
+        //    default:
+        //        Debug.LogError("Unsupported chat model");
+        //        break;
+        //}
+
+        CardInfo _cardInfo = new CardInfo(); 
+        /// replace the card name, type, resource type and flavor text type with variables
+        
+        _chat.AppendSystemMessage("Set up the model to generate " +
+            "Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
+            " type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
+            " and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
+            " incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Give the result within quotes and no other information, " +
+            "no flavor in the text and no just name of the card/type ");
+
+        string _cardName = "Purge the ancients";    // return string from cardInfo.cardTitle 
+        string _cardType = "ritual"; // same for card type description 
+        string _cardResourceType = "light";
+        string _flavorTextType = "spell";
+
+        _chat.AppendUserInput($"Here are the flavor text variables : {_cardName},{_cardType},{_cardResourceType},{_flavorTextType}");
+        string _response = await _chat.GetResponseFromChatbot();
+        bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
+  
+        Debug.Log(_response);
+    }
+
+    private void AI_TemperatureSlider()
+    {
+        GUILayout.BeginHorizontal();
+        GUILayout.Label("AI_Temperature");
+        EditorGUI.BeginChangeCheck();
+        
+        float _tempTemperature = temperature/2;
+        _tempTemperature = (float)Math.Round( _tempTemperature,1 );
+        _tempTemperature = EditorGUILayout.Slider(_tempTemperature, 0,1);
+        if (EditorGUI.EndChangeCheck())
+        {
+            temperature = _tempTemperature * 2;
+            temperature = (float)Math.Round(temperature,1);
+
+        Debug.Log($"Chat generating answer with temperature of {temperature}/2");
+        }
+       
+        GUILayout.EndHorizontal();
+    }
+
     private void SaveMaterialButton()
     {
         GUILayout.BeginHorizontal();
@@ -509,3 +629,4 @@ public class ImageGeneratorTool_EditorWindow : EditorWindow
         AssetDatabase.Refresh();
     }
 }
+
