@@ -48,8 +48,15 @@ public class CardInfo : ScriptableObject
     [SerializeField] private int cardResourceCost = 0;
     [SerializeField] private CardType cardType;
 
+  
 
     //Accessors
+
+    private void OnEnable()
+    {
+        
+        cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
+    }
     public List<API_CardSkills.CardSkill> AllCardSkills
     {
         get { return allCardSkills; }
@@ -99,9 +106,14 @@ public class CardInfo : ScriptableObject
         get { return cardType; }
         set { cardType = value; }
     }
- 
 
+    [ContextMenu("Generate Card Name")]
+    public void GenerateCardName()
+    {
+       cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
+    }
 
+    
 
 
 

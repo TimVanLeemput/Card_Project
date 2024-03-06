@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
-  m_Name: Dark Dragon
+  m_Name: Dark summon
   m_EditorClassIdentifier: 
-  resourceType: 5
-  cardTitle: Shadow dragon of doom
+  resourceType: 0
+  cardTitle: Dark summon
   allCardSkills: 
   cardArtSprite: {fileID: 0}
-  cardAttack: 5
-  cardHealth: 7
-  cardResourceCost: 5
-  cardType: 1
+  cardAttack: 0
+  cardHealth: 0
+  cardResourceCost: 0
+  cardType: 0
