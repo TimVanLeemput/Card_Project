@@ -11,20 +11,22 @@ public class CardInfo_Editor : Editor
     public CardInfo cardInfo = null;
     private void OnEnable()
     {
-        
+        cardInfo = (CardInfo)target;
+
+        cardInfo.GenerateCardName();
+
+        EditorGUI.FocusTextInControl("");
+
 
     }
     public override void OnInspectorGUI()
     {
         cardInfo = (CardInfo)target;
         GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Generate Card Name"))
-        { 
+        if (GUILayout.Button("Regenerate Card Name"))
+        {
             cardInfo.GenerateCardName();
-            //EditorUtility.SetDirty(cardInfo);
-            //EditorGUILayout.Space();
-            //EditorApplication.QueuePlayerLoopUpdate();
-            //Repaint();
+
             EditorGUI.FocusTextInControl("");
 
         }
@@ -33,3 +35,8 @@ public class CardInfo_Editor : Editor
         base.OnInspectorGUI();
     }
 }
+
+//EditorUtility.SetDirty(cardInfo);
+//EditorGUILayout.Space();
+//EditorApplication.QueuePlayerLoopUpdate();
+//Repaint();
