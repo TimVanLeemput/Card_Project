@@ -85,7 +85,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void OnEnable()
     {
+        Init();
         InitEvents();
+
         allFlavortexts = new List<string>();
         onRevealPasswordButtonClicked += SetCanRevealPassword;
         Init2DTextures();
@@ -93,7 +95,13 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     }
 
-
+    private void Init()
+    {
+        bool _hasSetTemperature = false;
+        if (!_hasSetTemperature)
+            SetTemperature(0.5f);
+        _hasSetTemperature = true;
+    }
 
     private void InitEvents()
     {
@@ -664,6 +672,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
+    private void SetTemperature(float _temperature)
+    {
+        temperature = Math.Clamp(temperature, 0, 2);
+    }
     private void FlavorTextStyleField()
     {
         GUILayout.BeginHorizontal();
