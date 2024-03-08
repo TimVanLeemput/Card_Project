@@ -13,7 +13,7 @@ using UnityEngine.UIElements;
 using System.IO;
 
 
-public class CardGeneratorTool_EditorWindow : EditorWindow
+public class PrefabGeneratorTool_EditorWindow : EditorWindow
 {
     public event Action<string> onFolderCreated = null;
     public event Action<string> onPathCreated = null;
@@ -25,7 +25,7 @@ public class CardGeneratorTool_EditorWindow : EditorWindow
     [MenuItem("Tools/Prefab Generator")]
     public static void ShowWindow()
     {
-        GetWindow<CardGeneratorTool_EditorWindow>("Prefab Generator").Show();
+        GetWindow<PrefabGeneratorTool_EditorWindow>("Prefab Generator").Show();
 
     }
 
