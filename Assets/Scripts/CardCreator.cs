@@ -15,9 +15,9 @@ public class CardCreator : MonoBehaviour
     CardResourceIcon cardResourceIcon = null;
 
     CardName titleCardName = null;
-
     CardSkillDescription cardSkillDescription = null;
     CardTypeName cardTypeName = null;
+    CardFlavorText cardFlavorText = null;
     ResourceCostText resourceCostText = null;
     CardAttackAmount cardAttackAmount = null;
     CardHealthAmount cardHealthAmount = null;
@@ -75,7 +75,7 @@ public class CardCreator : MonoBehaviour
 
         titleCardName = GetComponentInChildren<CardName>();
         cardTypeName = GetComponentInChildren<CardTypeName>();
-
+        cardFlavorText = GetComponentInChildren<CardFlavorText>();
         cardSkillDescription = GetComponentInChildren<CardSkillDescription>();
         resourceCostText = GetComponentInChildren<ResourceCostText>();
         cardAttackAmount = GetComponentInChildren<CardAttackAmount>();
@@ -107,6 +107,7 @@ public class CardCreator : MonoBehaviour
 
         //titleCardName.SetTitleName(cardInfo.CardTitle);
         SetCardTitleName(titleCardName, cardInfo.CardTitle);
+        SetCardTitleName(cardFlavorText, cardInfo.CardFlavorText);
         SwitchCardSkills();
         SwitchCardTypeName();
 

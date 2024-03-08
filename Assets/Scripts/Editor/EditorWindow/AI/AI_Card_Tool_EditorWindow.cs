@@ -52,7 +52,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public event Action<bool> onRevealPasswordButtonClicked = null;
     // Chat events
     public event Action<string> onFlavourTextGenerated = null;
-    public event Action<string> onFlavorTextSelected = null;
+    // Not event to be able to call it inside the CardInfo SO
+    public Action<string> onFlavorTextSelected = null;
 
     //Tabs
     public int tabs = 3;
@@ -100,6 +101,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         onPasswordEntered += Authenticate;
         onFlavourTextGenerated += SetFlavorText;
         onFlavourTextGenerated += AddFlavorTextToList;
+        onFlavorTextSelected += SetCardInfoFlavorText;
 
     }
 
@@ -754,6 +756,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void SelectFlavorTextField()
     {
+        SpaceV(5);
         GUILayout.BeginHorizontal();
        
         if (allFlavortexts.Count <= 0)
@@ -763,14 +766,18 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
         int _currentOptionIndex = 0;
         int _size = allFlavortexts.Count;
-
+        EditorGUI.BeginChangeCheck();
         _currentOptionIndex = EditorGUILayout.Popup("Select flavor text to use:",
             _currentOptionIndex, allFlavortexts.ToArray());
         string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
         Debug.Log($"this is the current selected flavor text:{_selectedFlavorText}");
-        onFlavorTextSelected?.Invoke(_selectedFlavorText);
+        
+        if(EditorGUI.EndChangeCheck())  
+            onFlavorTextSelected?.Invoke(_selectedFlavorText);
 
         GUILayout.EndHorizontal();
+        SpaceV(5);
+
     }
 
 
@@ -779,10 +786,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         currentFlavorText = _flavorText;
     }
 
-    private void SetCardInfoFlavorText(string _flavorText)
+    private void SetCardInfoFlavorText(string _selectedFlavorText)
     { 
-        
+        cardInfo.SetCardFlavorText(_selectedFlavorText);
     }
+    
+
     void SaveMaterial()
     {
         AssetDatabase.SaveAssets();

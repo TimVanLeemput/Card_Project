@@ -970,7 +970,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 611493161}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0.00004204563}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -978,8 +978,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -294.2, y: -167.19994}
-  m_SizeDelta: {x: 271, y: 156.2}
+  m_AnchoredPosition: {x: -1, y: -200}
+  m_SizeDelta: {x: 819.2, y: 93.2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &611493163
 MonoBehaviour:
@@ -1052,7 +1052,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 68.85
+  m_fontSize: 72
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1088,7 +1088,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: -79.90828, w: 0}
+  m_margin: {x: 0, y: 0, z: -3.5433197, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -3382,74 +3382,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2101291044}
   m_CullTransparentMesh: 1
---- !u!1001 &2113318847
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2164060031893461819, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_Name
-      value: GoldenShrineCard
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.37328622
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.99324715
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -4.308
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7a6a0c5538d5a904f8a789b6c5cfa333, type: 3}
 --- !u!1 &2117473927
 GameObject:
   m_ObjectHideFlags: 0
@@ -6105,7 +6037,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f351e05f097d8c418411e1357d83d0d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cardInfo: {fileID: 11400000, guid: f5811bb418a1ab549a6927b85934cb33, type: 2}
+  cardInfo: {fileID: 11400000, guid: 797a3b6b81a721b4cb2617a51876fdba, type: 2}
   allCardResourceIcons: {fileID: 11400000, guid: 54b71a46bbbecc4488666b14c1f9e609,
     type: 2}
   canStartUpdate: 0
@@ -9012,4 +8944,3 @@ SceneRoots:
   - {fileID: 8971901694030466388}
   - {fileID: 2117473931}
   - {fileID: 83972626}
-  - {fileID: 2113318847}

@@ -29,8 +29,9 @@ public class CardInfo : ScriptableObject
     //Strings
     [Header("Text")]
 
-    [SerializeField] private ResourceType resourceType;
+    [SerializeField] private ResourceType cardResourceType;
     [SerializeField] private string cardTitle = "";
+    [SerializeField] public string cardFlavorText = "";
     [SerializeField] List<API_CardSkills.CardSkill> allCardSkills = null;
 
     //Colors
@@ -48,13 +49,13 @@ public class CardInfo : ScriptableObject
     [SerializeField] private int cardResourceCost = 0;
     [SerializeField] private CardType cardType;
 
-  
+
 
     //Accessors
 
     private void OnEnable()
     {
-        
+
         cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
     }
     public List<API_CardSkills.CardSkill> AllCardSkills
@@ -76,6 +77,13 @@ public class CardInfo : ScriptableObject
         set { cardTitle = value; }
     }
 
+    public string CardFlavorText
+    {
+
+        get { return cardFlavorText; }
+        set { cardFlavorText = value; }
+    }
+
     public int CardAttackRef
     {
         get { return cardAttack; }
@@ -84,7 +92,7 @@ public class CardInfo : ScriptableObject
 
     public int CardHealthRef
     {
-        
+
         get { return cardHealth; }
         set { cardHealth = value; }
     }
@@ -97,8 +105,8 @@ public class CardInfo : ScriptableObject
 
     public ResourceType ResourceTypeRef
     {
-        get { return resourceType; }
-        set { resourceType = value; }
+        get { return cardResourceType; }
+        set { cardResourceType = value; }
     }
 
     public CardType CardTypeRef
@@ -110,10 +118,14 @@ public class CardInfo : ScriptableObject
     [ContextMenu("Generate Card Name")]
     public void GenerateCardName()
     {
-       cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
+        cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
     }
 
-    
+
+    public void SetCardFlavorText(string _flavorText)
+    {
+         cardFlavorText = _flavorText;
+    }
 
 
 
