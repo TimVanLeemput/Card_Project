@@ -12,7 +12,7 @@ using System;
 
 
 
-public class ImageGenerator_Tool : MonoBehaviour
+public class AI_Card_Tool : MonoBehaviour
 {
 
     OpenAIAPI openAIAPI = null;
