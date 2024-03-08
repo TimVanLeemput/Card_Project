@@ -52,6 +52,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public event Action<bool> onRevealPasswordButtonClicked = null;
     // Chat events
     public event Action<string> onFlavourTextGenerated = null;
+    public event Action<string> onFlavorTextSelected = null;
 
     //Tabs
     public int tabs = 3;
@@ -754,6 +755,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void SelectFlavorTextField()
     {
         GUILayout.BeginHorizontal();
+       
         if (allFlavortexts.Count <= 0)
         {
             GUILayout.EndHorizontal();
@@ -762,8 +764,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         int _currentOptionIndex = 0;
         int _size = allFlavortexts.Count;
 
-        EditorGUILayout.Popup("Select flavor text to use:",
-        _currentOptionIndex, allFlavortexts.ToArray());
+        _currentOptionIndex = EditorGUILayout.Popup("Select flavor text to use:",
+            _currentOptionIndex, allFlavortexts.ToArray());
+        string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
+        Debug.Log($"this is the current selected flavor text:{_selectedFlavorText}");
+        onFlavorTextSelected?.Invoke(_selectedFlavorText);
+
         GUILayout.EndHorizontal();
     }
 
@@ -771,6 +777,11 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     void SetFlavorText(string _flavorText)
     {
         currentFlavorText = _flavorText;
+    }
+
+    private void SetCardInfoFlavorText(string _flavorText)
+    { 
+        
     }
     void SaveMaterial()
     {
