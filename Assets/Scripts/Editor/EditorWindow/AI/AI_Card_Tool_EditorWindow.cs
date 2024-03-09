@@ -130,7 +130,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
                 break;
             case 2:
                 CreateTextFolder();
-                CreateTextFile();
+                //CreateTextFile();
                 ChatTestField();
                 AI_TemperatureSlider();
                 CardInfoField();
@@ -781,13 +781,17 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         int _currentOptionIndex = 0;
         int _size = allFlavortexts.Count;
         EditorGUI.BeginChangeCheck();
+
         _currentOptionIndex = EditorGUILayout.Popup("Select flavor text to use:",
             _currentOptionIndex, allFlavortexts.ToArray());
         string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
         Debug.Log($"this is the current selected flavor text:{_selectedFlavorText}");
-
+        // if currentOptionIndex = 0 -> Invoke()? 
+        // on click on first option -> invoke ?
         if (EditorGUI.EndChangeCheck())
+        {
             onFlavorTextSelected?.Invoke(_selectedFlavorText);
+        }
 
         GUILayout.EndHorizontal();
         SpaceV(5);
