@@ -332,6 +332,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         bool _generateImageButton = GUILayout.Button("Generate image");
         if (_generateImageButton)
         {
+            if (userInputPrompt == string.Empty)
+            {
+                Debug.LogError("Please enter a valid prompt");
+            }
             CreateImageURL();
         }
         GUILayout.EndHorizontal();
