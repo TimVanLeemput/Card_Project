@@ -14,53 +14,54 @@ public class TextFileCreator_Editor
     /// <summary>
     /// Use this method to create a folder
     /// </summary>
-    public static void CreateFolder(string _folderName)
-    {
-        if (!AssetDatabase.IsValidFolder($"Assets/{_folderName}"))
-        {
-            AssetDatabase.CreateFolder($"Assets", $"{_folderName}");
+    //public static void CreateFolder(string _folderName)
+    //{
+    //    if (!AssetDatabase.IsValidFolder($"Assets/{_folderName}"))
+    //    {
+    //        AssetDatabase.CreateFolder($"Assets", $"{_folderName}");
 
-        }
-            SetFolderPath($"Assets/{_folderName}");
-    }
+    //    }
+    //    SetFolderPath($"Assets/{_folderName}");
+    //}
 
-    private static void SetFolderPath(string _folderPath)
-    {
-        folderPath = _folderPath;
-    }
+    //private static void SetFolderPath(string _folderPath)
+    //{
+    //    folderPath = _folderPath;
+    //}
 
     /// <summary>
-    /// Use this method to create a .txt file
+    /// Use this method to add text to the current text file
     /// </summary>
-    public static void CreateTextFile(string _textFileName)
+    public static void AddToTextFile(string _textToAdd)
     {
-        TextAsset _textAsset = Resources.Load<TextAsset>("AI_Texts/AI_Texts");
-        if (_textAsset == null)
-        {
-            Debug.LogError("Failed to load text asset");
-            return;
-        }
-
-        string _contentString = "Content"; 
-        _contentString = _textAsset.text;
-        string _newPath = Path.Combine(Application.dataPath, "Resources", "AI_Texts/" + _textFileName + ".txt");
-
         try
         {
-            //StringBuilder _contentBuilder = new StringBuilder(_contentString);
-            //_contentBuilder.Append("yes");
-            //_contentString = _contentBuilder.ToString();
-            File.WriteAllText(_newPath, $"{_contentString}");
+            TextAsset _asset = Resources.Load<TextAsset>("AI_Texts");
+            if (_asset == null)
+            {
+                Debug.LogError("Failed to load text asset");
+                return;
+            }
+
+            string _contentString = _asset.text;
+            _contentString += $"{_textToAdd}" + "\n";
+
+            // Write the updated content back to the asset file
+            string assetPath = AssetDatabase.GetAssetPath(_asset);
+            File.WriteAllText(assetPath, _contentString);
+
+            // Refresh the asset database to reflect the changes
             AssetDatabase.Refresh();
-            //Debug.Log("Text file created successfully at: " + _newPath);
+
+            Debug.Log("Text file updated successfully");
         }
         catch (System.Exception ex)
         {
-            Debug.LogError("Error creating text file: " + ex.Message);
+            Debug.LogError("Error updating text file: " + ex.Message);
         }
-
-
     }
+
+
     /// <summary>
     /// Use this method to add a text to an already existing text file
     /// </summary>

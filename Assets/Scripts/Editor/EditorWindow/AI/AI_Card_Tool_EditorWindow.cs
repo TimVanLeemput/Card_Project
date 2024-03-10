@@ -109,6 +109,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         onPasswordEntered += Authenticate;
         onFlavourTextGenerated += SetFlavorText;
         onFlavourTextGenerated += AddFlavorTextToList;
+        onFlavourTextGenerated += AddTextToFile;
         onFlavorTextSelected += SetCardInfoFlavorText;
 
     }
@@ -814,9 +815,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         //TextFileCreator_Editor.CreateFolder("AI_Texts");
     }
 
-    private void CreateTextFile()
+    private void AddTextToFile(string _textToAdd)
     {
-        TextFileCreator_Editor.CreateTextFile("AI_Texts");
+        TextFileCreator_Editor.AddToTextFile($"{_textToAdd}");
     }
 
     void SaveMaterial()
