@@ -757,14 +757,13 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void AllFlavorTextsField()
     {
-        foreach (string _flavorText in allFlavortexts)
+        for (int i = 1; i < allFlavortexts.Count; i++)
         {
             SpaceV(1);
             GUILayout.BeginHorizontal();
-            EditorGUILayout.TextArea(_flavorText);
+            EditorGUILayout.TextArea(allFlavortexts[i]);
             GUILayout.EndHorizontal();
             SpaceV(1);
-
         }
     }
 
@@ -775,6 +774,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
        
         if (allFlavortexts.Count <= 0)
         {
+            allFlavortexts.Add("Select a flavor text");
             GUILayout.EndHorizontal();
             return;
         }
@@ -782,10 +782,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         int _size = allFlavortexts.Count;
         EditorGUI.BeginChangeCheck();
 
-        _currentOptionIndex = EditorGUILayout.Popup("Select flavor text to use:",
+        _currentOptionIndex = EditorGUILayout.Popup("",
             _currentOptionIndex, allFlavortexts.ToArray());
         string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
-        Debug.Log($"this is the current selected flavor text:{_selectedFlavorText}");
         // if currentOptionIndex = 0 -> Invoke()? 
         // on click on first option -> invoke ?
         if (EditorGUI.EndChangeCheck())
