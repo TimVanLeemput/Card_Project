@@ -10,45 +10,64 @@ using UnityEngine;
 public class TextFileCreator_Editor
 {
 
-    private static string folderPath = "";
+    private static string FOLDER_PATH = "";
+    private static string NEW_ENTRY_TITLE = "All flavor texts for : ";
     /// <summary>
     /// Use this method to create a folder
     /// </summary>
-    //public static void CreateFolder(string _folderName)
-    //{
-    //    if (!AssetDatabase.IsValidFolder($"Assets/{_folderName}"))
-    //    {
-    //        AssetDatabase.CreateFolder($"Assets", $"{_folderName}");
+    public static void CreateFolder(string _folderName)
+    {
+        if (!AssetDatabase.IsValidFolder($"Assets/Resources/AI_Texts/{_folderName}"))
+        {
+            string _path = AssetDatabase.CreateFolder($"Assets/Resources/AI_Texts", $"{_folderName}");
 
-    //    }
-    //    SetFolderPath($"Assets/{_folderName}");
-    //}
+            SetFolderPath($"{_path}");
+        }
+        else
+        {
+            SetFolderPath($"Assets/Resources/AI_Texts/{_folderName}");
+            Debug.Log($"Folder set to FOLDER_PATH ==> {FOLDER_PATH}");
+        }
+    }
 
-    //private static void SetFolderPath(string _folderPath)
-    //{
-    //    folderPath = _folderPath;
-    //}
+    private static void SetFolderPath(string _folderPath)
+    {
+        FOLDER_PATH = _folderPath;
+    }
 
     /// <summary>
     /// Use this method to add text to the current text file
     /// </summary>
-    public static void AddToTextFile(string _textToAdd)
+    public  static void AddToTextFile(string _textToAdd, string _entryTitle = "")
     {
         try
         {
-            TextAsset _asset = Resources.Load<TextAsset>("AI_Texts");
-            if (_asset == null)
+            // Load the text asset
+            string _assetPath = $"{FOLDER_PATH}/{_entryTitle}.txt";
+            string _contentString = string.Empty;
+
+            if (File.Exists(_assetPath))
             {
-                Debug.LogError("Failed to load text asset");
-                return;
+                // Read existing content if the file exists
+                _contentString = File.ReadAllText(_assetPath);
+            }
+            else
+            {
+                // Create a new text file if it doesn't exist
+                File.WriteAllText(_assetPath, "");
             }
 
-            string _contentString = _asset.text;
-            _contentString += $"{_textToAdd}" + "\n";
+            // Check if entry title is provided and it doesn't already exist in the content
+            if (!string.IsNullOrEmpty(_entryTitle) && !_contentString.Contains($"{NEW_ENTRY_TITLE}{_entryTitle}"))
+            {
+                _contentString += $"\n{NEW_ENTRY_TITLE}{_entryTitle}\n\n";
+            }
+
+            // Append the new text
+            _contentString += $"{_textToAdd}\n";
 
             // Write the updated content back to the asset file
-            string assetPath = AssetDatabase.GetAssetPath(_asset);
-            File.WriteAllText(assetPath, _contentString);
+            File.WriteAllText(_assetPath, _contentString);
 
             // Refresh the asset database to reflect the changes
             AssetDatabase.Refresh();

@@ -130,7 +130,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
                 APIKeyField();
                 break;
             case 2:
-                CreateTextFolder();
+                //CreateTextFolder();
                 //CreateTextFile();
                 ChatTestField();
                 AI_TemperatureSlider();
@@ -722,7 +722,13 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.Label("CardInfo to collect for flavor text prompt");
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
+        EditorGUI.BeginChangeCheck();
         cardInfo = (CardInfo)EditorGUILayout.ObjectField("", cardInfo, typeof(CardInfo), true, GUILayout.MaxWidth(150));
+        if (EditorGUI.EndChangeCheck())
+        {
+            TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
+            Debug.Log($"current card info title = {cardInfo.CardTitle}");
+        }
         GUILayout.EndHorizontal();
         SpaceV(10);
 
@@ -772,7 +778,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         SpaceV(5);
         GUILayout.BeginHorizontal();
-       
+
         if (allFlavortexts.Count <= 0)
         {
             allFlavortexts.Add("Select a flavor text");
@@ -805,7 +811,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
 
     private void SetCardInfoFlavorText(string _selectedFlavorText)
-    { 
+    {
         cardInfo.SetCardFlavorText(_selectedFlavorText);
     }
 
@@ -817,8 +823,15 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void AddTextToFile(string _textToAdd)
     {
-        TextFileCreator_Editor.AddToTextFile($"{_textToAdd}");
+        //await AsyncCreateFolderCall();
+        TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
+
+        TextFileCreator_Editor.AddToTextFile($"{_textToAdd}", $"{cardInfo.CardTitle}");
     }
+    //private async Task AsyncCreateFolderCall()
+    //{
+    //    await Task.Run(() => TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle));
+    //}
 
     void SaveMaterial()
     {

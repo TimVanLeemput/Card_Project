@@ -1,7 +1,0 @@
- this is a newer test string this is a newer test string this is a newer test string this is a newer test string <br> this is a newer test string
- this is a newer test string
- this is a newer test string
- this is a newer test string
-"Swift as a breeze, gentle as a whisper."
-"The tiny creature dances across the meadow, nimble and lovely."
-"Swift as lightning, agile as the wind, the Pikashoe dances gracefully through the meadow."
