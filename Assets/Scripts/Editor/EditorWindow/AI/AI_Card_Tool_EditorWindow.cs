@@ -335,6 +335,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             if (userInputPrompt == string.Empty)
             {
                 Debug.LogError("Please enter a valid prompt");
+                
             }
             CreateImageURL();
         }
@@ -525,7 +526,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
         CreateDefaultFolders();
         string _userInputNoSpace = $"{userInputPrompt.Replace(" ", "_")}";  // Replacing spaces with underscores
-
+        _userInputNoSpace = _userInputNoSpace.Replace("\"", "");  // Replacing double quotes with nothing
+        _userInputNoSpace = _userInputNoSpace.Replace("\'", ""); // Replacing single quotes with nothing
         string _fullPathTextures = $"Assets/Materials/AI_Mats/Textures/{_userInputNoSpace}_Textures";
         if (!AssetDatabase.IsValidFolder(_fullPathTextures))
         {
@@ -546,6 +548,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
 
         // Save the material as an asset
+        
         AssetDatabase.CreateAsset(_texture, _newTexturePath);   // Creates 2DTextureFile
 
         Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));

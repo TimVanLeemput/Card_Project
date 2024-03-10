@@ -43,7 +43,7 @@ public class TextFileCreator_Editor
         try
         {
             // Load the text asset
-            string _assetPath = $"{FOLDER_PATH}/{_entryTitle}.txt";
+            string _assetPath = $"{FOLDER_PATH}/{_entryTitle}.csv";
             string _contentString = string.Empty;
 
             if (File.Exists(_assetPath))

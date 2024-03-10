@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
   m_Name: Ultimate Sacrifice
   m_EditorClassIdentifier: 
-  resourceType: 0
+  cardResourceType: 0
   cardTitle: Ultimate Sacrifice
+  cardFlavorText: '"The ultimate sacrifice demands the ultimate reward."'
   allCardSkills: 
   cardArtSprite: {fileID: 0}
   cardAttack: 0
