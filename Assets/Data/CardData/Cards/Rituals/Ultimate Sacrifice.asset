@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
   m_Name: Ultimate Sacrifice
   m_EditorClassIdentifier: 
-  cardResourceType: 0
+  cardResourceType: 5
   cardTitle: Ultimate Sacrifice
-  cardFlavorText: '"The ultimate sacrifice demands the ultimate reward."'
+  cardFlavorText: '"Ancient trees whisper the secrets of sacrifice in the night."'
   allCardSkills: 
   cardArtSprite: {fileID: 0}
-  cardAttack: 0
-  cardHealth: 0
-  cardResourceCost: 0
-  cardType: 0
+  cardArtMaterial: {fileID: 2100000, guid: d6808d8f1d3e4c94fb7ea5e0b7e30c2f, type: 2}
+  cardAttack: 2
+  cardHealth: 6
+  cardResourceCost: 7
+  cardType: 1

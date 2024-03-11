@@ -14,6 +14,7 @@ using UnityEngine.UI;
 using System.Collections.Generic;
 using CodiceApp;
 using System.ComponentModel;
+using UnityEngine.Rendering;
 
 
 public class AI_Card_Tool_EditorWindow : EditorWindow
@@ -23,57 +24,66 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     [SerializeField] GameObject goImageTarget = null;
     [SerializeField] Material material = null;
     [SerializeField] Shader shader = null;
+
     [SerializeField] CardInfo cardInfo = null;
     [SerializeField] CardCreator cardCreator = null;
 
-    ImageGenerationRequest imageGeneration = null;
-    //IImageGenerationEndpoint iImageGenerationEndpoint = null;
-    ImageGenerationEndpoint imageGenerationEndpoint = null;
-    ImageResult imageResult = null;
-    RawImage rawImage = null;
+    //Not-used
+    //ImageGenerationRequest imageGeneration = null;
+    //ImageGenerationEndpoint imageGenerationEndpoint = null;
+    //ImageResult imageResult = null;
+    //RawImage rawImage = null;
 
+
+
+    #region Booleans
+    public bool urlHasBeenGenerated = false;
+    public bool openImageInBrowser = false;
+    public bool canRevealPassword = false;
+    #endregion
+
+
+    #region Events
+    public event Action<Texture2D> onTextureLoadedFromURL = null;
+    public event Action<Sprite> onSpriteGenerated = null;
+    public event Action<string> onPasswordEntered = null;
+    public event Action<bool> onRevealPasswordButtonClicked = null;
+    // Chat events
+    public event Action<string> onFlavourTextGenerated = null;
+    // Action delegate to be able to call it inside the CardInfo SO
+    public Action<string> onFlavorTextSelected = null;
+    #endregion
+
+    #region EditorWindow_UI
+    //strings
     public string userInputPrompt = "";
     public string generatedImageURL = "";
     public string manualURL = "";
     public string API_KEY = "";
     public string tempKey = "";
-
-    public bool urlHasBeenGenerated = false;
-    public bool openImageInBrowser = false;
-    public bool canRevealPassword = false;
-
     //2D icons
     private Texture2D revealPassWordIcon = null;
-
-
-    //Events
-    public event Action<Texture2D> onTextureLoadedFromURL = null;
-    public event Action<string> onPasswordEntered = null;
-    public event Action<bool> onRevealPasswordButtonClicked = null;
-    // Chat events
-    public event Action<string> onFlavourTextGenerated = null;
-    // Not event to be able to call it inside the CardInfo SO
-    public Action<string> onFlavorTextSelected = null;
-
     //Tabs
     public int tabs = 3;
     string[] tabSelection = new string[] { "Image Generation", "Credentials", "Chat" };
+    #endregion
+
+    #region AI_Properties
     // AI Properties
     [UnityEngine.Range(0.4f, 1.6f)] public float temperature = 0.8f;
     public string flavorTextStyle = "";
     public string currentFlavorText = "";
     List<string> allFlavortexts = null;
+    #endregion
 
-
-    //
-    // Styles
-    // Serialized Properties
-    SerializedProperty serializedProperty = null;
-    // SerializedObjects
+    #region AI_Generated
+    //private Sprite generatedSprite = null;
+    #endregion
 
     // Accessors
     public OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
     public float Temperature => temperature;
+
 
     [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
@@ -105,8 +115,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void InitEvents()
     {
-        onTextureLoadedFromURL += SetGameObjectMaterial;
         onPasswordEntered += Authenticate;
+        
+        onTextureLoadedFromURL += SetGameObjectMaterial;
+        //onTextureLoadedFromURL += GenerateSprite;
+       // onSpriteGenerated += SetSprite;
+        
         onFlavourTextGenerated += SetFlavorText;
         onFlavourTextGenerated += AddFlavorTextToList;
         onFlavourTextGenerated += AddTextToFile;
@@ -119,12 +133,18 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
         SpaceV();
+        //Generating cardinfo folder
+        if (cardInfo)
+        {
+            TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
+        }
 
 
         switch (tabs)
         {
             case 0:
                 ImageGeneratorTab();
+                //CreateSpriteButton();
                 break;
             case 1:
                 APIKeyField();
@@ -335,7 +355,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             if (userInputPrompt == string.Empty)
             {
                 Debug.LogError("Please enter a valid prompt");
-                
+                GUILayout.EndHorizontal();
             }
             CreateImageURL();
         }
@@ -347,12 +367,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.BeginVertical();
         GUILayout.Space(_value);
         GUILayout.EndVertical();
-    }
+    }//
     private void SpaceH(float _value = 20)
     {
         GUILayout.BeginHorizontal();
         GUILayout.Space(_value);
-        GUILayout.BeginHorizontal();
+        GUILayout.EndHorizontal();
     }
     private void GeneratedURLField()
     {
@@ -548,7 +568,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
 
         // Save the material as an asset
-        
+
         AssetDatabase.CreateAsset(_texture, _newTexturePath);   // Creates 2DTextureFile
 
         Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
@@ -570,8 +590,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
 
         GUILayout.BeginHorizontal();
-        bool _chatTestButton = GUILayout.Button("Chat tester");
-        if (_chatTestButton)
+        bool _generateTextButton = GUILayout.Button("Generate text");
+        if (_generateTextButton)
         {
             StartChat();
             //ChatGeneratorTool_EditorWindow.StartChat(openAIAPI, ChatModel.Ada);
@@ -591,43 +611,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
         Conversation _chat = openAIAPI.Chat.CreateConversation();
         _chat.Model = Model.ChatGPTTurbo;
-        //_chat.RequestParameters.Temperature = 2f;  //0 --> 2
-
-
-        //switch (_model)
-        //{
-        //    case ChatModel.Ada:
-        //        _chat.Model = Model.AdaText;
-        //        break;
-        //    case ChatModel.AdaEmbedding:
-        //        _chat.Model = Model.AdaTextEmbedding;
-        //        break;
-        //    case ChatModel.Babbage:
-        //        _chat.Model = Model.BabbageText;
-        //        break;
-        //    case ChatModel.Curie:
-        //        _chat.Model = Model.CurieText;
-        //        break;
-        //    case ChatModel.Davinci:
-        //        _chat.Model = Model.DavinciText;
-        //        break;
-        //    case ChatModel.CushmanCode:
-        //        _chat.Model = Model.CushmanCode;
-        //        break;
-        //    case ChatModel.DavinciCode:
-        //        _chat.Model = Model.DavinciCode;
-        //        break;
-        //    case ChatModel.ChatGPTTurbo:
-        //        _chat.Model = Model.ChatGPTTurbo;
-        //        break;
-        //    case ChatModel.TextModerationLatest:
-        //        _chat.Model = Model.TextModerationLatest;
-        //        break;
-        //    default:
-        //        Debug.LogError("Unsupported chat model");
-        //        break;
-        //}
-
+        
         CardInfo _cardInfo = new CardInfo();
         /// replace the card name, type, resource type and flavor text type with variables
 
@@ -835,10 +819,37 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
         TextFileCreator_Editor.AddToTextFile($"{_textToAdd}", $"{cardInfo.CardTitle}");
     }
-    //private async Task AsyncCreateFolderCall()
-    //{
-    //    await Task.Run(() => TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle));
-    //}
+
+    private void CreateSpriteButton()
+    {
+        //SpaceV(5);
+
+        //GUILayout.BeginHorizontal();
+        //bool _createSpriteButton = GUILayout.Button("Generate Sprite");
+        //if (_createSpriteButton)
+        //{
+        //    string _path = $"Assets/test.png";
+        //    AssetDatabase.CreateAsset(generatedSprite, _path);
+        //    AssetDatabase.SaveAssets();
+        //    AssetDatabase.Refresh();
+        //}
+        //GUILayout.EndHorizontal();
+
+        //SpaceV(5);
+    }
+
+    private void GenerateSprite(Texture2D _texture)
+    {
+        //Rect _spriteRect = new Rect(0, 0, _texture.width, _texture.height);
+        //Vector2 _spritePivot = new Vector2(0.5f, 0.5f);
+        //Sprite _sprite = Sprite.Create(_texture, _spriteRect, _spritePivot);
+        
+        //onSpriteGenerated?.Invoke(_sprite);
+    }
+    private void SetSprite(Sprite _sprite)
+    {
+        //generatedSprite = _sprite;
+    }
 
     void SaveMaterial()
     {

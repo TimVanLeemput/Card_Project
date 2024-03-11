@@ -38,6 +38,7 @@ public class CardInfo : ScriptableObject
     [Header("Art & Colors")]
 
     [SerializeField] Sprite cardArtSprite = null;
+    [SerializeField] Material cardArtMaterial = null;
 
 
     [Header("Stats")]
@@ -68,6 +69,11 @@ public class CardInfo : ScriptableObject
     {
         get { return cardArtSprite; }
         set { cardArtSprite = value; }
+    }
+    public Material CardArtMaterial
+    {
+        get { return cardArtMaterial; }
+        set { cardArtMaterial = value; }
     }
 
 

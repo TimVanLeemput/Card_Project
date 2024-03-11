@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dc4f7f7cb71706e41a0d376b91fac201, type: 3}
+  m_Name: CardResourceIcon
+  m_EditorClassIdentifier: 
+  fireIconSprite: {fileID: 21300000, guid: 39e9ac98b22426348910e726db3331f5, type: 3}
+  airIconSprite: {fileID: 21300000, guid: 1dc6960753cb50444857b1da87258f94, type: 3}
+  waterIconSprite: {fileID: 21300000, guid: 1674113846e0ff04a821214000f88975, type: 3}
+  earthIconSprite: {fileID: 21300000, guid: 35b81b0ee42b53a499447ae06b49aa73, type: 3}
+  darknessIconSprite: {fileID: 21300000, guid: 2e8c239f87203c449ac82cb849ac982c, type: 3}
+  lightIconSprite: {fileID: 21300000, guid: b0efda195ddb3984bbd02225d8adcace, type: 3}

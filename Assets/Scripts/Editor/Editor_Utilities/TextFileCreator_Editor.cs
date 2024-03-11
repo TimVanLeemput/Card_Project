@@ -26,7 +26,7 @@ public class TextFileCreator_Editor
         else
         {
             SetFolderPath($"Assets/Resources/AI_Texts/{_folderName}");
-            Debug.Log($"Folder set to FOLDER_PATH ==> {FOLDER_PATH}");
+            //Debug.Log($"Folder set to FOLDER_PATH ==> {FOLDER_PATH}");
         }
     }
 

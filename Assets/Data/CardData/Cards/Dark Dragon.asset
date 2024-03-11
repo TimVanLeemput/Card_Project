@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
   m_Name: Dark Dragon
   m_EditorClassIdentifier: 
-  resourceType: 5
-  cardTitle: Shadow dragon of doom
+  cardResourceType: 0
+  cardTitle: Dark Dragon
+  cardFlavorText: 
   allCardSkills: 
   cardArtSprite: {fileID: 0}
+  cardArtMaterial: {fileID: 2100000, guid: d6808d8f1d3e4c94fb7ea5e0b7e30c2f, type: 2}
   cardAttack: 5
   cardHealth: 7
   cardResourceCost: 5

@@ -12,6 +12,7 @@ public class CardCreator : MonoBehaviour
     //Art
     Art art = null;
     AI_Art aI_Art = null;
+    //Material aI_ArtMaterial = null;
     CardResourceIcon cardResourceIcon = null;
 
     CardName titleCardName = null;
@@ -70,7 +71,6 @@ public class CardCreator : MonoBehaviour
         artBackGround = GetComponentInChildren<ArtBackGround>();
         art = GetComponentInChildren<Art>();
         aI_Art = GetComponentInChildren<AI_Art>();
-   
 
 
         titleCardName = GetComponentInChildren<CardName>();
@@ -97,12 +97,13 @@ public class CardCreator : MonoBehaviour
             Debug.Log("failed to find cardinfo");
             return;
         }
-
+        UpdateCardTypeLayout();
         SetCardResourceCost(cardInfo.CardResourceCostRef);  // int
         SetCardAttackAmount(cardInfo.CardAttackRef);
         SetCardHealthAmount(cardInfo.CardHealthRef);
 
         SetSprite(art, cardInfo.CardArtSpriteRef);
+        SetMaterial(cardInfo.CardArtMaterial);
         SwitchCardColor();
 
         //titleCardName.SetTitleName(cardInfo.CardTitle);
@@ -110,6 +111,16 @@ public class CardCreator : MonoBehaviour
         SetCardTitleName(cardFlavorText, cardInfo.CardFlavorText);
         SwitchCardSkills();
         SwitchCardTypeName();
+
+
+    }
+    /// <summary>
+    /// Call this method to remove the stats layout from all cards excepted creatures
+    /// </summary>
+    private void UpdateCardTypeLayout()
+    { 
+        if(cardInfo.CardTypeRef != CardType.Creature)
+            cardStatsBackGroundColor.gameObject.SetActive(false);
 
 
     }
@@ -234,7 +245,8 @@ public class CardCreator : MonoBehaviour
 
     private void SetCardResourceCost(int _cost)
     {
-        resourceCostText.Tmp.text = _cost.ToString();
+        string _costToString = _cost.ToString().Replace("0","");
+        resourceCostText.Tmp.text = _costToString;
     }
 
     private void SetCardAttackAmount(int _attack)
@@ -248,6 +260,16 @@ public class CardCreator : MonoBehaviour
     private void SetSprite(Art _art, Sprite _sprite)
     {
         _art.SetSprite(_sprite);
+
+    }
+    /// <summary>
+    /// use this method to set the AI_Art
+    /// </summary>
+    /// <param name="_cardInfoMat"></param>
+    /// <param name="_mat"></param>
+    private void SetMaterial(Material _cardInfoMat)
+    {
+        aI_Art.gameObject.GetComponent<MeshRenderer>().material = _cardInfoMat;
 
     }
 
