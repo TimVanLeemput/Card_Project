@@ -72,3 +72,4 @@ crashlytics-build.properties
 /[Aa]ssets/[Ss]treamingAssets/aa/*
 Assets/Scripts/API/API_OpenAI_Authentication.cs
 Assets/Scripts/API/API_OpenAI_Authentication.cs.meta
+ScreenShots

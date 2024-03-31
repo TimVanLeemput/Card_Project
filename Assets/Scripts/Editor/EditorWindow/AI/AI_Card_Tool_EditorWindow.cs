@@ -1,20 +1,13 @@
-using NUnit.Framework;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Images;
 using OpenAI_API.Models;
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 using UnityEngine.Networking;
-using UnityEngine.UI;
-using System.Collections.Generic;
-using CodiceApp;
-using System.ComponentModel;
-using UnityEngine.Rendering;
 
 
 public class AI_Card_Tool_EditorWindow : EditorWindow
@@ -33,8 +26,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     //ImageGenerationEndpoint imageGenerationEndpoint = null;
     //ImageResult imageResult = null;
     //RawImage rawImage = null;
-
-
 
     #region Booleans
     public bool urlHasBeenGenerated = false;
@@ -84,15 +75,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
     public float Temperature => temperature;
 
-
     [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
     {
         //GetWindow<ImageGeneratorTool_EditorWindow>("AI Image Generator").Show();
         AI_Card_Tool_EditorWindow t = GetWindow<AI_Card_Tool_EditorWindow>(typeof(AI_Card_Tool_EditorWindow));
     }
-
-
     private void OnEnable()
     {
         Init();
@@ -101,10 +89,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         allFlavortexts = new List<string>();
         onRevealPasswordButtonClicked += SetCanRevealPassword;
         Init2DTextures();
-
-
     }
-
     private void Init()
     {
         bool _hasSetTemperature = false;
@@ -112,61 +97,38 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             SetTemperature(0.5f);
         _hasSetTemperature = true;
     }
-
     private void InitEvents()
     {
         onPasswordEntered += Authenticate;
-        
         onTextureLoadedFromURL += SetGameObjectMaterial;
-        //onTextureLoadedFromURL += GenerateSprite;
-       // onSpriteGenerated += SetSprite;
-        
         onFlavourTextGenerated += SetFlavorText;
         onFlavourTextGenerated += AddFlavorTextToList;
         onFlavourTextGenerated += AddTextToFile;
         onFlavorTextSelected += SetCardInfoFlavorText;
-
     }
-
-
     private void OnGUI()
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
-        SpaceV();
+        GUIHelpers_Editor.SpaceV();
         //Generating cardinfo folder
         if (cardInfo)
         {
             TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
         }
 
-
         switch (tabs)
         {
             case 0:
                 ImageGeneratorTab();
-                //CreateSpriteButton();
                 break;
             case 1:
                 APIKeyField();
                 break;
             case 2:
-                //CreateTextFolder();
-                //CreateTextFile();
-                ChatTestField();
-                AI_TemperatureSlider();
-                CardInfoField();
-                TweakFlavorTextPromptField();
-                FlavorTextStyleField();
-                RemoveAllFlavorTextsButton();
-                FlavorTextField();
-                SelectFlavorTextField();
-                AllFlavorTextsField();
+                FlavorTextGeneratorTab();
                 break;
-
         }
-
     }
-
     public OpenAIAPI GetAPI()
     {
         if (openAIAPI == null) return null;
@@ -177,18 +139,26 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         // Load the eye icon texture
         revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
     }
-
     private void ImageGeneratorTab()
     {
-        //AuthenticateButton();
         ImagePromptField();
         GameObjectToApplyImageOn();
-        //RawImageTest();
         GeneratedURLField();
         GenerateImageButton();
         ApplyImageToGameObjectButton();
-        //SaveMaterialButton();
     }
+    private void FlavorTextGeneratorTab()
+    {
+        ChatTestField();
+        AI_TemperatureSlider();
+        CardInfoField();
+        TweakFlavorTextPromptField();
+        FlavorTextStyleField();
+        RemoveAllFlavorTextsButton();
+        SelectFlavorTextField();
+        AllFlavorTextsField();
+    }
+    // Currently not in use 
     private async void Authenticate()
     {
         // openAIAPI = new OpenAIAPI("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");
@@ -222,7 +192,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         openAIAPI = new OpenAIAPI(_apiKey);
         Debug.Log("Authenticate with event called");
-
         try
         {
             bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();
@@ -249,7 +218,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         GUILayout.BeginHorizontal();
         GUILayout.Label("OpenAI API Key :");
-        //API_KEY = GUILayout.TextField(API_KEY, 400);
         EditorGUI.BeginChangeCheck();
         if (!canRevealPassword)
         {
@@ -320,14 +288,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
     }
-    private void OnURLGeneratedField()
-    {
-
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Prompt");
-        userInputPrompt = GUILayout.TextField(userInputPrompt, 200);
-        GUILayout.EndHorizontal();
-    }
 
     private void ImagePromptField()
     {
@@ -343,11 +303,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         goImageTarget = (GameObject)EditorGUILayout.ObjectField("GameObject to place Image on", goImageTarget, typeof(GameObject), true);
         GUILayout.EndHorizontal();
     }
-
-
     private void GenerateImageButton()
     {
-
         GUILayout.BeginHorizontal();
         bool _generateImageButton = GUILayout.Button("Generate image");
         if (_generateImageButton)
@@ -362,32 +319,14 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    private void SpaceV(float _value = 20)
-    {
-        GUILayout.BeginVertical();
-        GUILayout.Space(_value);
-        GUILayout.EndVertical();
-    }//
-    private void SpaceH(float _value = 20)
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Space(_value);
-        GUILayout.EndHorizontal();
-    }
     private void GeneratedURLField()
     {
-
-
-        //GUILayout.BeginVertical();
         GUILayout.BeginHorizontal();
         OpenInBrowserButton();
         GUILayout.EndHorizontal();
 
-
-        //GUILayout.EndHorizontal();
-
         GUILayout.BeginHorizontal();
-        SpaceV(5);
+        GUIHelpers_Editor.SpaceV(5);
         GUIStyle _labelStyle = new GUIStyle(EditorStyles.helpBox);
 
         GUIContent labelContent = new GUIContent("URL to Image", "URL generated by the prompt");
@@ -410,11 +349,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         if (generatedImageURL == null)
             GUILayout.TextArea("", 200);
 
-        //GUILayout.EndVertical();
         GUILayout.EndHorizontal();
-        SpaceV(5);
-
-
+        GUIHelpers_Editor.SpaceV(5);
     }
 
     private void OpenInBrowserButton()
@@ -473,17 +409,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
                     Application.OpenURL(generatedImageURL);
                 GetURLTexture();
             }
-
         }
-
         catch (Exception e)
         {
             Debug.Log($"Failed async call to generate AI Image{e.Message}");
-
         }
     }
-
-
     public async void GetURLTexture()
     {
         if (generatedImageURL == null) return;
@@ -495,7 +426,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             while (!_webRequest.isDone)
             {
                 await Task.Delay(8000);
-
             }
 
             if (_webRequest.result == UnityWebRequest.Result.Success)
@@ -513,7 +443,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         {
             Debug.Log($"Error loading website image: {e.Message}");
         }
-
     }
 
     private void CreateDefaultFolders()
@@ -537,9 +466,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         {
             AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Materials");
         }
-
-
-
     }
     private void SetGameObjectMaterial(Texture2D _texture)
     {
@@ -559,7 +485,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         {
             AssetDatabase.CreateFolder("Assets/Materials/AI_Mats/Materials", $"{_userInputNoSpace}_Material"); // Doesn't allow numbers in path!
         }
-
 
         string _newTexturePath = $"{_fullPathTextures}/{userInputPrompt}_Downloaded_2D_Texture.asset";
 
@@ -611,9 +536,21 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
         Conversation _chat = openAIAPI.Chat.CreateConversation();
         _chat.Model = Model.ChatGPTTurbo;
-        
+
         CardInfo _cardInfo = new CardInfo();
         /// replace the card name, type, resource type and flavor text type with variables
+        // Adapt this string to setup the chat assistant responses. 
+        // Following is the base model in case you erased it and lost it.
+        #region BaseChatSetup
+        //"Set up the model to generate " +
+        //"Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
+        //" type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
+        //" and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
+        //" incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Do not limit yourself" +
+        //"to only these types of flavor texts. Give the result within quotes and NO other information, " +
+        //"NO flavor in the text and NOT just name of the card/type "
+
+        #endregion
 
         _chat.AppendSystemMessage("Set up the model to generate " +
             "Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
@@ -678,37 +615,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
 
     }
-
-    /// <summary>
-    /// Call this method to display the flavor text prompt result
-    /// </summary>
-    /// <param name="_flavorTextPromptResult"></param>
-    /// 
-    private void FlavorTextField()
-    {
-        //if (currentFlavorText == string.Empty || currentFlavorText == "No flavor text generated")
-        //{
-        //    currentFlavorText = "No flavor text generated";
-        //    GUILayout.BeginHorizontal();
-
-        //    GUILayout.TextField(currentFlavorText);
-        //    GUILayout.EndHorizontal();
-        //}
-        //else
-        //{
-        //    GUILayout.BeginHorizontal();
-
-        //    GUILayout.TextArea(currentFlavorText);
-        //    GUILayout.EndHorizontal();
-        //}
-    }
-
-
-
     private void CardInfoField()
     {
         //Card info to collect to create prompt
-        SpaceV(10);
+        GUIHelpers_Editor.SpaceV(10);
         GUILayout.BeginHorizontal();
         GUILayout.Label("CardInfo to collect for flavor text prompt");
         GUILayout.EndHorizontal();
@@ -721,10 +631,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             Debug.Log($"current card info title = {cardInfo.CardTitle}");
         }
         GUILayout.EndHorizontal();
-        SpaceV(10);
-
+        GUIHelpers_Editor.SpaceV(10);
     }
-
     private void AddFlavorTextToList(string _flavorText)
     {
         allFlavortexts.Add(_flavorText);
@@ -736,38 +644,37 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void RemoveAllFlavorTextsButton()
     {
-        SpaceV(1);
+        GUIHelpers_Editor.SpaceV(1);
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Remove all flavor texts", GUILayout.MaxWidth(250), GUILayout.MaxHeight(30)))
             RemoveAllFlavorTexts();
         GUILayout.EndHorizontal();
-        SpaceV(1);
+        GUIHelpers_Editor.SpaceV(1);
     }
     private void TweakFlavorTextPromptField()
     {
-        SpaceV(5);
+        GUIHelpers_Editor.SpaceV(5);
         GUILayout.BeginHorizontal();
 
         GUILayout.Label("Tweak the flavor text style. Example : 'Strong creature', or 'Bloody vampire spell, or 'Vibrant medecinal jungle plant'", EditorStyles.boldLabel);
         GUILayout.EndHorizontal();
-        SpaceV(5);
+        GUIHelpers_Editor.SpaceV(5);
 
     }
     private void AllFlavorTextsField()
     {
         for (int i = 1; i < allFlavortexts.Count; i++)
         {
-            SpaceV(1);
+            GUIHelpers_Editor.SpaceV(1);
             GUILayout.BeginHorizontal();
             EditorGUILayout.TextArea(allFlavortexts[i]);
             GUILayout.EndHorizontal();
-            SpaceV(1);
+            GUIHelpers_Editor.SpaceV(1);
         }
     }
-
     private void SelectFlavorTextField()
     {
-        SpaceV(5);
+        GUIHelpers_Editor.SpaceV(5);
         GUILayout.BeginHorizontal();
 
         if (allFlavortexts.Count <= 0)
@@ -791,27 +698,16 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
 
         GUILayout.EndHorizontal();
-        SpaceV(5);
-
+        GUIHelpers_Editor.SpaceV(5);
     }
-
-
     void SetFlavorText(string _flavorText)
     {
         currentFlavorText = _flavorText;
     }
-
     private void SetCardInfoFlavorText(string _selectedFlavorText)
     {
         cardInfo.SetCardFlavorText(_selectedFlavorText);
     }
-
-    private void CreateTextFolder()
-    {
-        //Currently using the Resources/Text_AI folder
-        //TextFileCreator_Editor.CreateFolder("AI_Texts");
-    }
-
     private void AddTextToFile(string _textToAdd)
     {
         //await AsyncCreateFolderCall();
@@ -819,58 +715,4 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
         TextFileCreator_Editor.AddToTextFile($"{_textToAdd}", $"{cardInfo.CardTitle}");
     }
-
-    private void CreateSpriteButton()
-    {
-        //SpaceV(5);
-
-        //GUILayout.BeginHorizontal();
-        //bool _createSpriteButton = GUILayout.Button("Generate Sprite");
-        //if (_createSpriteButton)
-        //{
-        //    string _path = $"Assets/test.png";
-        //    AssetDatabase.CreateAsset(generatedSprite, _path);
-        //    AssetDatabase.SaveAssets();
-        //    AssetDatabase.Refresh();
-        //}
-        //GUILayout.EndHorizontal();
-
-        //SpaceV(5);
-    }
-
-    private void GenerateSprite(Texture2D _texture)
-    {
-        //Rect _spriteRect = new Rect(0, 0, _texture.width, _texture.height);
-        //Vector2 _spritePivot = new Vector2(0.5f, 0.5f);
-        //Sprite _sprite = Sprite.Create(_texture, _spriteRect, _spritePivot);
-        
-        //onSpriteGenerated?.Invoke(_sprite);
-    }
-    private void SetSprite(Sprite _sprite)
-    {
-        //generatedSprite = _sprite;
-    }
-
-    void SaveMaterial()
-    {
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-    }
 }
-
-
-
-
-
-
-
-//private void SaveMaterialButton()
-//{
-//    GUILayout.BeginHorizontal();
-//    bool _loginButton = GUILayout.Button("Save material");
-//    if (_loginButton)
-//    {
-//        SaveMaterial();
-//    }
-//    GUILayout.EndHorizontal();
-//}
