@@ -56,7 +56,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private Texture2D revealPassWordIcon = null;
     //Tabs
     public int tabs = 3;
-    string[] tabSelection = new string[] { "Image Generation", "Credentials", "Chat" };
+    string[] tabSelection = new string[] { "Image Generation", "Credentials", "Flavor Text Generation" };
     #endregion
 
     #region AI_Properties
@@ -162,7 +162,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private async void Authenticate()
     {
         // openAIAPI = new OpenAIAPI("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");
-        openAIAPI = new OpenAIAPI(API_OpenAI_Authentication.OPENAI_API_KEY);
+        //openAIAPI = new OpenAIAPI(API_OpenAI_Authentication.OPENAI_API_KEY);
         Debug.Log("Authenticate called");
 
         try
@@ -529,7 +529,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         if (openAIAPI == null)
         {
-            Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
+            //Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
             Debug.Log("Called authenticate from separate script");
             //tabs = 1;
             return;
@@ -620,7 +620,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         //Card info to collect to create prompt
         GUIHelpers_Editor.SpaceV(10);
         GUILayout.BeginHorizontal();
-        GUILayout.Label("CardInfo to collect for flavor text prompt");
+        GUILayout.Label("Card Scriptable Object to collect for flavor text prompt");
         GUILayout.EndHorizontal();
         GUILayout.BeginHorizontal();
         EditorGUI.BeginChangeCheck();
