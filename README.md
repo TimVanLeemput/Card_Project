@@ -50,25 +50,26 @@ To generate prefabs:
 4. Add the folder name, subfolder name, and prefab name.
 5. Click on "Generate".
 
-## Dependencies
-Microsoft.AspNet.WebApi.Client;
-Microsoft.AspNet.WebApi.Core;
-Microsoft.Bcl.AsyncInterfaces;
-Microsoft.Extensions.Configuration;
-Microsoft.Extensions.Configuration.Abstractions;
-Microsoft.Extensions.Configuration.Binder;
-Microsoft.Extensions.DependencyInjection.Abstractions;
-Microsoft.Extensions.Http;
-Microsoft.Extensions.Logging;
-Microsoft.Extensions.Logging.Abstractions;
-Microsoft.Extensions.Options;
-Microsoft.Extensions.Primitives;
-Newtonsoft.Json;
-OpenAI;
-System.Buffers;
-System.Interactive.Async;
-System.Linq.Async;
-System.Memory;
-System.Numerics.Vectors;
-System.Runtime.CompilerServices.Unsafe;
-System.Threading.Tasks.Extensions;
+## Dependencies:
+- Microsoft.AspNet.WebApi.Client
+- Microsoft.AspNet.WebApi.Core
+- Microsoft.Bcl.AsyncInterfaces
+- Microsoft.Extensions.Configuration
+- Microsoft.Extensions.Configuration.Abstractions
+- Microsoft.Extensions.Configuration.Binder
+- Microsoft.Extensions.DependencyInjection.Abstractions
+- Microsoft.Extensions.Http
+- Microsoft.Extensions.Logging
+- Microsoft.Extensions.Logging.Abstractions
+- Microsoft.Extensions.Options
+- Microsoft.Extensions.Primitives
+- Newtonsoft.Json
+- OpenAI
+- System.Buffers
+- System.Interactive.Async
+- System.Linq.Async
+- System.Memory
+- System.Numerics.Vectors
+- System.Runtime.CompilerServices.Unsafe
+- System.Threading.Tasks.Extensions
+
