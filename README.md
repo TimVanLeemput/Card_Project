@@ -73,3 +73,8 @@ To generate prefabs:
 - System.Runtime.CompilerServices.Unsafe
 - System.Threading.Tasks.Extensions
 
+## Acknowledgment
+
+Used part of the GoDoIt wrapper : 
+https://github.com/OkGoDoIt/OpenAI-API-dotnet
+
