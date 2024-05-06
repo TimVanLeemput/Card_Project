@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
   m_Name: CharmanderLookalike
   m_EditorClassIdentifier: 
-  resourceType: 1
-  cardTitle: Chourmander
+  cardResourceType: 1
+  cardTitle: CharmanderLookalike
+  cardFlavorText: 
   allCardSkills: 02000000
   cardArtSprite: {fileID: 0}
+  cardArtMaterial: {fileID: 2100000, guid: 5ab97a73de6fc244993ce497172efaf5, type: 2}
   cardAttack: 2
   cardHealth: 1
   cardResourceCost: 1

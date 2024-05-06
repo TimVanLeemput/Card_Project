@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
   m_Name: Dark summon
   m_EditorClassIdentifier: 
-  resourceType: 0
+  cardResourceType: 0
   cardTitle: Dark summon
+  cardFlavorText: 
   allCardSkills: 
   cardArtSprite: {fileID: 0}
+  cardArtMaterial: {fileID: 2100000, guid: cf8f7fe29f612c149a3faccbc0e76dfb, type: 2}
   cardAttack: 0
   cardHealth: 0
   cardResourceCost: 0
