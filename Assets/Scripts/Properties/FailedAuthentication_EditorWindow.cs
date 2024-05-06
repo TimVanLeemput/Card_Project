@@ -1,14 +1,15 @@
 using UnityEditor;
 using UnityEngine;
 
-
+#if UNITY_EDITOR
 public class FailedAuthentication_EditorWindow : EditorWindow
 {
     private string message = "Authentication Failed! Please try again.";
     private GUIStyle messageStyle;
     private GUIStyle buttonStyle;
-
+#if UNITY_EDITOR
     [MenuItem("Window/Failed Authentication Warning")]
+#endif 
     public static void ShowWindow()
     {
         FailedAuthentication_EditorWindow window = GetWindow<FailedAuthentication_EditorWindow>();
@@ -73,3 +74,4 @@ public class FailedAuthentication_EditorWindow : EditorWindow
         return result;
     }
 }
+#endif

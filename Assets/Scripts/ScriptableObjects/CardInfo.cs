@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
-
 public enum ResourceType
 {
     None,
@@ -53,12 +52,14 @@ public class CardInfo : ScriptableObject
 
 
     //Accessors
+#if UNITY_EDITOR
 
     private void OnEnable()
     {
 
         cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
     }
+#endif
     public List<API_CardSkills.CardSkill> AllCardSkills
     {
         get { return allCardSkills; }
@@ -120,12 +121,13 @@ public class CardInfo : ScriptableObject
         get { return cardType; }
         set { cardType = value; }
     }
-
+#if UNITY_EDITOR
     [ContextMenu("Generate Card Name")]
     public void GenerateCardName()
     {
         cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
     }
+#endif
 
 
     public void SetCardFlavorText(string _flavorText)

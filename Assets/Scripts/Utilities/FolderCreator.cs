@@ -5,7 +5,8 @@ using UnityEngine;
 
 public static class FolderCreator 
 {
-   
+#if UNITY_EDITOR
+
     public static string CreateFolder(params string[] _folderNames)
     {
         string _folderPath = "Assets";
@@ -26,6 +27,7 @@ public static class FolderCreator
         // Return the final folder path
         return _folderPath;
     }
+#endif
 
 
 }
