@@ -2,6 +2,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Unity.VisualScripting;
 
 namespace OpenAI_API.Models
 {
@@ -142,6 +143,11 @@ namespace OpenAI_API.Models
         /// Snapshot of gpt-3.5-turbo from March 1st 2023. Unlike gpt-3.5-turbo, this model will not receive updates, and will only be supported for a three month period ending on June 1st 2023.
         /// </summary>
         public static Model ChatGPTTurbo0301 => new Model("gpt-3.5-turbo-0125") { OwnedBy = "openai" };
+        /// <summary>
+        /// Our most advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo. 
+		/// Currently points to gpt-4o-2024-05-13.
+        /// </summary>
+        public static Model ChatGPT4o => new Model("gpt-4o") { OwnedBy = "openai" };
 
 		/// <summary>
 		/// Stable text moderation model that may provide lower accuracy compared to TextModerationLatest.
@@ -164,6 +170,21 @@ namespace OpenAI_API.Models
 		{
 			return await api.Models.RetrieveModelDetailsAsync(this.ModelID);
 		}
+		/// <summary>
+		/// use this method to add all AI models to the Models list.
+		/// </summary>
+		public static List<Model> PopulateModels()
+		{
+			List<Model> Models = new List<Model>();
+			if (Models == null)
+			{
+                Models.Add(AdaText); Models.Add(ChatGPTTurbo); Models.Add(ChatGPTTurbo0301);
+                Models.Add(ChatGPT4o); Models.Add(DavinciText); Models.Add(TextModerationStable); Models.Add(DavinciCode);
+                Models.Add(TextModerationLatest); Models.Add(BabbageText); Models.Add(CurieText);
+                return Models;
+			}
+			return null;
+        }
 
 	}
 

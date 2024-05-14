@@ -65,6 +65,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public string flavorTextStyle = "";
     public string currentFlavorText = "";
     List<string> allFlavortexts = null;
+
+    public Conversation conversation = null; // TO DO check if this is actually needed. The
+                                             // accessor for sure is used in the AI_ModelSelector_EditorWindow
+
     #endregion
 
     #region AI_Generated
@@ -74,6 +78,14 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     // Accessors
     public OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
     public float Temperature => temperature;
+
+    public event Action<Conversation> OnConversationStarted = null;
+
+    public Conversation Conversation
+    {
+        get { return conversation; }
+        set { conversation = value; }
+    }
 
     [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
@@ -105,7 +117,17 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         onFlavourTextGenerated += AddFlavorTextToList;
         onFlavourTextGenerated += AddTextToFile;
         onFlavorTextSelected += SetCardInfoFlavorText;
+
+        OnConversationStarted += SetConversation;
     }
+
+    private void SetConversation(Conversation _conversation)
+    {
+        if (_conversation == null) return;
+        conversation = _conversation;
+        Debug.Log("Conversation has been set, possible to edit Model from now on");
+    }
+
     private void OnGUI()
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
@@ -525,6 +547,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
     //
+
     private async void StartChat()
     {
         if (openAIAPI == null)
@@ -535,7 +558,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             return;
         }
         Conversation _chat = openAIAPI.Chat.CreateConversation();
-        _chat.Model = Model.ChatGPTTurbo;
+        OnConversationStarted?.Invoke(_chat);
+        // TO DO 
+        // Insert a chat model picker box or list. 
+        AI_ModelSelector_EditorWindow.SetTool(this);
+        AI_ModelSelector_EditorWindow.ChatModelSelection();
+        //_chat.Model = Model.ChatGPTTurbo;
 
         CardInfo _cardInfo = new CardInfo();
         /// replace the card name, type, resource type and flavor text type with variables
@@ -579,6 +607,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         string _response = await _chat.GetResponseFromChatbot();
         bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
         Debug.Log(_response);
+        Debug.Log("current model used is : " + _chat.Model);
 
         onFlavourTextGenerated?.Invoke(_response);
     }
