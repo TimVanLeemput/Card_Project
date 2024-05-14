@@ -24,9 +24,9 @@ public static class AI_ModelSelector_EditorWindow
     public static void ChatModelSelection()
     {
         if (tool == null) return;
-        List<Model> _allModels = SetModels();
+        List<Model> _allModels = Model.PopulateModels();
 
-        if(_allModels != null)
+        //if(_allModels != null)
         Debug.Log($"First in array of all models is => {_allModels[0].ModelID}");
 
 
@@ -35,8 +35,8 @@ public static class AI_ModelSelector_EditorWindow
 
     }
 
-    static List<Model> SetModels()
-    {
-        return Model.PopulateModels();
-    }
+    //static List<Model> SetModels()
+    //{
+    //    return Model.PopulateModels();
+    //}
 }

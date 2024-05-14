@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Unity.VisualScripting;
+using UnityEngine;
 
 namespace OpenAI_API.Models
 {
@@ -175,17 +176,17 @@ namespace OpenAI_API.Models
 		/// </summary>
 		public static List<Model> PopulateModels()
 		{
-			List<Model> Models = new List<Model>();
-			if (Models == null)
-			{
-                Models.Add(AdaText); Models.Add(ChatGPTTurbo); Models.Add(ChatGPTTurbo0301);
-                Models.Add(ChatGPT4o); Models.Add(DavinciText); Models.Add(TextModerationStable); Models.Add(DavinciCode);
-                Models.Add(TextModerationLatest); Models.Add(BabbageText); Models.Add(CurieText);
+			List<Model> Models = new List<Model>
+            {
+                ChatGPTTurbo,
+                ChatGPT4o,
+                AdaText,
+                DavinciText,
+                BabbageText,
+                CurieText
+            };
                 return Models;
-			}
-			return null;
         }
-
 	}
 
 	/// <summary>

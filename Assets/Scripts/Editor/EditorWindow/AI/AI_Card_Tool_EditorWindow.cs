@@ -607,7 +607,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         string _response = await _chat.GetResponseFromChatbot();
         bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
         Debug.Log(_response);
-        Debug.Log("current model used is : " + _chat.Model);
 
         onFlavourTextGenerated?.Invoke(_response);
     }
