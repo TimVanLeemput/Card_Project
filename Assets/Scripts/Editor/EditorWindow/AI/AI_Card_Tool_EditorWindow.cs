@@ -190,8 +190,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ModelSelector_EditorWindow.SelectChatModelField();
-        AI_ModelSelector_Editor.SetTool(this);
-        AI_ModelSelector_Editor.ChatModelSelection();
+        //AI_ModelSelector_Editor.SetTool(this);
+        //AI_ModelSelector_Editor.ChatModelSelection();
+        AI_ModelSelector_Editor.Init(this);
         ChatTestField();
         ModelCheckButton();
         AI_TemperatureSlider();
@@ -605,15 +606,14 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         //OnConversationStarted?.Invoke(_chat);
     }
 
-
     private async Task GenerateTextFlavor(Conversation _chat)
     {
         CardInfo _cardInfo = new CardInfo();
         _chat.Model = conversation.Model;
         ChatRequest _chatRequest = new ChatRequest();
         _chatRequest.Temperature = temperature;
-        double _tempTemp = _chatRequest.Temperature.Value;
-        Debug.Log($"Chat generating answer with temperature of {_tempTemp}/2");
+        float _tempTemp = (float)_chatRequest.Temperature.Value;
+        Debug.Log($"Chat generating answer with temperature of {_tempTemp/2}");
 
         // Replace the card name, type, resource type and flavor text type with variables
         // Adapt this string to setup the chat assistant responses. 
@@ -628,7 +628,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         //"NO flavor in the text and NOT just name of the card/type "
 
         #endregion
-
         _chat.AppendSystemMessage("Set up the model to generate " +
             "Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
             " type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
