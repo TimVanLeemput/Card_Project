@@ -39,13 +39,13 @@ namespace OpenAI_API.Embedding
 			this.Input = input;
 		}
 
-		/// <summary>
-		/// Creates a new <see cref="EmbeddingRequest"/> with the specified input and the <see cref="Model.AdaTextEmbedding"/> model.
-		/// </summary>
-		/// <param name="input">The prompt to transform</param>
-		public EmbeddingRequest(string input)
+        /// <summary>
+        /// Creates a new <see cref="EmbeddingRequest"/> with the specified input and the <see cref="Model.ChatGPT35_Turbo"/> model.
+        /// </summary>
+        /// <param name="input">The prompt to transform</param>
+        public EmbeddingRequest(string input)
 		{
-			Model = OpenAI_API.Models.Model.AdaTextEmbedding;
+			Model = OpenAI_API.Models.Model.ChatGPT35_Turbo;
 			this.Input = input;
 		}
 	}

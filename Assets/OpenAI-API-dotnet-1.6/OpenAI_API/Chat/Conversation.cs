@@ -56,7 +56,7 @@ namespace OpenAI_API.Chat
 			if (model != null)
 				RequestParameters.Model = model;
 			if (RequestParameters.Model == null)
-				RequestParameters.Model = Models.Model.ChatGPTTurbo;
+				RequestParameters.Model = Models.Model.ChatGPT35_Turbo;
 
 			_Messages = new List<ChatMessage>();
 			_endpoint = endpoint;

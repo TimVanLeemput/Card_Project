@@ -16,7 +16,7 @@ namespace OpenAI_API.Chat
 		/// <summary>
 		/// This allows you to set default parameters for every request, for example to set a default temperature or max tokens.  For every request, if you do not have a parameter set on the request but do have it set here as a default, the request will automatically pick up the default value.
 		/// </summary>
-		public ChatRequest DefaultChatRequestArgs { get; set; } = new ChatRequest() { Model = Model.ChatGPTTurbo };
+		public ChatRequest DefaultChatRequestArgs { get; set; } = new ChatRequest() { Model = Model.ChatGPT35_Turbo };
 
 		/// <summary>
 		/// The name of the endpoint, which is the final path segment in the API URL.  For example, "completions".

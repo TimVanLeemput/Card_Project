@@ -97,53 +97,22 @@ namespace OpenAI_API.Models
 		/// <summary>
 		/// The default model to use in requests if no other model is specified.
 		/// </summary>
-		public static Model DefaultModel { get; set; } = DavinciText;
+		public static Model DefaultModel { get; set; } = ChatGPT35_Turbo;
 
 
 		/// <summary>
+		/// DEPRECATED
 		/// Capable of very simple tasks, usually the fastest model in the GPT-3 series, and lowest cost
 		/// </summary>
-		public static Model AdaText => new Model("text-ada-001") { OwnedBy = "openai" };
+		
 
-		/// <summary>
-		/// Capable of straightforward tasks, very fast, and lower cost.
-		/// </summary>
-		public static Model BabbageText => new Model("babbage-002") { OwnedBy = "openai" };
-
-		/// <summary>
-		/// Very capable, but faster and lower cost than Davinci.
-		/// </summary>
-		public static Model CurieText => new Model("text-curie-001") { OwnedBy = "openai" };
-
-		/// <summary>
-		/// Most capable GPT-3 model. Can do any task the other models can do, often with higher quality, longer output and better instruction-following. Also supports inserting completions within text.
-		/// </summary>
-		public static Model DavinciText => new Model("text-davinci-003") { OwnedBy = "openai" };
-
-		/// <summary>
-		/// Almost as capable as Davinci Codex, but slightly faster. This speed advantage may make it preferable for real-time applications.
-		/// </summary>
-		public static Model CushmanCode => new Model("code-cushman-001") { OwnedBy = "openai" };
-
-		/// <summary>
-		/// Most capable Codex model. Particularly good at translating natural language to code. In addition to completing code, also supports inserting completions within code.
-		/// </summary>
-		public static Model DavinciCode => new Model("code-davinci-002") { OwnedBy = "openai" };
-
-		/// <summary>
-		/// OpenAI offers one second-generation embedding model for use with the embeddings API endpoint.
-		/// </summary>
-		public static Model AdaTextEmbedding => new Model("text-embedding-ada-002") { OwnedBy = "openai" };
 
 		/// <summary>
 		/// Most capable GPT-3.5 model and optimized for chat at 1/10th the cost of text-davinci-003. Will be updated with the latest model iteration.
 		/// </summary>
-		public static Model ChatGPTTurbo => new Model("gpt-3.5-turbo") { OwnedBy = "openai" };
-        //gpt-3.5-turbo-0125
-        /// <summary>
-        /// Snapshot of gpt-3.5-turbo from March 1st 2023. Unlike gpt-3.5-turbo, this model will not receive updates, and will only be supported for a three month period ending on June 1st 2023.
-        /// </summary>
-        public static Model ChatGPTTurbo0301 => new Model("gpt-3.5-turbo-0125") { OwnedBy = "openai" };
+		public static Model ChatGPT35_Turbo => new Model("gpt-3.5-turbo") { OwnedBy = "openai" };
+     
+        public static Model ChatGPT4_Turbo => new Model("gpt-4-turbo") { OwnedBy = "openai" };
         /// <summary>
         /// Our most advanced, multimodal flagship model that’s cheaper and faster than GPT-4 Turbo. 
 		/// Currently points to gpt-4o-2024-05-13.
@@ -178,12 +147,9 @@ namespace OpenAI_API.Models
 		{
 			List<Model> Models = new List<Model>
             {
-                ChatGPTTurbo,
-                ChatGPT4o,
-                AdaText,
-                DavinciText,
-                BabbageText,
-                CurieText
+                ChatGPT35_Turbo,
+				ChatGPT4_Turbo,
+                ChatGPT4o       
             };
                 return Models;
         }

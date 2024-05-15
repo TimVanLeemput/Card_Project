@@ -9,9 +9,9 @@ namespace OpenAI_API.Embedding
 	public class EmbeddingEndpoint : EndpointBase, IEmbeddingEndpoint
 	{
 		/// <summary>
-		/// This allows you to send request to the recommended model without needing to specify. Every request uses the <see cref="Model.AdaTextEmbedding"/> model
+		/// This allows you to send request to the recommended model without needing to specify. Every request uses the <see cref="Model.ChatGPT35_Turbo"/> model
 		/// </summary>
-		public EmbeddingRequest DefaultEmbeddingRequestArgs { get; set; } = new EmbeddingRequest() { Model = Model.AdaTextEmbedding };
+		public EmbeddingRequest DefaultEmbeddingRequestArgs { get; set; } = new EmbeddingRequest() { Model = Model.ChatGPT35_Turbo };
 
 		/// <summary>
 		/// The name of the endpoint, which is the final path segment in the API URL.  For example, "embeddings".

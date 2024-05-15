@@ -125,7 +125,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void SetConversation(Conversation _conversation)
     {
-        if (_conversation == null) return;
         conversation = _conversation;
         Debug.Log("Conversation has been set, possible to edit Model from now on");
         //OnConversationSet(Task<conversation>);
@@ -175,7 +174,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void FlavorTextGeneratorTab()
     {
         AI_ModelSelector_EditorWindow.SelectChatModelField();
+        AI_ModelSelector.SetTool(this);
+        AI_ModelSelector.ChatModelSelection();
         ChatTestField();
+        ModelCheckButton();
         AI_TemperatureSlider();
         CardInfoField();
         TweakFlavorTextPromptField();
@@ -539,22 +541,36 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     /// </summary>
     private void ChatTestField()
     {
-
         GUILayout.BeginHorizontal();
-
         bool _generateTextButton = GUILayout.Button("Generate text");
-        AI_ModelSelector.SetTool(this);
         AI_ModelSelector.ChatModelSelection();
-        if(conversation == null)
+        //Debug.Log($"Current conversation model: {conversation?.Model?.ModelID}");
+        if (conversation == null)
             StartChat();
         if (_generateTextButton)
         {
-            _ =  GenerateTextFlavor(conversation);
+            Debug.Log("Generate text button clicked");
+            _ = GenerateTextFlavor(conversation);
         }
-
         GUILayout.EndHorizontal();
     }
-    //
+
+
+    private void ModelCheckButton()
+    {
+        GUILayout.BeginHorizontal();
+
+        bool _checkModelButton = GUILayout.Button("Check Model");
+        if (_checkModelButton)
+            CheckModel();
+        GUILayout.EndHorizontal();
+
+    }
+
+    private void CheckModel()
+    {
+        Debug.Log($"current model is {conversation.Model.ModelID}");
+    }
 
     private void StartChat()
     {
@@ -566,13 +582,21 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             return;
         }
         Conversation _chat = openAIAPI.Chat.CreateConversation();
-        OnConversationStarted?.Invoke(_chat);
+        conversation = _chat;
+        //Debug.Log($"Started new chat. Conversation model: {conversation?.Model?.ModelID}");
+        //if(conversation == null)
+        //OnConversationStarted?.Invoke(_chat);
     }
+
 
     private async Task GenerateTextFlavor(Conversation _chat)
     {
+        Debug.Log($"Inside GenerateTextFlavor. Current conversation model: {_chat?.Model?.ModelID}");
+
         CardInfo _cardInfo = new CardInfo();
-        /// replace the card name, type, resource type and flavor text type with variables
+        _chat.Model = conversation.Model;
+
+        // Replace the card name, type, resource type and flavor text type with variables
         // Adapt this string to setup the chat assistant responses. 
         // Following is the base model in case you erased it and lost it.
         #region BaseChatSetup
@@ -613,7 +637,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         string _response = await _chat.GetResponseFromChatbot();
         bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
         Debug.Log(_response);
-
+        Debug.Log($"inside the GENERATE function the model is : {_chat.Model.ModelID}");
         onFlavourTextGenerated?.Invoke(_response);
     }
 

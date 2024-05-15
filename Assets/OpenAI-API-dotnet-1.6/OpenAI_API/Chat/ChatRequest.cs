@@ -16,7 +16,7 @@ namespace OpenAI_API.Chat
 		/// The model to use for this request
 		/// </summary>
 		[JsonProperty("model")]
-		public string Model { get; set; } = OpenAI_API.Models.Model.ChatGPTTurbo;
+		public string Model { get; set; } = OpenAI_API.Models.Model.ChatGPT35_Turbo;
 
 		/// <summary>
 		/// The messages to send with this Chat Request

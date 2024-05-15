@@ -10,13 +10,20 @@ using UnityEngine;
 public static class AI_ModelSelector
 {
 
-    public static List<Model> allChatModels = new List<Model>();
+    public static List<Model> allChatModels = null;
     public static AI_Card_Tool_EditorWindow tool = null;
 
+    
     public static void SetTool(AI_Card_Tool_EditorWindow _tool)
     {
         tool = _tool;
     }
+
+    public static void SetAllChatModels()
+    {
+        allChatModels = new List<Model>();
+    }
+
     /// <summary>
     /// Call this method to define the Chat Model of the type Conversation
     /// </summary>
@@ -30,7 +37,7 @@ public static class AI_ModelSelector
             return;
         }
         tool.Conversation.Model = _model;
-        Debug.Log($"{_model} is now the selected AI MODEL");
+        Debug.Log($"{_model.ModelID} is now the selected AI MODEL in SetChatModel ({typeof(AI_ModelSelector)})");
 
     }
     public static void ChatModelSelection()
