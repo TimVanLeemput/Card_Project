@@ -576,7 +576,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         if (openAIAPI == null)
         {
-            Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
+            Authenticate(API_OpenAI_Authentication.GetApiKey());
             Debug.Log("Called authenticate from separate script");
             //tabs = 1;
             return;
@@ -591,8 +591,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private async Task GenerateTextFlavor(Conversation _chat)
     {
-        Debug.Log($"Inside GenerateTextFlavor. Current conversation model: {_chat?.Model?.ModelID}");
-
         CardInfo _cardInfo = new CardInfo();
         _chat.Model = conversation.Model;
 

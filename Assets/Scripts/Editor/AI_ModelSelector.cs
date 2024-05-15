@@ -37,6 +37,7 @@ public static class AI_ModelSelector
             return;
         }
         tool.Conversation.Model = _model;
+
         Debug.Log($"{_model.ModelID} is now the selected AI MODEL in SetChatModel ({typeof(AI_ModelSelector)})");
 
     }
