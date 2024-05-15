@@ -70,6 +70,6 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
-Assets/Scripts/API/API_OpenAI_Authentication.cs
-Assets/Scripts/API/API_OpenAI_Authentication.cs.meta
 ScreenShots
+Assets/Scripts/Runtime/API/API_OpenAI_Authentication.cs
+Assets/Scripts/Runtime/API/API_OpenAI_Authentication.cs.meta
