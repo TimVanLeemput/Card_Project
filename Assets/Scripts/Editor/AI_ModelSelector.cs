@@ -7,7 +7,7 @@ using UnityEditor;
 using UnityEngine;
 
 
-public static class AI_ModelSelector
+public static class AI_ModelSelector_Editor
 {
 
     public static List<Model> allChatModels = null;
@@ -33,7 +33,7 @@ public static class AI_ModelSelector
     {
         if (tool == null || _model == null)
         {
-            Debug.Log($"FAILED TO FIND TOOL OR MODEL in {typeof(AI_ModelSelector)}");
+            Debug.Log($"FAILED TO FIND TOOL OR MODEL in {typeof(AI_ModelSelector_Editor)}");
             return;
         }
         tool.Conversation.Model = _model;

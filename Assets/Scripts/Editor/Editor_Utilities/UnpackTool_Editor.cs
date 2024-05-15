@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class UnpackToolEditor : Editor
+public class UnpackTool_Editor : Editor
 {
     [MenuItem("Shortcuts/Unpack")]
     static void Unpack()

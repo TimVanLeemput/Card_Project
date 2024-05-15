@@ -190,8 +190,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ModelSelector_EditorWindow.SelectChatModelField();
-        AI_ModelSelector.SetTool(this);
-        AI_ModelSelector.ChatModelSelection();
+        AI_ModelSelector_Editor.SetTool(this);
+        AI_ModelSelector_Editor.ChatModelSelection();
         ChatTestField();
         ModelCheckButton();
         AI_TemperatureSlider();
@@ -560,7 +560,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         GUILayout.BeginHorizontal();
         bool _generateTextButton = GUILayout.Button("Generate text");
-        AI_ModelSelector.ChatModelSelection();
+        AI_ModelSelector_Editor.ChatModelSelection();
         //Debug.Log($"Current conversation model: {conversation?.Model?.ModelID}");
         if (conversation == null)
             StartChat();

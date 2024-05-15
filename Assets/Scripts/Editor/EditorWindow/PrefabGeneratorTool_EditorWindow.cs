@@ -48,7 +48,7 @@ public class PrefabGeneratorTool_EditorWindow : EditorWindow
         {
             CreateFolder(folder, subFolder);
             Selection.activeGameObject = gameObjectToGenerate;
-            UnpackToolEditor.UnpackCompletely();
+            UnpackTool_Editor.UnpackCompletely();
 
 
         }
@@ -101,7 +101,7 @@ public class PrefabGeneratorTool_EditorWindow : EditorWindow
                 GameObject _cardPrefabVariant = PrefabUtility.SaveAsPrefabAsset(gameObjectToGenerate, $"{_prefabPath}");
                 PrefabUtility.InstantiatePrefab(_cardPrefabVariant);
                 //Selection.activeGameObject = _cardPrefabVariant;
-                UnpackToolEditor.UnpackCompletely();
+                UnpackTool_Editor.UnpackCompletely();
                 AssetDatabase.Refresh();
             }
         }
