@@ -3,6 +3,7 @@ using OpenAI_API.Chat;
 using OpenAI_API.Images;
 using OpenAI_API.Models;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEditor;
@@ -80,7 +81,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public float Temperature => temperature;
 
     public event Action<Conversation> OnConversationStarted = null;
-
     public Conversation Conversation
     {
         get { return conversation; }
@@ -119,6 +119,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         onFlavorTextSelected += SetCardInfoFlavorText;
 
         OnConversationStarted += SetConversation;
+        //OnConversationSet += GenerateTextFlavor;
+
     }
 
     private void SetConversation(Conversation _conversation)
@@ -126,6 +128,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         if (_conversation == null) return;
         conversation = _conversation;
         Debug.Log("Conversation has been set, possible to edit Model from now on");
+        //OnConversationSet(Task<conversation>);
     }
 
     private void OnGUI()
@@ -171,6 +174,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void FlavorTextGeneratorTab()
     {
+        AI_ModelSelector_EditorWindow.SelectChatModelField();
         ChatTestField();
         AI_TemperatureSlider();
         CardInfoField();
@@ -537,34 +541,36 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
 
         GUILayout.BeginHorizontal();
+
         bool _generateTextButton = GUILayout.Button("Generate text");
+        AI_ModelSelector.SetTool(this);
+        AI_ModelSelector.ChatModelSelection();
+        if(conversation == null)
+            StartChat();
         if (_generateTextButton)
         {
-            StartChat();
-            //ChatGeneratorTool_EditorWindow.StartChat(openAIAPI, ChatModel.Ada);
-
+            _ =  GenerateTextFlavor(conversation);
         }
+
         GUILayout.EndHorizontal();
     }
     //
 
-    private async void StartChat()
+    private void StartChat()
     {
         if (openAIAPI == null)
         {
-            //Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
+            Authenticate(API_OpenAI_Authentication.OPENAI_API_KEY);
             Debug.Log("Called authenticate from separate script");
             //tabs = 1;
             return;
         }
         Conversation _chat = openAIAPI.Chat.CreateConversation();
         OnConversationStarted?.Invoke(_chat);
-        // TO DO 
-        // Insert a chat model picker box or list. 
-        AI_ModelSelector_EditorWindow.SetTool(this);
-        AI_ModelSelector_EditorWindow.ChatModelSelection();
-        //_chat.Model = Model.ChatGPTTurbo;
+    }
 
+    private async Task GenerateTextFlavor(Conversation _chat)
+    {
         CardInfo _cardInfo = new CardInfo();
         /// replace the card name, type, resource type and flavor text type with variables
         // Adapt this string to setup the chat assistant responses. 

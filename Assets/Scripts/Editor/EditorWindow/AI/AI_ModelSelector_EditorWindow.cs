@@ -1,42 +1,62 @@
-using OpenAI_API.Chat;
 using OpenAI_API.Models;
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static UnityEngine.GridBrushBase;
 
-
-public static class AI_ModelSelector_EditorWindow
+public class AI_ModelSelector_EditorWindow : EditorWindow
 {
+    public static event Action<Model> OnModelSelected = null;
+    static int currentModelIndex = 0;
 
-    public static List<Model> allChatModels = new List<Model>();
-    public static AI_Card_Tool_EditorWindow tool = null;
-
-    public static void SetTool(AI_Card_Tool_EditorWindow _tool)
+    private void OnEnable()
     {
-        tool = _tool;
-    }
-    /// <summary>
-    /// Call this method to define the Chat Model of the type Conversation
-    /// </summary>
-    /// <param name="_conversation"></param>
-    /// <param name="_selectedModel"></param>
-    public static void ChatModelSelection()
-    {
-        if (tool == null) return;
-        List<Model> _allModels = Model.PopulateModels();
-
-        //if(_allModels != null)
-        Debug.Log($"First in array of all models is => {_allModels[0].ModelID}");
-
-
-        Model _currentModel = tool.Conversation.Model;
-        Debug.Log($"Current model is => {_currentModel.ModelID}");
-
+        OnModelSelected += SetChatModel;
     }
 
-    //static List<Model> SetModels()
-    //{
-    //    return Model.PopulateModels();
-    //}
+    private void SetChatModel(Model _model)
+    {
+        AI_ModelSelector.SetChatModel(_model);
+    }
+
+    public static void SelectChatModelField()
+    {
+        GUIHelpers_Editor.SpaceV(5);
+        GUILayout.BeginVertical(); // Begin a vertical layout group
+        List<Model> _allModels = AI_ModelSelector.allChatModels;
+
+        int _size = _allModels.Count;
+        EditorGUI.BeginChangeCheck();
+        List<string> _allModelsID = new List<string>();
+        
+        foreach (Model _model in _allModels)
+        {
+            _allModelsID.Add(_model.ModelID); // Corrected from _allModels.Add(_model.ModelID);
+           
+        }
+        //_allModelsID.Insert(0, "Select a model");
+        if (_allModels.Count > 0)
+        {
+            // Initialize _currentModelIndex with the index of the first model
+            //int _selectedModelIndex = _allModels
+            
+             
+            currentModelIndex = EditorGUILayout.Popup("Select AI Model",
+                currentModelIndex, _allModelsID.ToArray());
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Model _selectedModel = _allModels[currentModelIndex];
+                Debug.Log($"CURRENT MODEL inside {typeof(AI_ModelSelector_EditorWindow)} is {_selectedModel.ModelID}");
+                OnModelSelected?.Invoke(_selectedModel);
+            }
+        }
+
+        GUILayout.EndVertical(); // End the vertical layout group
+        GUIHelpers_Editor.SpaceV(5);
+    }
+
 }

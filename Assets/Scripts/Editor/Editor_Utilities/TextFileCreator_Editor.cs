@@ -72,7 +72,6 @@ public class TextFileCreator_Editor
             // Refresh the asset database to reflect the changes
             AssetDatabase.Refresh();
 
-            Debug.Log("Text file updated successfully");
         }
         catch (System.Exception ex)
         {
