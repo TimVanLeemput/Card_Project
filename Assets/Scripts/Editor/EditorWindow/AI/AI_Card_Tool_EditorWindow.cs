@@ -32,6 +32,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public bool urlHasBeenGenerated = false;
     public bool openImageInBrowser = false;
     public bool canRevealPassword = false;
+
+    public bool temperatureInfoBubbleHovered = false;
     #endregion
 
 
@@ -55,6 +57,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public string tempKey = "";
     //2D icons
     private Texture2D revealPassWordIcon = null;
+    private Texture2D mouseCursorQuestion = null;
+    private Texture2D white_bg_icon = null;
+
     //Tabs
     public int tabs = 3;
     string[] tabSelection = new string[] { "Image Generation", "Credentials", "Flavor Text Generation" };
@@ -146,13 +151,15 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
                 ImageGeneratorTab();
                 break;
             case 1:
-                APIKeyField();
+                CredentialsTab();
                 break;
             case 2:
                 FlavorTextGeneratorTab();
                 break;
         }
     }
+
+
     public OpenAIAPI GetAPI()
     {
         if (openAIAPI == null) return null;
@@ -162,17 +169,26 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         // Load the eye icon texture
         revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
+        mouseCursorQuestion = Resources.Load<Texture2D>("mouse_cursor_question_small");
+        mouseCursorQuestion = Resources.Load<Texture2D>("square_bg");
     }
     private void ImageGeneratorTab()
     {
+        Authenticate(API_OpenAI_Authentication.GetApiKey());
         ImagePromptField();
         GameObjectToApplyImageOn();
         GeneratedURLField();
         GenerateImageButton();
         ApplyImageToGameObjectButton();
     }
+    private void CredentialsTab()
+    {
+        Authenticate(API_OpenAI_Authentication.GetApiKey());
+        APIKeyField();
+    }
     private void FlavorTextGeneratorTab()
     {
+        Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ModelSelector_EditorWindow.SelectChatModelField();
         AI_ModelSelector.SetTool(this);
         AI_ModelSelector.ChatModelSelection();
@@ -218,8 +234,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private async void Authenticate(string _apiKey)
     {
+        if (openAIAPI != null) return;
         openAIAPI = new OpenAIAPI(_apiKey);
-        Debug.Log("Authenticate with event called");
+
         try
         {
             bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();
@@ -593,6 +610,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         CardInfo _cardInfo = new CardInfo();
         _chat.Model = conversation.Model;
+        ChatRequest _chatRequest = new ChatRequest();
+        _chatRequest.Temperature = temperature;
+        double _tempTemp = _chatRequest.Temperature.Value;
+        Debug.Log($"Chat generating answer with temperature of {_tempTemp}/2");
 
         // Replace the card name, type, resource type and flavor text type with variables
         // Adapt this string to setup the chat assistant responses. 
@@ -635,14 +656,16 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         string _response = await _chat.GetResponseFromChatbot();
         bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
         Debug.Log(_response);
-        Debug.Log($"inside the GENERATE function the model is : {_chat.Model.ModelID}");
         onFlavourTextGenerated?.Invoke(_response);
     }
 
     private void AI_TemperatureSlider()
     {
         GUILayout.BeginHorizontal();
-        GUILayout.Label("AI_Temperature");
+        GUILayout.FlexibleSpace();
+        GUILayout.Label("Model Temperature");
+        TemperatureInfoBubble();
+
         EditorGUI.BeginChangeCheck();
 
         float _tempTemperature = temperature / 2;
@@ -652,12 +675,33 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         {
             temperature = _tempTemperature * 2;
             temperature = (float)Math.Round(temperature, 1);
-
-            //Debug.Log($"Chat generating answer with temperature of {temperature}/2");
         }
-
         GUILayout.EndHorizontal();
     }
+    
+    private void TemperatureInfoBubble()
+    {
+        Rect _infoRec = GUILayoutUtility.GetRect(20, 30);
+        GUIStyle _style = new GUIStyle(GUI.skin.button);
+        _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
+        _style.fixedWidth = 20; // Set a fixed width for the button
+        _style.fixedHeight = 30; // Set a fixed height for the button
+        _style.normal.background = revealPassWordIcon;
+        _style.active.background = revealPassWordIcon;
+
+        bool _imageButton = GUI.Button(_infoRec, revealPassWordIcon, _style);
+        temperatureInfoBubbleHovered = _infoRec.Contains(Event.current.mousePosition);
+
+        if (temperatureInfoBubbleHovered)
+        {
+
+            Rect tooltipRect = new Rect(_infoRec.x, _infoRec.yMax, _infoRec.width * 20, 100);
+            EditorGUI.LabelField(tooltipRect, new GUIContent("Higher values = \n more random, \n lower values" +
+                " =\n more deterministic.", "This is the tooltip part"));
+
+        }
+    }
+
 
     private void SetTemperature(float _temperature)
     {
