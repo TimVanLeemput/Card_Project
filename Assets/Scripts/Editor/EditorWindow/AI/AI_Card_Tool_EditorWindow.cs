@@ -525,8 +525,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void SetGameObjectMaterial(Texture2D _texture)
     {
 
-        CreateDefaultFolders();
-        string _userInputNoSpace = $"{userInputPrompt.Replace(" ", "_")}";  // Replacing spaces with underscores
+        CreateDefaultFolders(); // Creates the default root folders for materials, textures and AI_Mats
+        string _userInputNoSpace = $"{AI_ImageGenerator_EditorWindow.userInputPrompt.Replace(" ", "_")}";  // Replacing spaces with underscores
         _userInputNoSpace = _userInputNoSpace.Replace("\"", "");  // Replacing double quotes with nothing
         _userInputNoSpace = _userInputNoSpace.Replace("\'", ""); // Replacing single quotes with nothing
         string _fullPathTextures = $"Assets/Materials/AI_Mats/Textures/{_userInputNoSpace}_Textures";
@@ -541,9 +541,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             AssetDatabase.CreateFolder("Assets/Materials/AI_Mats/Materials", $"{_userInputNoSpace}_Material"); // Doesn't allow numbers in path!
         }
 
-        string _newTexturePath = $"{_fullPathTextures}/{userInputPrompt}_Downloaded_2D_Texture.asset";
+        string _newTexturePath = $"{_fullPathTextures}/{AI_ImageGenerator_EditorWindow.userInputPrompt}_Downloaded_2D_Texture.asset";
 
-        string _newMatPath = $"{_fullPathMaterials}/{userInputPrompt}_Downloaded_Material.mat";
+        string _newMatPath = $"{_fullPathMaterials}/{AI_ImageGenerator_EditorWindow.userInputPrompt}_Downloaded_Material.mat";
         _newTexturePath = AssetDatabase.GenerateUniqueAssetPath(_newTexturePath);
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
 
