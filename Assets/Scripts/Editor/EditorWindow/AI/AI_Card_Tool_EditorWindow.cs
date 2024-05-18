@@ -13,9 +13,9 @@ using UnityEngine.Networking;
 
 public class AI_Card_Tool_EditorWindow : EditorWindow
 {
-    [SerializeField] OpenAIAPI openAIAPI = null;
+    [SerializeField] public static OpenAIAPI openAIAPI = null;
 
-    [SerializeField] GameObject goImageTarget = null;
+    //[SerializeField] GameObject goImageTarget = null; // TO DELETE
     [SerializeField] Material material = null;
     [SerializeField] Shader shader = null;
 
@@ -30,7 +30,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     #region Booleans
     public bool urlHasBeenGenerated = false;
-    public bool openImageInBrowser = false;
+    public bool openImageInBrowser = false; // TO DELETE
     public bool canRevealPassword = false;
 
     public bool temperatureInfoBubbleHovered = false;
@@ -38,7 +38,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
 
     #region Events
-    public event Action<Texture2D> onTextureLoadedFromURL = null;
+    public event Action<Texture2D> onTextureLoadedFromURL = null; // TO DELETE
     public event Action<Sprite> onSpriteGenerated = null;
     public event Action<string> onPasswordEntered = null;
     public event Action<bool> onRevealPasswordButtonClicked = null;
@@ -50,8 +50,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     #region EditorWindow_UI
     //strings
-    public string userInputPrompt = "";
-    public string generatedImageURL = "";
+    public string userInputPrompt = ""; // TO DELETE
+    public string generatedImageURL = ""; // TO DELETE
     public string manualURL = "";
     public string API_KEY = "";
     public string tempKey = "";
@@ -82,7 +82,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     #endregion
 
     // Accessors
-    public OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
+    public static OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
     public float Temperature => temperature;
 
     public event Action<Conversation> OnConversationStarted = null;
@@ -117,7 +117,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void InitEvents()
     {
         onPasswordEntered += Authenticate;
-        onTextureLoadedFromURL += SetGameObjectMaterial;
+        AI_ImageGenerator_EditorWindow.onTextureLoadedFromURL += SetGameObjectMaterial;
         onFlavourTextGenerated += SetFlavorText;
         onFlavourTextGenerated += AddFlavorTextToList;
         onFlavourTextGenerated += AddTextToFile;
@@ -175,11 +175,15 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void ImageGeneratorTab()
     {
         Authenticate(API_OpenAI_Authentication.GetApiKey());
-        ImagePromptField();
-        GameObjectToApplyImageOn();
-        GeneratedURLField();
-        GenerateImageButton();
-        ApplyImageToGameObjectButton();
+        //AI_ImageGenerator_EditorWindow -- Prompt field -- Generated URL field -- Generate-Image-Button-ApplyImageToButton
+        //AI_ImageGenerator_Editor -- GameObject to apply -- 
+        //AI_ImageGenerator_EditorWindow.ImagePromptField();
+        //ImagePromptField();
+        //GameObjectToApplyImageOn();
+        AI_ImageGenerator_EditorWindow.ImageGeneratorField();
+        //GeneratedURLField();
+        //GenerateImageButton();
+        //ApplyImageToGameObjectButton();
     }
     private void CredentialsTab()
     {
@@ -312,16 +316,16 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         canRevealPassword = _value;
     }
-    private void ApplyImageToGameObjectButton()
-    {
-        GUILayout.BeginHorizontal();
-        bool _applyButton = GUILayout.Button("Apply image");
-        if (_applyButton)
-        {
-            GetURLTexture();
-        }
-        GUILayout.EndHorizontal();
-    }
+    //private void ApplyImageToGameObjectButton()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    bool _applyButton = GUILayout.Button("Apply image");
+    //    if (_applyButton)
+    //    {
+    //        GetURLTexture();
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
 
     private void AuthenticateButton()
     {
@@ -335,161 +339,161 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    private void ImagePromptField()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Prompt");
-        userInputPrompt = GUILayout.TextField(userInputPrompt, 200);
-        GUILayout.EndHorizontal();
-    }
-    private void GameObjectToApplyImageOn()
-    {
-        // GameObject to apply image on 
-        GUILayout.BeginHorizontal();
-        goImageTarget = (GameObject)EditorGUILayout.ObjectField("GameObject to place Image on", goImageTarget, typeof(GameObject), true);
-        GUILayout.EndHorizontal();
-    }
-    private void GenerateImageButton()
-    {
-        GUILayout.BeginHorizontal();
-        bool _generateImageButton = GUILayout.Button("Generate image");
-        if (_generateImageButton)
-        {
-            if (userInputPrompt == string.Empty)
-            {
-                Debug.LogError("Please enter a valid prompt");
-                GUILayout.EndHorizontal();
-            }
-            CreateImageURL();
-        }
-        GUILayout.EndHorizontal();
-    }
+    //private void ImagePromptField()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Prompt");
+    //    userInputPrompt = GUILayout.TextField(userInputPrompt, 200);
+    //    GUILayout.EndHorizontal();
+    //}
+    //private void GameObjectToApplyImageOn()
+    //{
+    //    // GameObject to apply image on 
+    //    GUILayout.BeginHorizontal();
+    //    goImageTarget = (GameObject)EditorGUILayout.ObjectField("GameObject to place Image on", goImageTarget, typeof(GameObject), true);
+    //    GUILayout.EndHorizontal();
+    //}
+    //private void GenerateImageButton()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    bool _generateImageButton = GUILayout.Button("Generate image");
+    //    if (_generateImageButton)
+    //    {
+    //        if (userInputPrompt == string.Empty)
+    //        {
+    //            Debug.LogError("Please enter a valid prompt");
+    //            GUILayout.EndHorizontal();
+    //        }
+    //        CreateImageURL();
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
 
-    private void GeneratedURLField()
-    {
-        GUILayout.BeginHorizontal();
-        OpenInBrowserButton();
-        GUILayout.EndHorizontal();
+    //private void GeneratedURLField()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    OpenInBrowserButton();
+    //    GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
-        GUIHelpers_Editor.SpaceV(5);
-        GUIStyle _labelStyle = new GUIStyle(EditorStyles.helpBox);
+    //    GUILayout.BeginHorizontal();
+    //    GUIHelpers_Editor.SpaceV(5);
+    //    GUIStyle _labelStyle = new GUIStyle(EditorStyles.helpBox);
 
-        GUIContent labelContent = new GUIContent("URL to Image", "URL generated by the prompt");
-        Vector2 labelSize = _labelStyle.CalcSize(labelContent);
+    //    GUIContent labelContent = new GUIContent("URL to Image", "URL generated by the prompt");
+    //    Vector2 labelSize = _labelStyle.CalcSize(labelContent);
 
-        float windowWidth = EditorGUIUtility.currentViewWidth;
-        float remainingSpace = windowWidth - labelSize.x;
+    //    float windowWidth = EditorGUIUtility.currentViewWidth;
+    //    float remainingSpace = windowWidth - labelSize.x;
 
-        GUILayout.Space(remainingSpace / 2);
-        GUILayout.Label(labelContent, _labelStyle);
-        GUILayout.Space(remainingSpace / 2);
+    //    GUILayout.Space(remainingSpace / 2);
+    //    GUILayout.Label(labelContent, _labelStyle);
+    //    GUILayout.Space(remainingSpace / 2);
 
-        GUILayout.EndHorizontal();
+    //    GUILayout.EndHorizontal();
 
-        GUILayout.BeginHorizontal();
+    //    GUILayout.BeginHorizontal();
 
-        if (generatedImageURL != null)
-            GUILayout.TextArea(generatedImageURL, 200);
+    //    if (generatedImageURL != null)
+    //        GUILayout.TextArea(generatedImageURL, 200);
 
-        if (generatedImageURL == null)
-            GUILayout.TextArea("", 200);
+    //    if (generatedImageURL == null)
+    //        GUILayout.TextArea("", 200);
 
-        GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(5);
-    }
+    //    GUILayout.EndHorizontal();
+    //    GUIHelpers_Editor.SpaceV(5);
+    //}
 
-    private void OpenInBrowserButton()
-    {
-        GUILayout.BeginHorizontal();
-        bool _browserButton = GUILayout.Button("Open in browser");
-        if (_browserButton)
-            Application.OpenURL(generatedImageURL);
-        bool _editURL = GUILayout.Button("Reset URL");
-        if (_editURL)
-        {
-            generatedImageURL = null;
-            Debug.Log("reset url");
-        }
-        GUILayout.EndHorizontal();
-    }
+    //private void OpenInBrowserButton()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    bool _browserButton = GUILayout.Button("Open in browser");
+    //    if (_browserButton)
+    //        Application.OpenURL(generatedImageURL);
+    //    bool _editURL = GUILayout.Button("Reset URL");
+    //    if (_editURL)
+    //    {
+    //        generatedImageURL = null;
+    //        Debug.Log("reset url");
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
 
-    public async void CreateImageURL()
-    {
-        if (openAIAPI == null)
-        {
-            Debug.Log("Failed authentication, please login");
-            FailedAuthentication_EditorWindow.ShowWindow();
-            tabs = 1;
-            return;
-        }
-        bool _checkAuth = await openAIAPI.Auth.ValidateAPIKey();
-        if (_checkAuth)
-        { tabs = 0; }
-        else tabs = 1;
-        try
-        {
-            Task<ImageResult> _result = openAIAPI.ImageGenerations.CreateImageAsync(userInputPrompt);  // This is using the prompt
-            await _result; // Wait for the task to complete
+    //public async void CreateImageURL()
+    //{
+    //    if (openAIAPI == null)
+    //    {
+    //        Debug.Log("Failed authentication, please login");
+    //        FailedAuthentication_EditorWindow.ShowWindow();
+    //        tabs = 1;
+    //        return;
+    //    }
+    //    bool _checkAuth = await openAIAPI.Auth.ValidateAPIKey();
+    //    if (_checkAuth)
+    //    { tabs = 0; }
+    //    else tabs = 1;
+    //    try
+    //    {
+    //        Task<ImageResult> _result = openAIAPI.ImageGenerations.CreateImageAsync(userInputPrompt);  // This is using the prompt
+    //        await _result; // Wait for the task to complete
 
-            if (_result == null)
-            {
-                Debug.Log("Null result");
-                return;
-            }
+    //        if (_result == null)
+    //        {
+    //            Debug.Log("Null result");
+    //            return;
+    //        }
 
-            while (!_result.IsCompleted)
-            {
-                await Task.Delay(8000);
-            }
-            if (_result.IsCompleted)
-            {
+    //        while (!_result.IsCompleted)
+    //        {
+    //            await Task.Delay(8000);
+    //        }
+    //        if (_result.IsCompleted)
+    //        {
 
-                ImageResult result = _result.Result;
-                string _imageUrl = result.ToString();
-                if (_imageUrl == null) return;
-                Debug.Log($"Image URL: {_imageUrl}");
-                generatedImageURL = _imageUrl;
+    //            ImageResult result = _result.Result;
+    //            string _imageUrl = result.ToString();
+    //            if (_imageUrl == null) return;
+    //            Debug.Log($"Image URL: {_imageUrl}");
+    //            generatedImageURL = _imageUrl;
 
-                if (openImageInBrowser)  //Optional opening 
-                    Application.OpenURL(generatedImageURL);
-                GetURLTexture();
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log($"Failed async call to generate AI Image{e.Message}");
-        }
-    }
-    public async void GetURLTexture()
-    {
-        if (generatedImageURL == null) return;
-        try
-        {
-            UnityWebRequest _webRequest = UnityWebRequestTexture.GetTexture(generatedImageURL);
-            _webRequest.SendWebRequest();
+    //            if (openImageInBrowser)  //Optional opening 
+    //                Application.OpenURL(generatedImageURL);
+    //            GetURLTexture();
+    //        }
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log($"Failed async call to generate AI Image{e.Message}");
+    //    }
+    //}
+    //public async void GetURLTexture()
+    //{
+    //    if (generatedImageURL == null) return;
+    //    try
+    //    {
+    //        UnityWebRequest _webRequest = UnityWebRequestTexture.GetTexture(generatedImageURL);
+    //        _webRequest.SendWebRequest();
 
-            while (!_webRequest.isDone)
-            {
-                await Task.Delay(8000);
-            }
+    //        while (!_webRequest.isDone)
+    //        {
+    //            await Task.Delay(8000);
+    //        }
 
-            if (_webRequest.result == UnityWebRequest.Result.Success)
-            {
-                Debug.Log("Download successful");
-                var _texture = DownloadHandlerTexture.GetContent(_webRequest);
-                onTextureLoadedFromURL?.Invoke(_texture);
-            }
-            else
-            {
-                Debug.Log($"Failed to load web request: {_webRequest.error}");
-            }
-        }
-        catch (Exception e)
-        {
-            Debug.Log($"Error loading website image: {e.Message}");
-        }
-    }
+    //        if (_webRequest.result == UnityWebRequest.Result.Success)
+    //        {
+    //            Debug.Log("Download successful");
+    //            var _texture = DownloadHandlerTexture.GetContent(_webRequest);
+    //            onTextureLoadedFromURL?.Invoke(_texture);
+    //        }
+    //        else
+    //        {
+    //            Debug.Log($"Failed to load web request: {_webRequest.error}");
+    //        }
+    //    }
+    //    catch (Exception e)
+    //    {
+    //        Debug.Log($"Error loading website image: {e.Message}");
+    //    }
+    //}
 
     private void CreateDefaultFolders()
     {
@@ -513,6 +517,11 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Materials");
         }
     }
+    /// <summary>
+    /// To do :
+    /// Refactor this function into smaller ones. It does too many things at once
+    /// </summary>
+    /// <param name="_texture"></param>
     private void SetGameObjectMaterial(Texture2D _texture)
     {
 
@@ -545,9 +554,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
 
         AssetDatabase.CreateAsset(_newMaterial, _newMatPath);
-        goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
-        goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
-        material = goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
+        AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
+        AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
+        material = AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
         material.mainTexture = _texture;
 
         AssetDatabase.SaveAssets();
