@@ -51,7 +51,6 @@ public class AI_ImageGenerator_EditorWindow : EditorWindow
         GUILayout.BeginHorizontal();
         GUILayout.Label("Prompt");
         userInputPrompt = GUILayout.TextField(userInputPrompt, 200);
-        Debug.Log($"this is the current prompt = > {userInputPrompt}");
         GUILayout.EndHorizontal();
     }
 
