@@ -363,10 +363,11 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void StartChat()
     {
-        if (openAIAPI == null)
+        //if (AI_Authentication_Editor.Authenticate() == null)
         {
-            Authenticate(API_OpenAI_Authentication.GetApiKey());
-            Debug.Log("Called authenticate from separate script");
+            AuthenticateCall();
+            //Authenticate(API_OpenAI_Authentication.GetApiKey());
+            //Debug.Log("Called authenticate from separate script");
             //tabs = 1;
             return;
         }
