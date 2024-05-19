@@ -369,9 +369,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             //Authenticate(API_OpenAI_Authentication.GetApiKey());
             //Debug.Log("Called authenticate from separate script");
             //tabs = 1;
-            return;
+            //return;
         }
-        Conversation _chat = openAIAPI.Chat.CreateConversation();
+        Conversation _chat = AI_Authentication_Editor.openAIAPI.Chat.CreateConversation();
         conversation = _chat;
 
         //Replaced invoke method with direct set of conversation.
