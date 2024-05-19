@@ -14,12 +14,8 @@ using UnityEngine.Networking;
 public class AI_Card_Tool_EditorWindow : EditorWindow
 {
     [SerializeField] public static OpenAIAPI openAIAPI = null;
-
     [SerializeField] Material material = null;
-    [SerializeField] Shader shader = null;
-
     [SerializeField] CardInfo cardInfo = null;
-    [SerializeField] CardCreator cardCreator = null;
 
     #region Booleans
     public bool canRevealPassword = false;
@@ -43,8 +39,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     public string tempKey = "";
     //2D icons
     private Texture2D revealPassWordIcon = null;
-    private Texture2D mouseCursorQuestion = null;
-    private Texture2D white_bg_icon = null;
 
     //Tabs
     public static int tabs = 3;
@@ -69,8 +63,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     // Accessors
     public float Temperature => temperature;
-
-    public event Action<Conversation> OnConversationStarted = null;
+    
+    //public event Action<Conversation> OnConversationStarted = null;
     public static int Tabs
     {
         get { return tabs; }
@@ -154,8 +148,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         // Load the eye icon texture
         revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
-        mouseCursorQuestion = Resources.Load<Texture2D>("mouse_cursor_question_small");
-        mouseCursorQuestion = Resources.Load<Texture2D>("square_bg");
     }
     private void ImageGeneratorTab()
     {
@@ -216,7 +208,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private async void AuthenticateCall()
     {
-       await AI_Authentication_Editor.Authenticate(API_OpenAI_Authentication.GetApiKey(), this);
+        await AI_Authentication_Editor.Authenticate(API_OpenAI_Authentication.GetApiKey(), this);
     }
     private async void Authenticate(string _apiKey)
     {
@@ -304,7 +296,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         bool _loginButton = GUILayout.Button("Login to OpenAI");
         if (_loginButton)
         {
-            Authenticate(tempKey);
+            AuthenticateCall();
         }
         GUILayout.EndHorizontal();
     }
@@ -363,17 +355,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void StartChat()
     {
-        //if (AI_Authentication_Editor.Authenticate() == null)
-        {
-            AuthenticateCall();
-            //Authenticate(API_OpenAI_Authentication.GetApiKey());
-            //Debug.Log("Called authenticate from separate script");
-            //tabs = 1;
-            //return;
-        }
+        AuthenticateCall();
         Conversation _chat = AI_Authentication_Editor.OpenAIAPI.Chat.CreateConversation();
         conversation = _chat;
-
         //Replaced invoke method with direct set of conversation.
         //Event was causing issues.
         //OnConversationStarted?.Invoke(_chat);

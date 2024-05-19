@@ -15,7 +15,6 @@ using System.IO;
 
 public class PrefabGeneratorTool_EditorWindow : EditorWindow
 {
-    public event Action<string> onFolderCreated = null;
     public event Action<string> onPathCreated = null;
     public string folder = "";
     public string subFolder = "";
