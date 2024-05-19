@@ -371,7 +371,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             //tabs = 1;
             //return;
         }
-        Conversation _chat = AI_Authentication_Editor.openAIAPI.Chat.CreateConversation();
+        Conversation _chat = AI_Authentication_Editor.OpenAIAPI.Chat.CreateConversation();
         conversation = _chat;
 
         //Replaced invoke method with direct set of conversation.

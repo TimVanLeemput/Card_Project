@@ -10,11 +10,16 @@ using UnityEngine;
 public static class AI_Authentication_Editor
 {
     public static OpenAIAPI openAIAPI = null;
+    public static OpenAIAPI OpenAIAPI
+    {
+        get { return openAIAPI; }
+        set { openAIAPI = value; }
+    }
     public static async Task<OpenAIAPI> Authenticate(string _apiKey, EditorWindow _editorWindow)
     {
         if (openAIAPI != null) return null;
         openAIAPI = new OpenAIAPI(_apiKey);
-        
+
         try
         {
             bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();

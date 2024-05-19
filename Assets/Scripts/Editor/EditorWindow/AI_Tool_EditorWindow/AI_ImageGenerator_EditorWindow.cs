@@ -145,7 +145,7 @@ public class AI_ImageGenerator_EditorWindow : EditorWindow
         #endregion
         try
         {
-            Task<ImageResult> _result = AI_Authentication_Editor.openAIAPI.ImageGenerations.CreateImageAsync(userInputPrompt);  // This is using the prompt
+            Task<ImageResult> _result = AI_Authentication_Editor.OpenAIAPI.ImageGenerations.CreateImageAsync(userInputPrompt);  // This is using the prompt
             await _result; // Wait for the task to complete
 
             if (_result == null)
