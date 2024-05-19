@@ -47,7 +47,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private Texture2D white_bg_icon = null;
 
     //Tabs
-    public int tabs = 3;
+    public static int tabs = 3;
     string[] tabSelection = new string[] { "Image Generation", "Credentials", "Flavor Text Generation" };
     #endregion
 
@@ -68,10 +68,19 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     #endregion
 
     // Accessors
-    public static OpenAIAPI OpenAIAPI { get { return openAIAPI; } }
     public float Temperature => temperature;
 
     public event Action<Conversation> OnConversationStarted = null;
+    public static int Tabs
+    {
+        get { return tabs; }
+        set { tabs = value; }
+    }
+    public static OpenAIAPI OpenAIAPI
+    {
+        get { return openAIAPI; }
+        set { openAIAPI = value; }
+    }
     public Conversation Conversation
     {
         get { return conversation; }
@@ -141,7 +150,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
                 break;
         }
     }
-
     private void Init2DTextures()
     {
         // Load the eye icon texture
@@ -153,7 +161,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ImageGenerator_EditorWindow.ImageGeneratorField();
-        
+
     }
     private void CredentialsTab()
     {
@@ -371,7 +379,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         ChatRequest _chatRequest = new ChatRequest();
         _chatRequest.Temperature = temperature;
         float _tempTemp = (float)_chatRequest.Temperature.Value;
-        Debug.Log($"Chat generating answer with temperature of {_tempTemp/2}");
+        Debug.Log($"Chat generating answer with temperature of {_tempTemp / 2}");
 
         // Replace the card name, type, resource type and flavor text type with variables
         // Adapt this string to setup the chat assistant responses. 
@@ -435,7 +443,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
     }
-    
+
     private void TemperatureInfoBubble()
     {
         Rect _infoRec = GUILayoutUtility.GetRect(20, 30);
