@@ -322,37 +322,39 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
     }
 
-    private void CreateDefaultFolders()
-    {
-        if (!AssetDatabase.IsValidFolder("Assets/Materials"))
-        {
-            AssetDatabase.CreateFolder("Assets", "Materials");
-        }
+    //private void CreateDefaultFolders()
+    //{
+    //    if (!AssetDatabase.IsValidFolder("Assets/Materials"))
+    //    {
+    //        AssetDatabase.CreateFolder("Assets", "Materials");
+    //    }
 
-        if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats"))
-        {
-            AssetDatabase.CreateFolder("Assets/Materials", "AI_Mats");
-        }
+    //    if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats"))
+    //    {
+    //        AssetDatabase.CreateFolder("Assets/Materials", "AI_Mats");
+    //    }
 
-        if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats/Textures"))
-        {
-            AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Textures");
-        }
+    //    if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats/Textures"))
+    //    {
+    //        AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Textures");
+    //    }
 
-        if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats/Materials"))
-        {
-            AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Materials");
-        }
-    }
+    //    if (!AssetDatabase.IsValidFolder("Assets/Materials/AI_Mats/Materials"))
+    //    {
+    //        AssetDatabase.CreateFolder("Assets/Materials/AI_Mats", "Materials");
+    //    }
+    //}
     /// <summary>
-    /// This method 
+    /// This method generates 2 paths : one for the texture and for the material
+    /// Could possible be transformed in a method with two out strings : 
+    /// void func(Texture2D _tex, out string _texPath, out string _matPath)
     /// </summary>
-    /// <param name="_texture"></param>
-
-    private void CreateAIMaterialsFolders(Texture2D _texture)
+    /// <param name="_texture"> The AI generated texture</param>
+    
+    private void CreateAIMaterialsFolders(Texture2D _AI_GeneratedTexture)
     {
-        CreateDefaultFolders(); // Ensures the creation of the default root folders for materials, textures and AI_Mats
-        Texture2D _generatedTexture = _texture;
+        DefaultAIFolderCreator_Editor.CreateDefaultAIMatsFolders(); // Ensures the creation of the default root folders for materials, textures and AI_Mats
+        Texture2D _generatedTexture = _AI_GeneratedTexture;
         string _userInputNoSpace = $"{AI_ImageGenerator_EditorWindow.userInputPrompt.Replace(" ", "_")}";  // Replacing spaces with underscores
         _userInputNoSpace = _userInputNoSpace.Replace("\"", "");  // Replacing double quotes with nothing
         _userInputNoSpace = _userInputNoSpace.Replace("\'", ""); // Replacing single quotes with nothing
@@ -375,13 +377,14 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         _newMatPath = AssetDatabase.GenerateUniqueAssetPath(_newMatPath);
         OnAIMatAndTexturePathsCreated?.Invoke(_generatedTexture,_newTexturePath, _newMatPath);
     }
+    /// <summary>
+    /// This method  
+    /// </summary>
+    /// <param name="_texture"></param>
+    /// <param name="_texturePath"></param>
+    /// <param name="_matPath"></param>
     private void SetGameObjectMaterial(Texture2D _texture, string _texturePath, string _matPath)
     {
-
-        // Call event that calls SetGameObjectMaterial
-
-        // Save the material as an asset
-
         AssetDatabase.CreateAsset(_texture, _texturePath);   // Creates 2DTextureFile
 
         Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
@@ -394,8 +397,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
         AssetDatabase.SaveAssets();
     }
-
-
     /// <summary>
     /// Call this method to test the chat
     /// </summary>
@@ -414,8 +415,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
     }
-
-
     private void ModelCheckButton()
     {
         GUILayout.BeginHorizontal();
@@ -424,7 +423,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         if (_checkModelButton)
             CheckModel();
         GUILayout.EndHorizontal();
-
     }
 
     private void CheckModel()
