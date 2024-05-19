@@ -291,7 +291,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         if (_loginButton)
         {
             Authenticate(tempKey);
-            //generatedImageURL = null;
         }
         GUILayout.EndHorizontal();
     }
@@ -324,7 +323,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         GUILayout.BeginHorizontal();
         bool _generateTextButton = GUILayout.Button("Generate text");
         AI_ModelSelector_Editor.ChatModelSelection();
-        //Debug.Log($"Current conversation model: {conversation?.Model?.ModelID}");
         if (conversation == null)
             StartChat();
         if (_generateTextButton)
@@ -549,8 +547,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         _currentOptionIndex = EditorGUILayout.Popup("",
             _currentOptionIndex, allFlavortexts.ToArray());
         string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
-        // if currentOptionIndex = 0 -> Invoke()? 
-        // on click on first option -> invoke ?
+
         if (EditorGUI.EndChangeCheck())
         {
             onFlavorTextSelected?.Invoke(_selectedFlavorText);
@@ -569,9 +566,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void AddTextToFile(string _textToAdd)
     {
-        //await AsyncCreateFolderCall();
         TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
-
         TextFileCreator_Editor.AddToTextFile($"{_textToAdd}", $"{cardInfo.CardTitle}");
     }
 }
