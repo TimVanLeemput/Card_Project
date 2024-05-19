@@ -381,7 +381,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private async Task GenerateTextFlavor(Conversation _chat)
     {
-        CardInfo _cardInfo = new CardInfo();
+        CardInfo _cardInfo = CreateInstance<CardInfo>();
         _chat.Model = conversation.Model;
         ChatRequest _chatRequest = new ChatRequest();
         _chatRequest.Temperature = temperature;
