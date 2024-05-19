@@ -159,18 +159,20 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void ImageGeneratorTab()
     {
-        Authenticate(API_OpenAI_Authentication.GetApiKey());
+        AuthenticateCall();
+        //Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ImageGenerator_EditorWindow.ImageGeneratorField();
-
     }
     private void CredentialsTab()
     {
-        Authenticate(API_OpenAI_Authentication.GetApiKey());
+        AuthenticateCall();
+        //Authenticate(API_OpenAI_Authentication.GetApiKey());
         APIKeyField();
     }
     private void FlavorTextGeneratorTab()
     {
-        Authenticate(API_OpenAI_Authentication.GetApiKey());
+        AuthenticateCall();
+        //Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ModelSelector_EditorWindow.SelectChatModelField();
         AI_ModelSelector_Editor.Init(this);
         ChatTestField();
@@ -211,6 +213,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
             FailedAuthentication_EditorWindow.ShowWindow();
 
         }
+    }
+    private async void AuthenticateCall()
+    {
+       await AI_Authentication_Editor.Authenticate(API_OpenAI_Authentication.GetApiKey(), this);
     }
     private async void Authenticate(string _apiKey)
     {
