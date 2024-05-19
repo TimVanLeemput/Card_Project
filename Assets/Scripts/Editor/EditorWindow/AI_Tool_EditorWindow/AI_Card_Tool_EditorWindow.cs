@@ -63,7 +63,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     // Accessors
     public float Temperature => temperature;
-    
+
     //public event Action<Conversation> OnConversationStarted = null;
     public static int Tabs
     {
@@ -119,9 +119,13 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void InitAuthEvents()
     {
-        onPasswordEntered += Authenticate;
+        onPasswordEntered += AuthenticateCall;
     }
-
+    private void Init2DTextures()
+    {
+        // Load the eye icon texture
+        revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
+    }
     private void OnGUI()
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
@@ -143,11 +147,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
                 FlavorTextGeneratorTab();
                 break;
         }
-    }
-    private void Init2DTextures()
-    {
-        // Load the eye icon texture
-        revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
     }
     private void ImageGeneratorTab()
     {
@@ -178,64 +177,16 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         AllFlavorTextsField();
     }
     // Currently not in use 
-    private async void Authenticate()
-    {
-
-        Debug.Log("Authenticate called");
-
-        try
-        {
-            bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();
-            if (isValidKey)
-            {
-                Debug.Log("Authentication to OpenAI successful");
-                tabs = 0;
-            }
-            else
-            {
-                Debug.LogError("Invalid API key provided");
-                FailedAuthentication_EditorWindow.ShowWindow();
-                // OpenAI_Login_Pop_Up_EditorWindow.ShowWindow();
-                tabs = 1;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
-            FailedAuthentication_EditorWindow.ShowWindow();
-
-        }
-    }
     private async void AuthenticateCall()
     {
         await AI_Authentication_Editor.Authenticate(API_OpenAI_Authentication.GetApiKey(), this);
     }
-    private async void Authenticate(string _apiKey)
-    {
-        if (openAIAPI != null) return;
-        openAIAPI = new OpenAIAPI(_apiKey);
 
-        try
-        {
-            bool isValidKey = await openAIAPI.Auth.ValidateAPIKey();
-            if (isValidKey)
-            {
-                Debug.Log("Authentication to OpenAI successful");
-                tabs = 0;
-                Repaint();
-            }
-            else
-            {
-                Debug.Log("Invalid API key provided");
-                // OpenAI_Login_Pop_Up_EditorWindow.ShowWindow();
-                tabs = 1;
-            }
-        }
-        catch (Exception ex)
-        {
-            Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
-        }
+    private async void AuthenticateCall(string _tempKey)
+    {
+        await AI_Authentication_Editor.Authenticate(_tempKey, this);
     }
+
 
     private void APIKeyField()
     {

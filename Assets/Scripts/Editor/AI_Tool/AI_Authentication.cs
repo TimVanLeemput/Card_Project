@@ -33,7 +33,7 @@ public static class AI_Authentication_Editor
             else
             {
                 Debug.Log("Invalid API key provided");
-                // OpenAI_Login_Pop_Up_EditorWindow.ShowWindow();
+                FailedAuthentication_EditorWindow.ShowWindow();
 
                 AI_Card_Tool_EditorWindow.Tabs = 1;
                 return null;
@@ -42,6 +42,7 @@ public static class AI_Authentication_Editor
         catch (Exception ex)
         {
             Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
+            FailedAuthentication_EditorWindow.ShowWindow();
             return null;
         }
     }
