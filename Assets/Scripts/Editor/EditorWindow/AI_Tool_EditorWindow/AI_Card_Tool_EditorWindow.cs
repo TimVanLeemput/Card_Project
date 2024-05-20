@@ -18,14 +18,14 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     [SerializeField] CardInfo cardInfo = null;
 
     #region Booleans
-    public bool canRevealPassword = false;
+    //public bool canRevealPassword = false; // to delete
     public bool temperatureInfoBubbleHovered = false;
     #endregion
 
 
     #region Events
-    public event Action<string> onPasswordEntered = null;
-    public event Action<bool> onRevealPasswordButtonClicked = null;
+    //public event Action<string> onPasswordEntered = null; to delete
+    //public event Action<bool> onRevealPasswordButtonClicked = null; to delete
     // Chat events
     public event Action<string> onFlavourTextGenerated = null;
     // Action delegate to be able to call it inside the CardInfo SO
@@ -35,10 +35,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     #region EditorWindow_UI
     //strings
     public string manualURL = "";
-    public string API_KEY = "";
-    public string tempKey = "";
+    //public string API_KEY = ""; To delete
+    //public string tempKey = ""; to delete
     //2D icons
-    private Texture2D revealPassWordIcon = null;
+    //private Texture2D revealPassWordIcon = null; to delete
 
     //Tabs
     public static int tabs = 3;
@@ -93,8 +93,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         InitEvents();
 
         allFlavortexts = new List<string>();
-        onRevealPasswordButtonClicked += SetCanRevealPassword;
-        Init2DTextures();
+        AI_Authentication_EditorWindow.InitAIAuthEvents();
+        //to delete
+        //AI_Authentication_EditorWindow.onRevealPasswordButtonClicked += SetCanRevealPassword;
+        //Init2DTextures(); to delete
     }
     private void Init()
     {
@@ -119,13 +121,14 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void InitAuthEvents()
     {
-        onPasswordEntered += AuthenticateCall;
+        AI_Authentication_EditorWindow.onPasswordEntered += AI_Authentication.AuthenticateCall;
     }
-    private void Init2DTextures()
-    {
-        // Load the eye icon texture
-        revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
-    }
+    //to delete
+    //private void Init2DTextures()
+    //{
+    //    // Load the eye icon texture
+    //    revealPassWordIcon = Resources.Load<Texture2D>("reveal_password_Icon_white");
+    //}
     private void OnGUI()
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
@@ -150,19 +153,18 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void ImageGeneratorTab()
     {
-        AuthenticateCall();
+        AI_Authentication.AuthenticateCall();
         //Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ImageGenerator_EditorWindow.ImageGeneratorField();
     }
     private void CredentialsTab()
     {
-        AuthenticateCall();
-        //Authenticate(API_OpenAI_Authentication.GetApiKey());
-        APIKeyField();
+        AI_Authentication.AuthenticateCall();
+        AI_Authentication_EditorWindow.APIKeyField();
     }
     private void FlavorTextGeneratorTab()
     {
-        AuthenticateCall();
+        AI_Authentication.AuthenticateCall();
         //Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ModelSelector_EditorWindow.SelectChatModelField();
         AI_ModelSelector_Editor.Init(this);
@@ -176,81 +178,82 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         SelectFlavorTextField();
         AllFlavorTextsField();
     }
-    // Currently not in use 
-    private async void AuthenticateCall()
-    {
-        await AI_Authentication_Editor.Authenticate(API_OpenAI_Authentication.GetApiKey(), this);
-    }
+    //to delete
+    //public async void AuthenticateCall()
+    //{
+    //    await AI_Authentication_Editor.Authenticate(API_OpenAI_Authentication.GetApiKey(), this);
+    //}
 
-    private async void AuthenticateCall(string _tempKey)
-    {
-        await AI_Authentication_Editor.Authenticate(_tempKey, this);
-    }
+    //public async void AuthenticateCall(string _tempKey)
+    //{
+    //    await AI_Authentication_Editor.Authenticate(_tempKey, this);
+    //}
 
+    //to delete
+    //private void APIKeyField()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("OpenAI API Key :");
+    //    EditorGUI.BeginChangeCheck();
+    //    if (!canRevealPassword)
+    //    {
+    //        tempKey = GUILayout.PasswordField(API_KEY, '*');
+    //    }
+    //    else tempKey = GUILayout.TextField(API_KEY);
 
-    private void APIKeyField()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("OpenAI API Key :");
-        EditorGUI.BeginChangeCheck();
-        if (!canRevealPassword)
-        {
-            tempKey = GUILayout.PasswordField(API_KEY, '*');
-        }
-        else tempKey = GUILayout.TextField(API_KEY);
+    //    if (EditorGUI.EndChangeCheck())
+    //    {
+    //        API_KEY = tempKey;
+    //    }
+    //    if (Event.current != null && Event.current.isKey)
+    //    {
+    //        if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
+    //        {
+    //            Debug.Log("enter pressed");
+    //            onPasswordEntered?.Invoke(tempKey);
+    //            Event.current.Use(); // Consume the event to prevent other actions
+    //        }
+    //    }
+    //    RevealPasswordButton();
+    //    AuthenticateButton();
 
-        if (EditorGUI.EndChangeCheck())
-        {
-            API_KEY = tempKey;
-        }
-        if (Event.current != null && Event.current.isKey)
-        {
-            if (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter)
-            {
-                onPasswordEntered?.Invoke(tempKey);
-                Event.current.Use(); // Consume the event to prevent other actions
-            }
-        }
-        RevealPasswordButton();
-        AuthenticateButton();
+    //    GUILayout.EndHorizontal();
+    //}
 
-        GUILayout.EndHorizontal();
-    }
+    //to delete
+    //private void RevealPasswordButton()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    GUIStyle _style = new GUIStyle(GUI.skin.button);
+    //    _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
+    //    _style.fixedWidth = 15; // Set a fixed width for the button
+    //    _style.fixedHeight = 20; // Set a fixed height for the button
+    //    _style.normal.background = revealPassWordIcon;
+    //    _style.active.background = revealPassWordIcon;
 
-
-    private void RevealPasswordButton()
-    {
-        GUILayout.BeginHorizontal();
-        GUIStyle _style = new GUIStyle(GUI.skin.button);
-        _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
-        _style.fixedWidth = 15; // Set a fixed width for the button
-        _style.fixedHeight = 20; // Set a fixed height for the button
-        _style.normal.background = revealPassWordIcon;
-        _style.active.background = revealPassWordIcon;
-
-        bool _revealPasswordButton = GUILayout.Button(revealPassWordIcon, _style);
-        if (_revealPasswordButton)
-        {
-            onRevealPasswordButtonClicked?.Invoke(!canRevealPassword);
-        }
-        GUILayout.EndHorizontal();
-    }
-
-    private void SetCanRevealPassword(bool _value)
-    {
-        canRevealPassword = _value;
-    }
-
-    private void AuthenticateButton()
-    {
-        GUILayout.BeginHorizontal();
-        bool _loginButton = GUILayout.Button("Login to OpenAI");
-        if (_loginButton)
-        {
-            AuthenticateCall();
-        }
-        GUILayout.EndHorizontal();
-    }
+    //    bool _revealPasswordButton = GUILayout.Button(revealPassWordIcon, _style);
+    //    if (_revealPasswordButton)
+    //    {
+    //        onRevealPasswordButtonClicked?.Invoke(!canRevealPassword);
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
+    //to delete
+    //private void SetCanRevealPassword(bool _value)
+    //{
+    //    canRevealPassword = _value;
+    //}
+    // to delete
+    //private void AuthenticateButton()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    bool _loginButton = GUILayout.Button("Login to OpenAI");
+    //    if (_loginButton)
+    //    {
+    //        AuthenticateCall(tempKey);
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
 
     /// <summary>
     /// This method  
@@ -306,8 +309,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     private void StartChat()
     {
-        AuthenticateCall();
-        Conversation _chat = AI_Authentication_Editor.OpenAIAPI.Chat.CreateConversation();
+        AI_Authentication.AuthenticateCall();
+        Conversation _chat = AI_Authentication.OpenAIAPI.Chat.CreateConversation();
         conversation = _chat;
         //Replaced invoke method with direct set of conversation.
         //Event was causing issues.
@@ -393,10 +396,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
         _style.fixedWidth = 20; // Set a fixed width for the button
         _style.fixedHeight = 30; // Set a fixed height for the button
-        _style.normal.background = revealPassWordIcon;
-        _style.active.background = revealPassWordIcon;
+        _style.normal.background = AI_Authentication_EditorWindow.RevealPassWordIcon;
+        _style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ;
 
-        bool _imageButton = GUI.Button(_infoRec, revealPassWordIcon, _style);
+        bool _imageButton = GUI.Button(_infoRec, AI_Authentication_EditorWindow.RevealPassWordIcon, _style);
         temperatureInfoBubbleHovered = _infoRec.Contains(Event.current.mousePosition);
 
         if (temperatureInfoBubbleHovered)
@@ -408,7 +411,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
         }
     }
-
 
     private void SetTemperature(float _temperature)
     {
