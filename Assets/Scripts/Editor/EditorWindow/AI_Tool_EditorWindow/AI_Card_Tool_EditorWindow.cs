@@ -14,12 +14,12 @@ using UnityEngine.Networking;
 public class AI_Card_Tool_EditorWindow : EditorWindow
 {
     [SerializeField] public static OpenAIAPI openAIAPI = null;
+    //[SerializeField] static CardInfo  cardInfo = null; // to delete
     [SerializeField] Material material = null;
-    [SerializeField] CardInfo cardInfo = null;
-
+    static AI_Card_Tool_EditorWindow  toolInstance = null;
     #region Booleans
     //public bool canRevealPassword = false; // to delete
-    public bool temperatureInfoBubbleHovered = false;
+    //public bool temperatureInfoBubbleHovered = false; to delete
     #endregion
 
 
@@ -27,9 +27,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     //public event Action<string> onPasswordEntered = null; to delete
     //public event Action<bool> onRevealPasswordButtonClicked = null; to delete
     // Chat events
-    public event Action<string> onFlavourTextGenerated = null;
+    //public event Action<string> onFlavourTextGenerated = null; to delete
     // Action delegate to be able to call it inside the CardInfo SO
-    public Action<string> onFlavorTextSelected = null;
+    //public Action<string> onFlavorTextSelected = null; to delete
     #endregion
 
     #region EditorWindow_UI
@@ -47,12 +47,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     #region AI_Properties
     // AI Properties
-    [UnityEngine.Range(0.4f, 1.6f)] public float temperature = 0.8f;
-    public string flavorTextStyle = "";
-    public string currentFlavorText = "";
-    List<string> allFlavortexts = null;
-
-    public Conversation conversation = null; // TO DO check if this is actually needed. The
+    //[UnityEngine.Range(0.4f, 1.6f)] public float temperature = 0.8f; // to delete
+    //public string flavorTextStyle = ""; to delete
+    //public string currentFlavorText = ""; to delete
+    //List<string> allFlavortexts = null; to delete 
+    //to delete
+    //public Conversation conversation = null; // TO DO check if this is actually needed. The
                                              // accessor for sure is used in the AI_ModelSelector_EditorWindow
 
     #endregion
@@ -62,9 +62,10 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     #endregion
 
     // Accessors
-    public float Temperature => temperature;
+    //public float Temperature => temperature; // to delete
 
     //public event Action<Conversation> OnConversationStarted = null;
+    #region Accessors
     public static int Tabs
     {
         get { return tabs; }
@@ -75,24 +76,33 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         get { return openAIAPI; }
         set { openAIAPI = value; }
     }
-    public Conversation Conversation
-    {
-        get { return conversation; }
-        set { conversation = value; }
-    }
+
+    //to delete
+    //public static CardInfo CardInfo
+    //{
+    //    get { return cardInfo; }
+    //    set { cardInfo = value; }
+    //}
+   //to delete
+    //public Conversation Conversation
+    //{
+    //    get { return conversation; }
+    //    set { conversation = value; }
+    //}
+    #endregion
 
     [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
     {
         //GetWindow<ImageGeneratorTool_EditorWindow>("AI Image Generator").Show();
         AI_Card_Tool_EditorWindow t = GetWindow<AI_Card_Tool_EditorWindow>(typeof(AI_Card_Tool_EditorWindow));
+        if (toolInstance != null) return;
+        toolInstance = t;
     }
     private void OnEnable()
     {
         Init();
-        InitEvents();
-
-        allFlavortexts = new List<string>();
+        //allFlavortexts = new List<string>(); to delete
         AI_Authentication_EditorWindow.InitAIAuthEvents();
         //to delete
         //AI_Authentication_EditorWindow.onRevealPasswordButtonClicked += SetCanRevealPassword;
@@ -100,11 +110,19 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void Init()
     {
-        bool _hasSetTemperature = false;
-        if (!_hasSetTemperature)
-            SetTemperature(0.5f);
-        _hasSetTemperature = true;
+        //InitTemperature(); to delete
+        InitEvents();
+        AI_FlavorTextGenerator.Init();
+
     }
+    //to delete
+    //private void InitTemperature()
+    //{
+    //    bool _hasSetTemperature = false;
+    //    if (!_hasSetTemperature)
+    //        SetTemperature(0.5f);
+    //    _hasSetTemperature = true;
+    //}
     private void InitEvents()
     {
         InitAuthEvents();
@@ -114,14 +132,21 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void InitFlavorTextEvents()
     {
-        onFlavourTextGenerated += SetFlavorText;
-        onFlavourTextGenerated += AddFlavorTextToList;
-        onFlavourTextGenerated += AddTextToFile;
-        onFlavorTextSelected += SetCardInfoFlavorText;
+        //to delete
+        //onFlavourTextGenerated += SetFlavorText;
+        //onFlavourTextGenerated += AddFlavorTextToList;
+        //onFlavourTextGenerated += AddTextToFile;
+        //onFlavorTextSelected += SetCardInfoFlavorText;
     }
     private void InitAuthEvents()
     {
         AI_Authentication_EditorWindow.onPasswordEntered += AI_Authentication.AuthenticateCall;
+    }
+
+    public static AI_Card_Tool_EditorWindow GetTool()
+    {
+        if(toolInstance != null) return toolInstance;
+        else return null;
     }
     //to delete
     //private void Init2DTextures()
@@ -133,10 +158,11 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
         GUIHelpers_Editor.SpaceV();
-        if (cardInfo)
-        {
-            TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
-        }
+        //to delete and replace 
+        //if (cardInfo)
+        //{
+        //    TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
+        //}
 
         switch (tabs)
         {
@@ -164,19 +190,20 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void FlavorTextGeneratorTab()
     {
+        AI_ModelSelector_Editor.Init(this); // TO DO might need to be replaced after SelectChatModelField
         AI_Authentication.AuthenticateCall();
         //Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ModelSelector_EditorWindow.SelectChatModelField();
-        AI_ModelSelector_Editor.Init(this);
-        ChatTestField();
-        ModelCheckButton();
-        AI_TemperatureSlider();
-        CardInfoField();
-        TweakFlavorTextPromptField();
-        FlavorTextStyleField();
-        RemoveAllFlavorTextsButton();
-        SelectFlavorTextField();
-        AllFlavorTextsField();
+        AI_FlavorTextGenerator_EditorWindow.FlavorTextGenerationField();
+        //ChatGenerationField(); to delete
+        //ModelCheckButton();
+        //AI_TemperatureSlider();
+        //CardInfoField();
+        //TweakFlavorTextPromptField();
+        //FlavorTextStyleField();
+        //RemoveAllFlavorTextsButton();
+        //SelectFlavorTextField();
+        //AllFlavorTextsField();
     }
     //to delete
     //public async void AuthenticateCall()
@@ -278,247 +305,263 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     /// <summary>
     /// Call this method to test the chat
     /// </summary>
-    private void ChatTestField()
-    {
-        GUILayout.BeginHorizontal();
-        bool _generateTextButton = GUILayout.Button("Generate text");
-        AI_ModelSelector_Editor.ChatModelSelection();
-        if (conversation == null)
-            StartChat();
-        if (_generateTextButton)
-        {
-            Debug.Log("Generate text button clicked");
-            _ = GenerateTextFlavor(conversation);
-        }
-        GUILayout.EndHorizontal();
-    }
-    private void ModelCheckButton()
-    {
-        GUILayout.BeginHorizontal();
+    //private void ChatGenerationField()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    bool _generateTextButton = GUILayout.Button("Generate text");
+    //    AI_ModelSelector_Editor.ChatModelSelection();
+    //    if (conversation == null)
+    //        StartChat();
+    //    if (_generateTextButton)
+    //    {
+    //        Debug.Log("Generate text button clicked");
+    //        _ = GenerateTextFlavor(conversation);
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
 
-        bool _checkModelButton = GUILayout.Button("Check Model");
-        if (_checkModelButton)
-            CheckModel();
-        GUILayout.EndHorizontal();
-    }
+    //to delete
+    //private void ModelCheckButton()
+    //{
+    //    GUILayout.BeginHorizontal();
 
-    private void CheckModel()
-    {
-        Debug.Log($"current model is {conversation.Model.ModelID}");
-    }
+    //    bool _checkModelButton = GUILayout.Button("Check Model");
+    //    if (_checkModelButton)
+    //        CheckModel();
+    //    GUILayout.EndHorizontal();
+    //}
 
-    private void StartChat()
-    {
-        AI_Authentication.AuthenticateCall();
-        Conversation _chat = AI_Authentication.OpenAIAPI.Chat.CreateConversation();
-        conversation = _chat;
-        //Replaced invoke method with direct set of conversation.
-        //Event was causing issues.
-        //OnConversationStarted?.Invoke(_chat);
-    }
+    //to delete
+    //private void CheckModel()
+    //{
+    //    //Debug.Log($"current model is {conversation.Model.ModelID}");
+    //}
 
-    private async Task GenerateTextFlavor(Conversation _chat)
-    {
-        CardInfo _cardInfo = CreateInstance<CardInfo>();
-        _chat.Model = conversation.Model;
-        ChatRequest _chatRequest = new ChatRequest();
-        _chatRequest.Temperature = temperature;
-        float _tempTemp = (float)_chatRequest.Temperature.Value;
-        Debug.Log($"Chat generating answer with temperature of {_tempTemp / 2}");
+    //to delete
+    //private void StartChat()
+    //{
+    //    AI_Authentication.AuthenticateCall();
+    //    Conversation _chat = AI_Authentication.OpenAIAPI.Chat.CreateConversation();
+    //    conversation = _chat;
+    //    //Replaced invoke method with direct set of conversation.
+    //    //Event was causing issues.
+    //    //OnConversationStarted?.Invoke(_chat);
+    //}
 
-        // Replace the card name, type, resource type and flavor text type with variables
-        // Adapt this string to setup the chat assistant responses. 
-        // Following is the base model in case you erased it and lost it.
-        #region BaseChatSetup
-        //"Set up the model to generate " +
-        //"Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
-        //" type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
-        //" and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
-        //" incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Do not limit yourself" +
-        //"to only these types of flavor texts. Give the result within quotes and NO other information, " +
-        //"NO flavor in the text and NOT just name of the card/type "
 
-        #endregion
-        _chat.AppendSystemMessage("Set up the model to generate " +
-            "Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
-            " type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
-            " and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
-            " incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Do not limit yourself" +
-            "to only these types of flavor texts. Give the result within quotes and NO other information, " +
-            "NO flavor in the text and NOT just name of the card/type ");
+    //to delete
+    //private async Task GenerateTextFlavor(Conversation _chat)
+    //{
+    //    CardInfo _cardInfo = CreateInstance<CardInfo>();
+    //    _chat.Model = conversation.Model;
+    //    ChatRequest _chatRequest = new ChatRequest();
+    //    _chatRequest.Temperature = temperature;
+    //    float _tempTemp = (float)_chatRequest.Temperature.Value;
+    //    Debug.Log($"Chat generating answer with temperature of {_tempTemp / 2}");
 
-        if (!cardInfo)
-        {
-            string _cardNameTest = "TEST";    // return string from cardInfo.cardTitle 
-            string _cardTypeTest = "TEST"; // same for card type description 
-            string _cardResourceTypeTest = "TEST";
-            string _flavorTextTypeTest = "TEST";
-            _chat.AppendUserInput($"Flavor text failed, defaulting to : {_cardNameTest},{_cardTypeTest},{_cardResourceTypeTest},{_flavorTextTypeTest}");
-            return;
-        }
+    //    // Replace the card name, type, resource type and flavor text type with variables
+    //    // Adapt this string to setup the chat assistant responses. 
+    //    // Following is the base model in case you erased it and lost it.
+    //    #region BaseChatSetup
+    //    //"Set up the model to generate " +
+    //    //"Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
+    //    //" type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
+    //    //" and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
+    //    //" incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Do not limit yourself" +
+    //    //"to only these types of flavor texts. Give the result within quotes and NO other information, " +
+    //    //"NO flavor in the text and NOT just name of the card/type "
 
-        string _cardName = cardInfo.CardTitle;    // return string from cardInfo.cardTitle 
-        string _cardType = cardInfo.CardTypeRef.ToString(); // same for card type description 
-        string _cardResourceType = cardInfo.ResourceTypeRef.ToString();
-        string _flavorTextType = flavorTextStyle;
+    //    #endregion
+    //    _chat.AppendSystemMessage("Set up the model to generate " +
+    //        "Magic: The Gathering-style card flavor text prompts. Include parameters for card name," +
+    //        " type (creature/instant/ritual), associated resource type (air, fire, darkness, light, water, earth)," +
+    //        " and the type of flavor text (creature/spell/landscape). Ensure the responses capture the essence of the card's theme and characteristics," +
+    //        " incorporating details such as creature subtype (human/humanoid/animal/living/plant), action for spells, or description for landscapes. Do not limit yourself" +
+    //        "to only these types of flavor texts. Give the result within quotes and NO other information, " +
+    //        "NO flavor in the text and NOT just name of the card/type ");
 
-        _chat.AppendUserInput($"Here are the flavor text variables : {_cardName},{_cardType},{_cardResourceType},{_flavorTextType}");
-        string _response = await _chat.GetResponseFromChatbot();
-        bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
-        Debug.Log(_response);
-        onFlavourTextGenerated?.Invoke(_response);
-    }
+    //    if (!cardInfo)
+    //    {
+    //        string _cardNameTest = "TEST";    // return string from cardInfo.cardTitle 
+    //        string _cardTypeTest = "TEST"; // same for card type description 
+    //        string _cardResourceTypeTest = "TEST";
+    //        string _flavorTextTypeTest = "TEST";
+    //        _chat.AppendUserInput($"Flavor text failed, defaulting to : {_cardNameTest},{_cardTypeTest},{_cardResourceTypeTest},{_flavorTextTypeTest}");
+    //        return;
+    //    }
 
-    private void AI_TemperatureSlider()
-    {
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        GUILayout.Label("Model Temperature");
-        TemperatureInfoBubble();
+    //string _cardName = cardInfo.CardTitle;    // return string from cardInfo.cardTitle 
+    //string _cardType = cardInfo.CardTypeRef.ToString(); // same for card type description 
+    //string _cardResourceType = cardInfo.ResourceTypeRef.ToString();
+    //string _flavorTextType = flavorTextStyle;
 
-        EditorGUI.BeginChangeCheck();
+    //_chat.AppendUserInput($"Here are the flavor text variables : {_cardName},{_cardType},{_cardResourceType},{_flavorTextType}");
+    //    string _response = await _chat.GetResponseFromChatbot();
+    //bool _responseValid = _chat.GetResponseFromChatbot().IsCompleted;
+    //Debug.Log(_response);
+    //    onFlavourTextGenerated?.Invoke(_response);
+    //}
+    //to delete
+    //private void AI_TemperatureSlider()
+    //{
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.FlexibleSpace();
+    //    GUILayout.Label("Model Temperature");
+    //    TemperatureInfoBubble();
 
-        float _tempTemperature = temperature / 2;
-        _tempTemperature = (float)Math.Round(_tempTemperature, 1);
-        _tempTemperature = EditorGUILayout.Slider(_tempTemperature, 0, 1, GUILayout.MaxWidth(250));
-        if (EditorGUI.EndChangeCheck())
-        {
-            temperature = _tempTemperature * 2;
-            temperature = (float)Math.Round(temperature, 1);
-        }
-        GUILayout.EndHorizontal();
-    }
+    //    EditorGUI.BeginChangeCheck();
 
-    private void TemperatureInfoBubble()
-    {
-        Rect _infoRec = GUILayoutUtility.GetRect(20, 30);
-        GUIStyle _style = new GUIStyle(GUI.skin.button);
-        _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
-        _style.fixedWidth = 20; // Set a fixed width for the button
-        _style.fixedHeight = 30; // Set a fixed height for the button
-        _style.normal.background = AI_Authentication_EditorWindow.RevealPassWordIcon;
-        _style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ;
+    //    float _tempTemperature = temperature / 2;
+    //    _tempTemperature = (float)Math.Round(_tempTemperature, 1);
+    //    _tempTemperature = EditorGUILayout.Slider(_tempTemperature, 0, 1, GUILayout.MaxWidth(250));
+    //    if (EditorGUI.EndChangeCheck())
+    //    {
+    //        temperature = _tempTemperature * 2;
+    //        temperature = (float)Math.Round(temperature, 1);
+    //    }
+    //    GUILayout.EndHorizontal();
+    //}
 
-        bool _imageButton = GUI.Button(_infoRec, AI_Authentication_EditorWindow.RevealPassWordIcon, _style);
-        temperatureInfoBubbleHovered = _infoRec.Contains(Event.current.mousePosition);
+    //to delete
+    //private void TemperatureInfoBubble()
+    //{
+    //    Rect _infoRec = GUILayoutUtility.GetRect(20, 30);
+    //    GUIStyle _style = new GUIStyle(GUI.skin.button);
+    //    _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
+    //    _style.fixedWidth = 20; // Set a fixed width for the button
+    //    _style.fixedHeight = 30; // Set a fixed height for the button
+    //    _style.normal.background = AI_Authentication_EditorWindow.RevealPassWordIcon;
+    //    _style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ;
 
-        if (temperatureInfoBubbleHovered)
-        {
+    //    bool _imageButton = GUI.Button(_infoRec, AI_Authentication_EditorWindow.RevealPassWordIcon, _style);
+    //    temperatureInfoBubbleHovered = _infoRec.Contains(Event.current.mousePosition);
 
-            Rect tooltipRect = new Rect(_infoRec.x, _infoRec.yMax, _infoRec.width * 20, 100);
-            EditorGUI.LabelField(tooltipRect, new GUIContent("Higher values = \n more random, \n lower values" +
-                " =\n more deterministic.", "This is the tooltip part"));
+    //    if (temperatureInfoBubbleHovered)
+    //    {
 
-        }
-    }
+    //        Rect tooltipRect = new Rect(_infoRec.x, _infoRec.yMax, _infoRec.width * 20, 100);
+    //        EditorGUI.LabelField(tooltipRect, new GUIContent("Higher values = \n more random, \n lower values" +
+    //            " =\n more deterministic.", "This is the tooltip part"));
 
-    private void SetTemperature(float _temperature)
-    {
-        temperature = Math.Clamp(temperature, 0, 2);
-    }
-    private void FlavorTextStyleField()
-    {
-        GUILayout.BeginHorizontal();
+    //    }
+    //}
+    //to delete
+    //private void SetTemperature(float _temperature)
+    //{
+    //    temperature = Math.Clamp(temperature, 0, 2);
+    //}
 
-        flavorTextStyle = GUILayout.TextField(flavorTextStyle);
-        GUILayout.EndHorizontal();
+    //to delete
+    //private void FlavorTextStyleField()
+    //{
+    //    GUILayout.BeginHorizontal();
 
-    }
-    private void CardInfoField()
-    {
-        //Card info to collect to create prompt
-        GUIHelpers_Editor.SpaceV(10);
-        GUILayout.BeginHorizontal();
-        GUILayout.Label("Card Scriptable Object to collect for flavor text prompt");
-        GUILayout.EndHorizontal();
-        GUILayout.BeginHorizontal();
-        EditorGUI.BeginChangeCheck();
-        cardInfo = (CardInfo)EditorGUILayout.ObjectField("", cardInfo, typeof(CardInfo), true, GUILayout.MaxWidth(150));
-        if (EditorGUI.EndChangeCheck())
-        {
-            TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
-            Debug.Log($"current card info title = {cardInfo.CardTitle}");
-        }
-        GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(10);
-    }
-    private void AddFlavorTextToList(string _flavorText)
-    {
-        allFlavortexts.Add(_flavorText);
+    //    flavorTextStyle = GUILayout.TextField(flavorTextStyle);
+    //    GUILayout.EndHorizontal();
 
-    }
-    private void RemoveAllFlavorTexts()
-    {
-        allFlavortexts.Clear();
-    }
-    private void RemoveAllFlavorTextsButton()
-    {
-        GUIHelpers_Editor.SpaceV(1);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Remove all flavor texts", GUILayout.MaxWidth(250), GUILayout.MaxHeight(30)))
-            RemoveAllFlavorTexts();
-        GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(1);
-    }
-    private void TweakFlavorTextPromptField()
-    {
-        GUIHelpers_Editor.SpaceV(5);
-        GUILayout.BeginHorizontal();
+    //}
+    //to delete
+    //private void CardInfoField()
+    //{
+    //    //Card info to collect to create prompt
+    //    GUIHelpers_Editor.SpaceV(10);
+    //    GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Card Scriptable Object to collect for flavor text prompt");
+    //    GUILayout.EndHorizontal();
+    //    GUILayout.BeginHorizontal();
+    //    EditorGUI.BeginChangeCheck();
+    //    cardInfo = (CardInfo)EditorGUILayout.ObjectField("", cardInfo, typeof(CardInfo), true, GUILayout.MaxWidth(150));
+    //    if (EditorGUI.EndChangeCheck())
+    //    {
+    //        TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
+    //        Debug.Log($"current card info title = {cardInfo.CardTitle}");
+    //    }
+    //    GUILayout.EndHorizontal();
+    //    GUIHelpers_Editor.SpaceV(10);
+    //}
+    //to delete
+    //private void AddFlavorTextToList(string _flavorText)
+    //{
+    //    allFlavortexts.Add(_flavorText);
 
-        GUILayout.Label("Tweak the flavor text style. Example : 'Strong creature', or 'Bloody vampire spell, or 'Vibrant medecinal jungle plant'", EditorStyles.boldLabel);
-        GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(5);
+    //}
+    //private void RemoveAllFlavorTexts()
+    //{
+    //    allFlavortexts.Clear();
+    //}
+    //private void RemoveAllFlavorTextsButton()
+    //{
+    //    GUIHelpers_Editor.SpaceV(1);
+    //    GUILayout.BeginHorizontal();
+    //    if (GUILayout.Button("Remove all flavor texts", GUILayout.MaxWidth(250), GUILayout.MaxHeight(30)))
+    //        RemoveAllFlavorTexts();
+    //    GUILayout.EndHorizontal();
+    //    GUIHelpers_Editor.SpaceV(1);
+    //}
+    //to delete
+    //private void TweakFlavorTextPromptField()
+    //{
+    //    GUIHelpers_Editor.SpaceV(5);
+    //    GUILayout.BeginHorizontal();
 
-    }
-    private void AllFlavorTextsField()
-    {
-        for (int i = 1; i < allFlavortexts.Count; i++)
-        {
-            GUIHelpers_Editor.SpaceV(1);
-            GUILayout.BeginHorizontal();
-            EditorGUILayout.TextArea(allFlavortexts[i]);
-            GUILayout.EndHorizontal();
-            GUIHelpers_Editor.SpaceV(1);
-        }
-    }
-    private void SelectFlavorTextField()
-    {
-        GUIHelpers_Editor.SpaceV(5);
-        GUILayout.BeginHorizontal();
+    //    GUILayout.Label("Tweak the flavor text style. Example : 'Strong creature', or 'Bloody vampire spell, or 'Vibrant medecinal jungle plant'", EditorStyles.boldLabel);
+    //    GUILayout.EndHorizontal();
+    //    GUIHelpers_Editor.SpaceV(5);
 
-        if (allFlavortexts.Count <= 0)
-        {
-            allFlavortexts.Add("Select a flavor text");
-            GUILayout.EndHorizontal();
-            return;
-        }
-        int _currentOptionIndex = 0;
-        int _size = allFlavortexts.Count;
-        EditorGUI.BeginChangeCheck();
+    //}
+    //to delete
+    //private void AllFlavorTextsField()
+    //{
+    //    for (int i = 1; i < allFlavortexts.Count; i++)
+    //    {
+    //        GUIHelpers_Editor.SpaceV(1);
+    //        GUILayout.BeginHorizontal();
+    //        EditorGUILayout.TextArea(allFlavortexts[i]);
+    //        GUILayout.EndHorizontal();
+    //        GUIHelpers_Editor.SpaceV(1);
+    //    }
+    //}
+    // to delete
+    //private void SelectFlavorTextField()
+    //{
+    //    GUIHelpers_Editor.SpaceV(5);
+    //    GUILayout.BeginHorizontal();
 
-        _currentOptionIndex = EditorGUILayout.Popup("",
-            _currentOptionIndex, allFlavortexts.ToArray());
-        string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
+    //    if (allFlavortexts.Count <= 0)
+    //    {
+    //        allFlavortexts.Add("Select a flavor text");
+    //        GUILayout.EndHorizontal();
+    //        return;
+    //    }
+    //    int _currentOptionIndex = 0;
+    //    int _size = allFlavortexts.Count;
+    //    EditorGUI.BeginChangeCheck();
 
-        if (EditorGUI.EndChangeCheck())
-        {
-            onFlavorTextSelected?.Invoke(_selectedFlavorText);
-        }
+    //    _currentOptionIndex = EditorGUILayout.Popup("",
+    //        _currentOptionIndex, allFlavortexts.ToArray());
+    //    string _selectedFlavorText = allFlavortexts[_currentOptionIndex];
 
-        GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(5);
-    }
-    void SetFlavorText(string _flavorText)
-    {
-        currentFlavorText = _flavorText;
-    }
-    private void SetCardInfoFlavorText(string _selectedFlavorText)
-    {
-        cardInfo.SetCardFlavorText(_selectedFlavorText);
-    }
-    private void AddTextToFile(string _textToAdd)
-    {
-        TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
-        TextFileCreator_Editor.AddToTextFile($"{_textToAdd}", $"{cardInfo.CardTitle}");
-    }
+    //    if (EditorGUI.EndChangeCheck())
+    //    {
+    //        onFlavorTextSelected?.Invoke(_selectedFlavorText);
+    //    }
+
+    //    GUILayout.EndHorizontal();
+    //    GUIHelpers_Editor.SpaceV(5);
+    //}
+    //void SetFlavorText(string _flavorText)
+    //{
+    //    currentFlavorText = _flavorText;
+    //}
+    //to delete
+    //private void SetCardInfoFlavorText(string _selectedFlavorText)
+    //{
+    //    cardInfo.SetCardFlavorText(_selectedFlavorText);
+    //}
+    //to delete
+    //private void AddTextToFile(string _textToAdd)
+    //{
+    //    TextFileCreator_Editor.CreateFolder(cardInfo.CardTitle);
+    //    TextFileCreator_Editor.AddToTextFile($"{_textToAdd}", $"{cardInfo.CardTitle}");
+    //}
 }

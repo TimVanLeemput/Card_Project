@@ -15,13 +15,14 @@ public static class AI_ModelSelector_Editor
 
     public static void Init(AI_Card_Tool_EditorWindow _tool)
     {
-        SetTool(_tool);
+        SetTool();
         ChatModelSelection();
     }
     
-    public static void SetTool(AI_Card_Tool_EditorWindow _tool)
+    public static void SetTool()
     {
-        tool = _tool;
+        if (tool != null) return;
+        tool = AI_Card_Tool_EditorWindow.GetTool();
     }
 
     public static void SetAllChatModels()
@@ -41,7 +42,7 @@ public static class AI_ModelSelector_Editor
             Debug.Log($"FAILED TO FIND TOOL OR MODEL in {typeof(AI_ModelSelector_Editor)}");
             return;
         }
-        tool.Conversation.Model = _model;
+        AI_FlavorTextGenerator.Conversation.Model = _model;
 
         Debug.Log($"Selected model => {_model.ModelID})");
 

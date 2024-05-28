@@ -36,7 +36,6 @@ public class Player_Inputs : MonoBehaviour
     {
         if (!detectionComponent) return;
         detectionComponent.MouseDetect(mousePos);
-        Debug.Log($"{detectionComponent}");
     }
 
 
