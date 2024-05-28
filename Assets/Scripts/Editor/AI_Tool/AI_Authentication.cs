@@ -37,7 +37,7 @@ public static class AI_Authentication
                     Debug.Log("Invalid API key provided");
                     FailedAuthentication_EditorWindow.ShowWindow();
 
-                    AI_Card_Tool_EditorWindow.Tabs = 1;
+                    //AI_Card_Tool_EditorWindow.Tabs = 1;
                     return null;
                 }
             }
@@ -52,13 +52,13 @@ public static class AI_Authentication
     }
     public static async void AuthenticateCall()
     {
-        EditorWindow _toolWindow =  EditorWindow.GetWindow<AI_Card_Tool_EditorWindow>();
+        EditorWindow _toolWindow =  AI_Card_Tool_EditorWindow.GetTool();
         await Authenticate(API_OpenAI_Authentication.GetApiKey(), _toolWindow);
     }
 
     public static async void AuthenticateCall(string _tempKey)
     {
-        EditorWindow _toolWindow = EditorWindow.GetWindow<AI_Card_Tool_EditorWindow>();
+        EditorWindow _toolWindow = AI_Card_Tool_EditorWindow.GetTool();
         await Authenticate(_tempKey, _toolWindow);
     }
 }
