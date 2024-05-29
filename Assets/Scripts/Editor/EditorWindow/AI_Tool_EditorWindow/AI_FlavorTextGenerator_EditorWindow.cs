@@ -2,6 +2,8 @@ using OpenAI_API.Chat;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Drawing;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEngine;
 
@@ -9,6 +11,16 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
 {
     public static bool temperatureInfoBubbleHovered = false;
     static Vector2 scrollPos = Vector2.zero;
+
+    private static Texture2D helpToolTipIcon = null;
+
+
+
+    private void Load2DTextures()
+    {
+        helpToolTipIcon = Resources.Load<Texture2D>("_Help");
+
+    }
     public static void FlavorTextGenerationField()
     {
         AI_ModelSelector_EditorWindow.SelectChatModelField();
@@ -50,7 +62,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         //Event was causing issues.
         //OnConversationStarted?.Invoke(_chat);
     }
-    
+
     private static void ModelCheckButton()
     {
         GUILayout.BeginHorizontal();
@@ -60,51 +72,59 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
             AI_FlavorTextGenerator.CheckModel();
         GUILayout.EndHorizontal();
     }
-  
+
     private static void AI_TemperatureSlider()
     {
         GUILayout.BeginHorizontal();
         GUILayout.FlexibleSpace();
         GUILayout.Label("Model Temperature");
+
         TemperatureInfoBubble();
 
         EditorGUI.BeginChangeCheck();
-        //float temperature = AI_FlavorTextGenerator.Temperature;
-
-        //float _tempTemperature = temperature / 2;
-        //_tempTemperature = (float)Math.Round(_tempTemperature, 1);
-        //float _adjustedTemp = AI_FlavorTextGenerator.Temperature / 2;
 
         AI_FlavorTextGenerator.Temperature = EditorGUILayout.Slider(((float)Math.Round(AI_FlavorTextGenerator.Temperature, 1)), 0, 1, GUILayout.MaxWidth(250));
         if (EditorGUI.EndChangeCheck())
         {
-            AI_FlavorTextGenerator.Temperature = (float)Math.Round(AI_FlavorTextGenerator.Temperature,1);
-            //temperature = _tempTemperature * 2;
-            //temperature = (float)Math.Round(temperature, 1);
+            AI_FlavorTextGenerator.Temperature = (float)Math.Round(AI_FlavorTextGenerator.Temperature, 1);
         }
         GUILayout.EndHorizontal();
+        ModelTemperatureHelpBox(); // move in init
+
+
+    }
+    private static void ModelTemperatureHelpBox()
+    {
+        //EditorGUILayout.BeginVertical(EditorStyles.helpBox, GUILayout.Width(300), GUILayout.Height(40));
+        //GUILayout.Label("Higher values = more random, lower values" +
+        //          " = more deterministic.", EditorStyles.wordWrappedLabel);
+        //EditorGUILayout.EndVertical();
+        ////EditorGUILayout.HelpBox("Higher values = more random, lower values" +
+        ////          " = more deterministic.", MessageType.None,false);
     }
 
+    // Not in use anymore
     private static void TemperatureInfoBubble()
     {
         Rect _infoRec = GUILayoutUtility.GetRect(20, 30);
         GUIStyle _style = new GUIStyle(GUI.skin.button);
-        _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
-        _style.fixedWidth = 10; // Set a fixed width for the button
-        _style.fixedHeight = 15; // Set a fixed height for the button
-        _style.normal.background = AI_Authentication_EditorWindow.RevealPassWordIcon; // Should be changed for another icon
-        _style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ; // Should be changed for another icon
+        _style.padding = new RectOffset(2, 2, 2, 2);
 
+        _style.fixedWidth = 16; // Smaller width
+        _style.fixedHeight = 16; // Smaller height
+        GUIContent _iconContent = EditorGUIUtility.IconContent("_Help@2x");
+        _style.normal.background = _iconContent.image as Texture2D; ; // Should be changed for another icon
+        _style.active.background = _iconContent.image as Texture2D; ; // Should be changed for another icon
+        //_style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ; // Should be changed for another icon
         bool _imageButton = GUI.Button(_infoRec, AI_Authentication_EditorWindow.RevealPassWordIcon, _style);
         temperatureInfoBubbleHovered = _infoRec.Contains(Event.current.mousePosition);
 
         if (temperatureInfoBubbleHovered)
         {
 
-            Rect tooltipRect = new Rect(_infoRec.x, _infoRec.yMax, _infoRec.width * 20, 100);
-            EditorGUI.LabelField(tooltipRect, new GUIContent("Higher values = \n more random, \n lower values" +
-                " =\n more deterministic.", "This is the tooltip part"));
+            Rect _tooltipRect = new Rect(_infoRec.x, _infoRec.y, 500, 100);
 
+            EditorGUI.LabelField(_tooltipRect, new GUIContent("", "Higher values = more random\nlower values = more deterministic"));
         }
     }
 
@@ -118,8 +138,8 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         GUILayout.BeginHorizontal();
         EditorGUI.BeginChangeCheck();
         //CardInfo cardInfo = AI_FlavorTextGenerator.CardInfo;
-        
-        
+
+
         AI_FlavorTextGenerator.CardInfo = (CardInfo)EditorGUILayout.ObjectField("",
             AI_FlavorTextGenerator.CardInfo, typeof(CardInfo), true, GUILayout.MaxWidth(150));
         if (EditorGUI.EndChangeCheck())
@@ -158,7 +178,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
     }
     private static void AllFlavorTextsField()
     {
-        scrollPos = 
+        scrollPos =
         EditorGUILayout.BeginScrollView(scrollPos);
         List<string> allFlavorTexts = AI_FlavorTextGenerator.AllFlavortexts;
         for (int i = 1; i < allFlavorTexts.Count; i++)
@@ -199,5 +219,5 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUIHelpers.SpaceV(5);
     }
-    
+
 }
