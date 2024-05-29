@@ -1,9 +1,5 @@
-using OpenAI_API.Chat;
 using OpenAI_API.Models;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor;
 using UnityEngine;
 
 
