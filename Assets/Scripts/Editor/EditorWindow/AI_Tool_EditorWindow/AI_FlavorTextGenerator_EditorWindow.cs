@@ -8,7 +8,6 @@ using UnityEngine;
 public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
 {
     public static bool temperatureInfoBubbleHovered = false;
-    public static CardInfo currentCardInfo = null;
 
     public static void FlavorTextGenerationField()
     {
