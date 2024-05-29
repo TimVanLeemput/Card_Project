@@ -85,7 +85,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void OnGUI()
     {
         tabs = GUILayout.Toolbar(tabs, tabSelection);
-        GUIHelpers_Editor.SpaceV();
+        GUIHelpers.SpaceV();
 
         switch (tabs)
         {

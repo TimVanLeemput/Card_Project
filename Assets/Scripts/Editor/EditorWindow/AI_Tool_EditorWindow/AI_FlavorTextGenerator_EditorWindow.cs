@@ -90,10 +90,10 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         Rect _infoRec = GUILayoutUtility.GetRect(20, 30);
         GUIStyle _style = new GUIStyle(GUI.skin.button);
         _style.padding = new RectOffset(1, 1, 1, 1); // Adjust padding to make the button smaller
-        _style.fixedWidth = 20; // Set a fixed width for the button
-        _style.fixedHeight = 30; // Set a fixed height for the button
-        _style.normal.background = AI_Authentication_EditorWindow.RevealPassWordIcon;
-        _style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ;
+        _style.fixedWidth = 10; // Set a fixed width for the button
+        _style.fixedHeight = 15; // Set a fixed height for the button
+        _style.normal.background = AI_Authentication_EditorWindow.RevealPassWordIcon; // Should be changed for another icon
+        _style.active.background = AI_Authentication_EditorWindow.RevealPassWordIcon; ; // Should be changed for another icon
 
         bool _imageButton = GUI.Button(_infoRec, AI_Authentication_EditorWindow.RevealPassWordIcon, _style);
         temperatureInfoBubbleHovered = _infoRec.Contains(Event.current.mousePosition);
@@ -111,7 +111,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
     private static void CardInfoField()
     {
         //Card info to collect to create prompt
-        GUIHelpers_Editor.SpaceV(10);
+        GUIHelpers.SpaceV(10);
         GUILayout.BeginHorizontal();
         GUILayout.Label("Card Scriptable Object to collect for flavor text prompt");
         GUILayout.EndHorizontal();
@@ -128,16 +128,16 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
             Debug.Log($"current card info title = {AI_FlavorTextGenerator.CardInfo.CardTitle}");
         }
         GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(10);
+        GUIHelpers.SpaceV(10);
     }
     private static void TweakFlavorTextPromptLabel()
     {
-        GUIHelpers_Editor.SpaceV(5);
+        GUIHelpers.SpaceV(5);
         GUILayout.BeginHorizontal();
 
         GUILayout.Label("Tweak the flavor text style. Example : 'Strong creature', or 'Bloody vampire spell, or 'Vibrant medecinal jungle plant'", EditorStyles.boldLabel);
         GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(5);
+        GUIHelpers.SpaceV(5);
 
     }
     private static void FlavorTextTweakField()
@@ -149,12 +149,12 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
     }
     private static void RemoveAllFlavorTextsButton()
     {
-        GUIHelpers_Editor.SpaceV(1);
+        GUIHelpers.SpaceV(1);
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Remove all flavor texts", GUILayout.MaxWidth(250), GUILayout.MaxHeight(30)))
             AI_FlavorTextGenerator.RemoveAllFlavorTexts();
         GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(1);
+        GUIHelpers.SpaceV(1);
     }
     private static void AllFlavorTextsField()
     {
@@ -163,17 +163,17 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         List<string> allFlavorTexts = AI_FlavorTextGenerator.AllFlavortexts;
         for (int i = 1; i < allFlavorTexts.Count; i++)
         {
-            GUIHelpers_Editor.SpaceV(1);
+            GUIHelpers.SpaceV(1);
             GUILayout.BeginHorizontal();
             EditorGUILayout.TextArea(allFlavorTexts[i]);
             GUILayout.EndHorizontal();
-            GUIHelpers_Editor.SpaceV(1);
+            GUIHelpers.SpaceV(1);
         }
         EditorGUILayout.EndScrollView();
     }
     private static void SelectFlavorTextField()
     {
-        GUIHelpers_Editor.SpaceV(5);
+        GUIHelpers.SpaceV(5);
         GUILayout.BeginHorizontal();
         List<string> allFlavorTexts = AI_FlavorTextGenerator.AllFlavortexts;
 
@@ -197,7 +197,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         }
 
         GUILayout.EndHorizontal();
-        GUIHelpers_Editor.SpaceV(5);
+        GUIHelpers.SpaceV(5);
     }
     
 }

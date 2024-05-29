@@ -16,7 +16,7 @@ public class AI_ModelSelector_EditorWindow : EditorWindow
         {
             AI_ModelSelector_Editor.SetAllChatModels();
         }
-        GUIHelpers_Editor.SpaceV(5);
+        GUIHelpers.SpaceV(5);
         GUILayout.BeginVertical();
         List<Model> _allModels = AI_ModelSelector_Editor.allChatModels;
 
@@ -41,6 +41,6 @@ public class AI_ModelSelector_EditorWindow : EditorWindow
         }
 
         GUILayout.EndVertical();
-        GUIHelpers_Editor.SpaceV(5);
+        GUIHelpers.SpaceV(5);
     }
 }
