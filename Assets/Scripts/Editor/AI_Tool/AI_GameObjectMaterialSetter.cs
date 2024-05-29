@@ -23,7 +23,6 @@ public class AI_GameObjectMaterialSetter
         AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
         material = AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
         material.mainTexture = _texture;
-
         AssetDatabase.SaveAssets();
         onMaterialSaved?.Invoke(material);
     }

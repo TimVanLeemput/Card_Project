@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEditor;
-using UnityEditor.TerrainTools;
 using UnityEngine;
 
 [CustomEditor(typeof(CardInfo))]
@@ -16,7 +12,6 @@ public class CardInfo_Editor : Editor
         cardInfo.GenerateCardName();
 
         EditorGUI.FocusTextInControl("");
-
 
     }
     public override void OnInspectorGUI()
@@ -32,11 +27,49 @@ public class CardInfo_Editor : Editor
         }
 
         GUILayout.EndHorizontal();
-        base.OnInspectorGUI();
+        //base.OnInspectorGUI();
+        IterationHelpBox("cardArtSprite", "Use sprite to drag and drop an external image");
     }
+
+    private void IterationHelpBox(string _propertyName, string _helpMessage)
+    {
+        SerializedProperty _iterator = serializedObject.GetIterator();
+        bool arrayDisplayed = false;
+        bool propertyNameEncountered = false;
+
+        while (_iterator.NextVisible(true))
+        {
+            if (_iterator.isArray && !arrayDisplayed)
+            {
+                EditorGUILayout.PropertyField(_iterator, true);
+                arrayDisplayed = true;
+                continue;
+            }
+
+            // Check if the property name is encountered
+            if (_iterator.name == _propertyName && !propertyNameEncountered)
+            {
+                EditorGUILayout.PropertyField(_iterator, true);
+                EditorGUILayout.HelpBox(_helpMessage, MessageType.None, false);
+                propertyNameEncountered = true;
+                continue;
+            }
+
+            // Skip displaying individual elements of the array
+            if (arrayDisplayed && _iterator.depth > 0)
+            {
+                continue;
+            }
+
+            EditorGUILayout.PropertyField(_iterator, true);
+        }
+
+        serializedObject.ApplyModifiedProperties();
+    }
+
+
+
+
 }
 
-//EditorUtility.SetDirty(cardInfo);
-//EditorGUILayout.Space();
-//EditorApplication.QueuePlayerLoopUpdate();
-//Repaint();
+

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
@@ -31,7 +32,7 @@ public class CardInfo : ScriptableObject
     [SerializeField] private ResourceType cardResourceType;
     [SerializeField] private string cardTitle = "";
     [SerializeField] public string cardFlavorText = "";
-    [SerializeField] List<API_CardSkills.CardSkill> allCardSkills = null;
+     [SerializeField]public List<API_CardSkills.CardSkill> allCardSkills = null;
 
     //Colors
     [Header("Art & Colors")]
