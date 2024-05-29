@@ -70,7 +70,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void InitEvents()
     {
         InitAuthEvents();
-        AI_ImageGenerator_EditorWindow.onTextureLoadedFromURL += AIFolderCreator_Editor.CreateAIMaterialsFolders;
+        AI_ImageGenerator.onTextureLoadedFromURL += AIFolderCreator_Editor.CreateAIMaterialsFolders;
         AIFolderCreator_Editor.OnAIMatAndTexturePathsCreated += SetGameObjectMaterial;
     }
  

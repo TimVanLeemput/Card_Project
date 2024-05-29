@@ -14,10 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cardResourceType: 1
   cardTitle: Nazarena, dragon empress
-  cardFlavorText: '"The flames of power obey her every command."'
+  cardFlavorText: '"Amidst flames, Nazarena rises, her wings painting the sky with
+    ash and cinder."'
   allCardSkills: 0200000003000000
   cardArtSprite: {fileID: 0}
-  cardArtMaterial: {fileID: 2100000, guid: 41ac8dcc9890ce74abf568373822c910, type: 2}
+  cardArtMaterial: {fileID: 2100000, guid: cb09febb5f197e146ad98efec62d1469, type: 2}
   cardAttack: 5
   cardHealth: 5
   cardResourceCost: 2
