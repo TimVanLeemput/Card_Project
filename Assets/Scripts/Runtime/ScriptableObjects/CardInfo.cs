@@ -32,7 +32,7 @@ public class CardInfo : ScriptableObject
     [SerializeField] private ResourceType cardResourceType;
     [SerializeField] private string cardTitle = "";
     [SerializeField] public string cardFlavorText = "";
-     [SerializeField]public List<API_CardSkills.CardSkill> allCardSkills = null;
+    [SerializeField] public List<API_CardSkills.CardSkill> allCardSkills = null;
 
     //Colors
     [Header("Art & Colors")]
@@ -133,7 +133,7 @@ public class CardInfo : ScriptableObject
 
     public void SetCardFlavorText(string _flavorText)
     {
-         cardFlavorText = _flavorText;
+        cardFlavorText = _flavorText;
     }
 
 

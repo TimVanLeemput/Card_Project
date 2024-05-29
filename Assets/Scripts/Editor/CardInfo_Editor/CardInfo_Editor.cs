@@ -30,42 +30,47 @@ public class CardInfo_Editor : Editor
         //base.OnInspectorGUI();
         IterationHelpBox("cardArtSprite", "Use sprite to drag and drop an external image");
     }
-
+    /// <summary>
+    /// This method calls an iterator for our connected script.
+    /// It also skips any individual childs within an array, 
+    /// which would otherwise be shown twice on top of showing a
+    /// "Size" variable for this array.
+    /// </summary>
+    /// <param name="_propertyName"></param>
+    /// <param name="_helpMessage"></param>
     private void IterationHelpBox(string _propertyName, string _helpMessage)
     {
         SerializedProperty _iterator = serializedObject.GetIterator();
-        bool arrayDisplayed = false;
-        bool propertyNameEncountered = false;
+        bool _arrayDisplayed = false;
+        bool _propertyNameEncountered = false;
 
         while (_iterator.NextVisible(true))
         {
-            if (_iterator.isArray && !arrayDisplayed)
+            bool _isPropertyTarget = _iterator.name == _propertyName;
+            if (_iterator.isArray && !_arrayDisplayed || _isPropertyTarget && !_propertyNameEncountered)
             {
                 EditorGUILayout.PropertyField(_iterator, true);
-                arrayDisplayed = true;
+                if (_iterator.isArray) _arrayDisplayed = true;
+                if (_isPropertyTarget)
+                {
+                    EditorGUILayout.HelpBox(_helpMessage, MessageType.None, false);
+                    _propertyNameEncountered = true;
+                }
                 continue;
             }
 
-            // Check if the property name is encountered
-            if (_iterator.name == _propertyName && !propertyNameEncountered)
+            if (!_arrayDisplayed || _iterator.depth == 0)
             {
                 EditorGUILayout.PropertyField(_iterator, true);
-                EditorGUILayout.HelpBox(_helpMessage, MessageType.None, false);
-                propertyNameEncountered = true;
-                continue;
             }
-
-            // Skip displaying individual elements of the array
-            if (arrayDisplayed && _iterator.depth > 0)
-            {
-                continue;
-            }
-
-            EditorGUILayout.PropertyField(_iterator, true);
         }
 
         serializedObject.ApplyModifiedProperties();
     }
+
+
+
+
 
 
 
