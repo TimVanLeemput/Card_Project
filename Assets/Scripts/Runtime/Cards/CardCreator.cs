@@ -30,6 +30,8 @@ public class CardCreator : MonoBehaviour
 
     public bool canStartUpdate = false;
     public event Action<bool> onInit = null;
+
+    public CardInfo CardInfo => cardInfo;
     private void Awake()
     {
 

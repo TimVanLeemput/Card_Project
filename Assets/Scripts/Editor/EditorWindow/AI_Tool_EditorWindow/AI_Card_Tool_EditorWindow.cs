@@ -7,7 +7,6 @@ using UnityEngine;
 public class AI_Card_Tool_EditorWindow : EditorWindow
 {
     [SerializeField] public static OpenAIAPI openAIAPI = null;
-    //[SerializeField] Material material = null; to delete
     static AI_Card_Tool_EditorWindow  toolInstance = null;
     #region Booleans
     #endregion
@@ -19,7 +18,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
 
     #region EditorWindow_UI
     public string manualURL = "";
-
 
     //Tabs
     public static int tabs = 3;
@@ -48,7 +46,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     [MenuItem("Tools/AI Helper")]
     public static void ShowWindow()
     {
-        //GetWindow<ImageGeneratorTool_EditorWindow>("AI Image Generator").Show();
         AI_Card_Tool_EditorWindow t = GetWindow<AI_Card_Tool_EditorWindow>(typeof(AI_Card_Tool_EditorWindow));
         if (toolInstance != null) return;
         toolInstance = t;
@@ -63,7 +60,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         InitEvents();
         AI_ModelSelector_Editor.Init();
         AI_FlavorTextGenerator.Init();
-
+        AI_GameObjectMaterialSetter.Init();
 
     }
    
@@ -71,7 +68,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         InitAuthEvents();
         AI_ImageGenerator.onTextureLoadedFromURL += AIFolderCreator_Editor.CreateAIMaterialsFolders;
-        AIFolderCreator_Editor.OnAIMatAndTexturePathsCreated += AI_GameObjectMaterialSetter.SetGameObjectMaterial;
+        AIFolderCreator_Editor.OnAIMatAndTexturePathsCreated += AI_GameObjectMaterialSetter.SaveGameObjectMaterial;
     }
  
     private void InitAuthEvents()
@@ -119,20 +116,4 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         AI_FlavorTextGenerator_EditorWindow.FlavorTextGenerationField();
 
     }
-
-    //to delete
-    //private void SetGameObjectMaterial(Texture2D _texture, string _texturePath, string _matPath)
-    //{
-    //    AssetDatabase.CreateAsset(_texture, _texturePath);   // Creates 2DTextureFile
-
-    //    Material _newMaterial = new Material(Shader.Find("Universal Render Pipeline/Lit"));
-
-    //    AssetDatabase.CreateAsset(_newMaterial, _matPath);
-    //    AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().material = _newMaterial;
-    //    AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().sharedMaterial.mainTexture = _texture;
-    //    material = AI_ImageGenerator_EditorWindow.goImageTarget.GetComponent<MeshRenderer>().sharedMaterial;
-    //    material.mainTexture = _texture;
-
-    //    AssetDatabase.SaveAssets();
-    //}
 }

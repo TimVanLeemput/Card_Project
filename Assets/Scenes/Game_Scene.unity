@@ -1728,7 +1728,7 @@ PrefabInstance:
     - target: {fileID: 2164060031893461819, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
         type: 3}
       propertyPath: m_Name
-      value: Naza
+      value: Pikashoe
       objectReference: {fileID: 0}
     - target: {fileID: 2164060031893461819, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
         type: 3}
@@ -1754,7 +1754,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100000, guid: 704e351a8641c934196ffea21e89791e, type: 2}
+      objectReference: {fileID: 2100000, guid: 95e7084806421f044b29a200773fb0e2, type: 2}
     - target: {fileID: 7872981682699083875, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1809,7 +1809,7 @@ PrefabInstance:
         type: 3}
       propertyPath: cardInfo
       value: 
-      objectReference: {fileID: 11400000, guid: afb54a908c7b07d448ef44fae181a51a,
+      objectReference: {fileID: 11400000, guid: 797a3b6b81a721b4cb2617a51876fdba,
         type: 2}
     - target: {fileID: 9080887512288849073, guid: 7a6a0c5538d5a904f8a789b6c5cfa333,
         type: 3}

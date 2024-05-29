@@ -14,7 +14,12 @@ public class AI_ImageGenerator_EditorWindow : EditorWindow
         get { return userInputPrompt; }
         set { userInputPrompt = value; }
     }
-   
+    public static GameObject GameObjectTarget
+    {
+        get { return goImageTarget; }
+        set { goImageTarget = value; }
+    }
+
     #endregion
 
     public static void ImageGeneratorField()
@@ -105,7 +110,7 @@ public class AI_ImageGenerator_EditorWindow : EditorWindow
         }
         GUILayout.EndHorizontal();
     }
- 
+
     private static void ApplyImageToGameObjectButtonField()
     {
         GUILayout.BeginHorizontal();

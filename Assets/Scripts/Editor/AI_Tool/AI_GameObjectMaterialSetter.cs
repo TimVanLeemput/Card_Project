@@ -1,11 +1,18 @@
+using System;
 using UnityEditor;
 using UnityEngine;
 
 public class AI_GameObjectMaterialSetter 
 {
     [SerializeField] static Material material = null;
+    public static Action<Material> onMaterialSaved = null;
 
-    public static void SetGameObjectMaterial(Texture2D _texture, string _texturePath, string _matPath)
+    public static void Init()
+    {
+        onMaterialSaved += SetCardInfoMaterial;
+    }
+
+    public static void SaveGameObjectMaterial(Texture2D _texture, string _texturePath, string _matPath)
     {
         AssetDatabase.CreateAsset(_texture, _texturePath);   // Creates 2DTextureFile
 
@@ -18,6 +25,13 @@ public class AI_GameObjectMaterialSetter
         material.mainTexture = _texture;
 
         AssetDatabase.SaveAssets();
+        onMaterialSaved?.Invoke(material);
     }
 
+    private static void SetCardInfoMaterial(Material _mat)
+    {
+        Debug.Log("calling the CardInfo material function");
+        CardCreator _cardCreatorFromGO = AI_ImageGenerator_EditorWindow.GameObjectTarget.GetComponentInParent<CardCreator>();
+        _cardCreatorFromGO.CardInfo.CardArtMaterial = _mat;
+    }
 }
