@@ -29,7 +29,7 @@ public static class AI_Authentication
                 {
                     Debug.Log("Authentication to OpenAI successful");
                     //tabs = 0;
-                    _editorWindow.Repaint();
+                    //_editorWindow.Repaint();
                     return openAIAPI;
                 }
                 else
@@ -44,7 +44,7 @@ public static class AI_Authentication
             catch (Exception ex)
             {
                 Debug.LogError("Failed to authenticate to OpenAI: " + ex.Message);
-                FailedAuthentication_EditorWindow.ShowWindow();
+                //FailedAuthentication_EditorWindow.ShowWindow();
                 return null;
             }
         }

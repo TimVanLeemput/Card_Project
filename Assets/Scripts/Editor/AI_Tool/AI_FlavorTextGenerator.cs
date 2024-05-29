@@ -24,7 +24,11 @@ public class AI_FlavorTextGenerator
 
     #endregion
     #region Accessors
-    public static float Temperature => temperature;
+    public static float Temperature
+    {
+        get { return temperature; }
+        set { temperature = value; }
+    }
     public static Conversation Conversation
     {
         get { return conversation; }
@@ -125,8 +129,8 @@ public class AI_FlavorTextGenerator
         _chat.Model = conversation.Model;
         ChatRequest _chatRequest = new ChatRequest();
         _chatRequest.Temperature = temperature;
-        float _tempTemp = (float)_chatRequest.Temperature.Value;
-        Debug.Log($"Chat generating answer with temperature of {_tempTemp / 2}");
+        //float _tempTemp = (float)_chatRequest.Temperature.Value; // to delete
+        Debug.Log($"Chat generating answer with temperature of {(float)_chatRequest.Temperature.Value}");
 
         // Replace the card name, type, resource type and flavor text type with variables
         // Adapt this string to setup the chat assistant responses. 

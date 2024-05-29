@@ -69,15 +69,18 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         TemperatureInfoBubble();
 
         EditorGUI.BeginChangeCheck();
-        float temperature = AI_FlavorTextGenerator.Temperature;
+        //float temperature = AI_FlavorTextGenerator.Temperature;
 
-        float _tempTemperature = temperature / 2;
-        _tempTemperature = (float)Math.Round(_tempTemperature, 1);
-        _tempTemperature = EditorGUILayout.Slider(_tempTemperature, 0, 1, GUILayout.MaxWidth(250));
+        //float _tempTemperature = temperature / 2;
+        //_tempTemperature = (float)Math.Round(_tempTemperature, 1);
+        //float _adjustedTemp = AI_FlavorTextGenerator.Temperature / 2;
+
+        AI_FlavorTextGenerator.Temperature = EditorGUILayout.Slider(((float)Math.Round(AI_FlavorTextGenerator.Temperature, 1)), 0, 1, GUILayout.MaxWidth(250));
         if (EditorGUI.EndChangeCheck())
         {
-            temperature = _tempTemperature * 2;
-            temperature = (float)Math.Round(temperature, 1);
+            AI_FlavorTextGenerator.Temperature = (float)Math.Round(AI_FlavorTextGenerator.Temperature,1);
+            //temperature = _tempTemperature * 2;
+            //temperature = (float)Math.Round(temperature, 1);
         }
         GUILayout.EndHorizontal();
     }
