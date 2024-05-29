@@ -8,7 +8,7 @@ using UnityEngine;
 public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
 {
     public static bool temperatureInfoBubbleHovered = false;
-
+    static Vector2 scrollPos = Vector2.zero;
     public static void FlavorTextGenerationField()
     {
         AI_ModelSelector_EditorWindow.SelectChatModelField();
@@ -16,8 +16,8 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         ModelCheckButton();
         AI_TemperatureSlider();
         CardInfoField();
-        TweakFlavorTextPromptField();
-        FlavorTextStyleField();
+        TweakFlavorTextPromptLabel();
+        FlavorTextTweakField();
         RemoveAllFlavorTextsButton();
         SelectFlavorTextField();
         AllFlavorTextsField();
@@ -130,7 +130,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         GUILayout.EndHorizontal();
         GUIHelpers_Editor.SpaceV(10);
     }
-    private static void TweakFlavorTextPromptField()
+    private static void TweakFlavorTextPromptLabel()
     {
         GUIHelpers_Editor.SpaceV(5);
         GUILayout.BeginHorizontal();
@@ -140,11 +140,10 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         GUIHelpers_Editor.SpaceV(5);
 
     }
-    private static void FlavorTextStyleField()
+    private static void FlavorTextTweakField()
     {
         GUILayout.BeginHorizontal();
-        string flavorTextStyle = AI_FlavorTextGenerator.FlavorTextStyle;
-        flavorTextStyle = GUILayout.TextField(flavorTextStyle);
+        AI_FlavorTextGenerator.FlavorTextStyle = GUILayout.TextField(AI_FlavorTextGenerator.FlavorTextStyle);
         GUILayout.EndHorizontal();
 
     }
@@ -159,6 +158,8 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
     }
     private static void AllFlavorTextsField()
     {
+        scrollPos = 
+        EditorGUILayout.BeginScrollView(scrollPos);
         List<string> allFlavorTexts = AI_FlavorTextGenerator.AllFlavortexts;
         for (int i = 1; i < allFlavorTexts.Count; i++)
         {
@@ -168,6 +169,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
             GUILayout.EndHorizontal();
             GUIHelpers_Editor.SpaceV(1);
         }
+        EditorGUILayout.EndScrollView();
     }
     private static void SelectFlavorTextField()
     {
