@@ -13,7 +13,7 @@ public static class AI_ModelSelector_Editor
     public static List<Model> allChatModels = null;
     public static AI_Card_Tool_EditorWindow tool = null;
 
-    public static void Init(AI_Card_Tool_EditorWindow _tool)
+    public static void Init()
     {
         SetTool();
         ChatModelSelection();

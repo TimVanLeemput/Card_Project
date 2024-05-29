@@ -12,6 +12,7 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
 
     public static void FlavorTextGenerationField()
     {
+        AI_ModelSelector_EditorWindow.SelectChatModelField();
         ChatGenerationField();
         ModelCheckButton();
         AI_TemperatureSlider();

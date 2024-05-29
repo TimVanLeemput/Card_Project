@@ -29,7 +29,7 @@ public static class AI_Authentication
                 {
                     Debug.Log("Authentication to OpenAI successful");
                     //tabs = 0;
-                    //_editorWindow.Repaint();
+                    _editorWindow.Repaint();
                     return openAIAPI;
                 }
                 else
@@ -37,7 +37,7 @@ public static class AI_Authentication
                     Debug.Log("Invalid API key provided");
                     FailedAuthentication_EditorWindow.ShowWindow();
 
-                    //AI_Card_Tool_EditorWindow.Tabs = 1;
+                    AI_Card_Tool_EditorWindow.Tabs = 1;
                     return null;
                 }
             }

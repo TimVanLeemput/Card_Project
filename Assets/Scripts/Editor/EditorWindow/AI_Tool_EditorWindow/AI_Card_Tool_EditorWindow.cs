@@ -112,7 +112,9 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         //InitTemperature(); to delete
         InitEvents();
+        AI_ModelSelector_Editor.Init();
         AI_FlavorTextGenerator.Init();
+
 
     }
     //to delete
@@ -180,6 +182,7 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     private void ImageGeneratorTab()
     {
         AI_Authentication.AuthenticateCall();
+
         //Authenticate(API_OpenAI_Authentication.GetApiKey());
         AI_ImageGenerator_EditorWindow.ImageGeneratorField();
     }
@@ -190,10 +193,8 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     }
     private void FlavorTextGeneratorTab()
     {
-        AI_ModelSelector_Editor.Init(this); // TO DO might need to be replaced after SelectChatModelField
         AI_Authentication.AuthenticateCall();
         //Authenticate(API_OpenAI_Authentication.GetApiKey());
-        AI_ModelSelector_EditorWindow.SelectChatModelField();
         AI_FlavorTextGenerator_EditorWindow.FlavorTextGenerationField();
         //ChatGenerationField(); to delete
         //ModelCheckButton();
