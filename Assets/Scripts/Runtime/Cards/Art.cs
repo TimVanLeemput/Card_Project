@@ -18,14 +18,12 @@ public class Art : MonoBehaviour
         image = GetComponent<Image>(); // No need for UnityEngine.UI.Image here
         if (image == null)
         {
-            Debug.Log("No image found in Art");
             return;
         }
         else
         {
             if (!image.sprite) return;
             
-            Debug.Log($"Sprite is : {image.sprite.name}");
             sprite = image.sprite;
     
 
