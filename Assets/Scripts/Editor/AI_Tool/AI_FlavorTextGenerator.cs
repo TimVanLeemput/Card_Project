@@ -1,9 +1,7 @@
 using OpenAI_API.Chat;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class AI_FlavorTextGenerator
@@ -129,7 +127,6 @@ public class AI_FlavorTextGenerator
         _chat.Model = conversation.Model;
         ChatRequest _chatRequest = new ChatRequest();
         _chatRequest.Temperature = temperature;
-        //float _tempTemp = (float)_chatRequest.Temperature.Value; // to delete
         Debug.Log($"Chat generating answer with temperature of {(float)_chatRequest.Temperature.Value}");
 
         // Replace the card name, type, resource type and flavor text type with variables

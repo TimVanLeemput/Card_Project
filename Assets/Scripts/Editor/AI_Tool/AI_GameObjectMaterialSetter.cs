@@ -11,7 +11,6 @@ public class AI_GameObjectMaterialSetter
     {
         onMaterialSaved += SetCardInfoMaterial;
     }
-
     public static void SaveGameObjectMaterial(Texture2D _texture, string _texturePath, string _matPath)
     {
         AssetDatabase.CreateAsset(_texture, _texturePath);   // Creates 2DTextureFile

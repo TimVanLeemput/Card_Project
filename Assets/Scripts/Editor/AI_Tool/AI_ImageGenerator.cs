@@ -20,8 +20,7 @@ public class AI_ImageGenerator
 
     public static async void CreateImageURL()
     {
-        // TO DO
-        // Auth check to double check or remove entirely
+     
         #region Auth check and tab movement
         //if (openAIAPI == null)
         //{
