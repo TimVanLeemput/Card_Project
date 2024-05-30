@@ -1,3 +1,4 @@
+using NUnit.Framework.Constraints;
 using OpenAI_API.Models;
 using System.Collections.Generic;
 using UnityEditor;
@@ -9,34 +10,30 @@ using UnityEngine;
 public class AI_ModelSelector_EditorWindow : EditorWindow
 {
     static int currentModelIndex = 0;
+    static List<string> allModelsID = null;
+
+    public static void Init()
+    {
+        //if (allModelsID.Count > 0) return;
+        allModelsID = AI_ModelSelector.GetAllChatModelsIDs();
+    }
 
     public static void SelectChatModelField()
     {
-        if (AI_ModelSelector_Editor.allChatModels == null)
-        {
-            AI_ModelSelector_Editor.SetAllChatModels();
-        }
         GUIHelpers.SpaceV(5);
         GUILayout.BeginVertical();
-        List<Model> _allModels = AI_ModelSelector_Editor.allChatModels;
-
-        int _size = _allModels.Count;
         EditorGUI.BeginChangeCheck();
-        List<string> _allModelsID = new List<string>();
 
-        foreach (Model _model in _allModels)
+        if (AI_ModelSelector.allChatModels.Count > 0)
         {
-            _allModelsID.Add(_model.ModelID);
-        }
-        if (_allModels.Count > 0)
-        {
+          
             currentModelIndex = EditorGUILayout.Popup("Select AI Model",
-                currentModelIndex, _allModelsID.ToArray());
+                currentModelIndex, allModelsID.ToArray(),GUILayout.Width(280));
 
             if (EditorGUI.EndChangeCheck())
             {
-                Model _selectedModel = _allModels[currentModelIndex];
-                AI_ModelSelector_Editor.SetChatModel(_selectedModel);
+                Model _selectedModel = AI_ModelSelector.allChatModels[currentModelIndex];
+                AI_ModelSelector.SetChatModel(_selectedModel);
             }
         }
 
@@ -44,3 +41,4 @@ public class AI_ModelSelector_EditorWindow : EditorWindow
         GUIHelpers.SpaceV(5);
     }
 }
+

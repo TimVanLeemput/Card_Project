@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-public static class AI_ModelSelector_Editor
+public static class AI_ModelSelector
 {
 
     public static List<Model> allChatModels = null;
@@ -12,20 +12,26 @@ public static class AI_ModelSelector_Editor
     public static void Init()
     {
         SetTool();
-        ChatModelSelection();
+        PopulateAllChatModels();
     }
     
     public static void SetTool()
     {
-        if (tool != null) return;
+        //if (tool != null) return;
         tool = AI_Card_Tool_EditorWindow.GetTool();
     }
 
-    public static void SetAllChatModels()
-    {
-        allChatModels = new List<Model>();
-    }
 
+    public static List<string> GetAllChatModelsIDs()
+    {
+        if (allChatModels.Count <= 0) return null;
+        List<string> _allModelsID = new List<string>();
+        foreach (Model _model in allChatModels)
+        {
+            _allModelsID.Add(_model.ModelID);
+        }
+        return _allModelsID;
+    }
     /// <summary>
     /// Call this method to define the Chat Model of the type Conversation
     /// </summary>
@@ -33,21 +39,20 @@ public static class AI_ModelSelector_Editor
     /// <param name="_selectedModel"></param>
     public static void SetChatModel(Model _model)
     {
-        if (tool == null || _model == null)
+        if (_model == null)
         {
-            Debug.Log($"FAILED TO FIND TOOL OR MODEL in {typeof(AI_ModelSelector_Editor)}");
+            Debug.Log($"FAILED TO FIND MODEL in {typeof(AI_ModelSelector)}");
             return;
         }
         AI_FlavorTextGenerator.Conversation.Model = _model;
-
-        Debug.Log($"Selected model => {_model.ModelID})");
-
     }
-    public static void ChatModelSelection()
+    public static void PopulateAllChatModels()
     {
-        if (tool == null) return;
         List<Model> _allModels = Model.PopulateModels();
 
         allChatModels = _allModels;
+
     }
+
+
 }

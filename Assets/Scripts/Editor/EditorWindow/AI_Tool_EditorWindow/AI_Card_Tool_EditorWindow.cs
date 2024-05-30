@@ -54,11 +54,12 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         Init();
         AI_Authentication_EditorWindow.InitAIAuthEvents();
+        AI_ModelSelector_EditorWindow.Init();
     }
     private void Init()
     {
         InitEvents();
-        AI_ModelSelector_Editor.Init();
+        AI_ModelSelector.Init();
         AI_FlavorTextGenerator.Init();
         AI_GameObjectMaterialSetter.Init();
 

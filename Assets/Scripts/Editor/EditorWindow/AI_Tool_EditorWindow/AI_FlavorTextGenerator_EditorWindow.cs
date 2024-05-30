@@ -40,7 +40,6 @@ public class AI_FlavorTextGenerator_EditorWindow : EditorWindow
         GUILayout.BeginHorizontal();
 
         bool _generateTextButton = GUILayout.Button("Generate text");
-        AI_ModelSelector_Editor.ChatModelSelection();
 
         Conversation _conv = AI_FlavorTextGenerator.Conversation;
         if (_conv == null) StartChat();
