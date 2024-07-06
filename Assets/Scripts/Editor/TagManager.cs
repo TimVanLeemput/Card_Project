@@ -296,7 +296,7 @@ public class TagManager : EditorWindow
     private void AllGameObjectsWithTagListField()
     {
         if (!displayGameObjectsWithSpecificTagField) return;
-   
+
         EditorGUILayout.BeginVertical(GUI.skin.box);
         scrollPositionGameObjectsWithFilteredTag = EditorGUILayout.BeginScrollView(scrollPositionGameObjectsWithFilteredTag);
 
@@ -408,9 +408,12 @@ public class TagManager : EditorWindow
     {
         if (Selection.activeGameObject != null)
         {
-            Undo.RecordObject(Selection.activeGameObject, "Change Tag");
-            Selection.activeGameObject.tag = tag;
-            EditorUtility.SetDirty(Selection.activeGameObject);
+            foreach (GameObject go in Selection.objects)
+            {
+                Undo.RecordObject(go, "Change Tag");
+                go.tag = tag;
+                EditorUtility.SetDirty(go);
+            }
         }
         else
         {
