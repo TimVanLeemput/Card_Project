@@ -2,32 +2,13 @@ using OpenAI_API;
 using UnityEditor;
 using UnityEngine;
 
-
-
 public class AI_Card_Tool_EditorWindow : EditorWindow
 {
     [SerializeField] public static OpenAIAPI openAIAPI = null;
-    static AI_Card_Tool_EditorWindow  toolInstance = null;
-    #region Booleans
-    #endregion
+    static AI_Card_Tool_EditorWindow toolInstance = null;
 
-
-    #region Events
-  
-    #endregion
-
-    #region EditorWindow_UI
-    public string manualURL = "";
-
-    //Tabs
     public static int tabs = 3;
     string[] tabSelection = new string[] { "Image Generation", "Credentials", "Flavor Text Generation" };
-    #endregion
-
-
-
-    #region AI_Generated
-    #endregion
 
     #region Accessors
     public static int Tabs
@@ -40,7 +21,6 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
         get { return openAIAPI; }
         set { openAIAPI = value; }
     }
-
     #endregion
 
     [MenuItem("Tools/AI Helper")]
@@ -115,6 +95,5 @@ public class AI_Card_Tool_EditorWindow : EditorWindow
     {
         AI_Authentication.AuthenticateCall();
         AI_FlavorTextGenerator_EditorWindow.FlavorTextGenerationField();
-
     }
 }
