@@ -188,6 +188,7 @@ public class TagManager : EditorWindow
         UntaggedButtonField();
         GUILayout.EndHorizontal();
     }
+
     private void TagsScrollViewField()
     {
         EditorGUILayout.BeginVertical(GUI.skin.box);
@@ -363,7 +364,11 @@ public class TagManager : EditorWindow
 
         GUILayout.EndHorizontal();
     }
-
+    /// <summary>
+    /// This method creates a new tag and
+    /// adds it to the AssetDataBase
+    /// </summary>
+    /// <param name="tag"></param>
     private void AddTag(string tag)
     {
         if (!TagExists(tag))
@@ -382,14 +387,23 @@ public class TagManager : EditorWindow
             Debug.LogWarning("Tag already exists.");
         }
     }
-
+    /// <summary>
+    /// This method will copy the string of
+    /// the tag reference you are currently clicking
+    /// in the EditorWindow
+    /// </summary>
+    /// <param name="text"></param>
     private void CopyToClipboard(string text)
     {
         TextEditor te = new TextEditor { text = text };
         te.SelectAll();
         te.Copy();
     }
-
+    /// <summary>
+    /// This method sets the tag of the 
+    /// currently selected GameObject
+    /// </summary>
+    /// <param name="tag"> Name of the new tag</param>
     private void ChangeTagOfSelectedObject(string tag)
     {
         if (Selection.activeGameObject != null)
@@ -404,7 +418,11 @@ public class TagManager : EditorWindow
         }
     }
 
-
+    /// <summary>
+    /// This method checks if a tag already exists in this Unity Project
+    /// </summary>
+    /// <param name="tag"></param>
+    /// <returns></returns>
     private bool TagExists(string tag)
     {
         return UnityEditorInternal.InternalEditorUtility.tags.Contains(tag);
