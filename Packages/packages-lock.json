@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.domybest.mybox": {
-      "version": "file:MyBox",
+      "version": "file:C:/Users/timmo/Downloads/MyBox-master/MyBox-master",
       "depth": 0,
-      "source": "embedded",
+      "source": "local",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       }

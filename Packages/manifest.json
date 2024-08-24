@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.domybest.mybox": "file:C:/Users/timmo/Downloads/MyBox-master/MyBox-master",
     "com.unity.cinemachine": "2.9.7",
     "com.unity.collab-proxy": "2.2.0",
     "com.unity.ide.rider": "3.0.26",
