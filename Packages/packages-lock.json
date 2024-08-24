@@ -1,5 +1,13 @@
 {
   "dependencies": {
+    "com.domybest.mybox": {
+      "version": "file:MyBox",
+      "depth": 0,
+      "source": "embedded",
+      "dependencies": {
+        "com.unity.ugui": "1.0.0"
+      }
+    },
     "com.unity.burst": {
       "version": "1.8.9",
       "depth": 1,

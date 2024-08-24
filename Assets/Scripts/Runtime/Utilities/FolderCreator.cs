@@ -3,8 +3,17 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public static class FolderCreator 
+public  class FolderCreator 
 {
+    private void StringCompare()
+    { 
+        string _myString = string.Empty;
+        string _myString2 = string.Empty;
+        _myString.CompareTo(_myString2);
+
+        string.CompareOrdinal(_myString, _myString2);
+        string.Compare(_myString, _myString2, System.StringComparison.OrdinalIgnoreCase);
+    }
 #if UNITY_EDITOR
 
     public static string CreateFolder(params string[] _folderNames)

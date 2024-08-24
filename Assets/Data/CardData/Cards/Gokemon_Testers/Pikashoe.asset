@@ -12,12 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
   m_Name: Pikashoe
   m_EditorClassIdentifier: 
-  cardResourceType: 0
+  cardResourceType: 6
   cardTitle: Pikashoe
   cardFlavorText: '"Tiny but mighty, the Pikashoe scampers through the grass with
     unmatched agility."'
   allCardSkills: 05000000
   cardArtSprite: {fileID: 0}
+  cardArtMaterial: {fileID: 0}
   cardAttack: 2
   cardHealth: 2
   cardResourceCost: 2

@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 23fe74e71ff752a4499ab3ba8d8b4bbd, type: 3}
-  m_Name: CharmanderLookalike
+  m_Name: CharmanderLookAlike
   m_EditorClassIdentifier: 
   cardResourceType: 1
-  cardTitle: CharmanderLookalike
+  cardTitle: CharmanderLookAlike
   cardFlavorText: 
   allCardSkills: 02000000
   cardArtSprite: {fileID: 0}
@@ -22,3 +22,5 @@ MonoBehaviour:
   cardHealth: 1
   cardResourceCost: 1
   cardType: 1
+  canDisplayResourceTypeColorIndicator: 0
+  resourceTypeColorIndicator: {r: 1, g: 1, b: 1, a: 1}

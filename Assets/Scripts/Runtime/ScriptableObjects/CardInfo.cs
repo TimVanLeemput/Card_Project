@@ -1,18 +1,20 @@
+using MyBox;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
+[Flags]
 public enum ResourceType
 {
-    None,
-    Fire,
-    Air,
-    Earth,
-    Water,
-    Darkness,
-    Light
+    None = 0,
+    Fire = 1,
+    Air = 2,
+    Earth = 4,
+    Water = 8,
+    Darkness = 16,
+    Light = 32
 }
 
 public enum CardType
@@ -24,6 +26,7 @@ public enum CardType
     Resource
 }
 [CreateAssetMenu(menuName = "New Card")]
+[Serializable]
 public class CardInfo : ScriptableObject
 {
     //Strings
@@ -50,7 +53,9 @@ public class CardInfo : ScriptableObject
     [SerializeField] private int cardResourceCost = 0;
     [SerializeField] private CardType cardType;
 
-
+    [Header("Optional")]
+    [SerializeField][OverrideLabel("Display Resource Color")] private bool canDisplayResourceTypeColorIndicator = false;
+    [SerializeField][ConditionalField(nameof(canDisplayResourceTypeColorIndicator))] private Color resourceTypeColorIndicator = Color.white;
 
     //Accessors
 #if UNITY_EDITOR
@@ -122,14 +127,18 @@ public class CardInfo : ScriptableObject
         get { return cardType; }
         set { cardType = value; }
     }
-#if UNITY_EDITOR
-    [ContextMenu("Generate Card Name")]
-    public void GenerateCardName()
-    {
-        cardTitle = System.IO.Path.GetFileNameWithoutExtension(UnityEditor.AssetDatabase.GetAssetPath(this));
-    }
-#endif
 
+    public Color ResourceTypeColorIndicator
+    {
+        get { return resourceTypeColorIndicator; }
+        set { resourceTypeColorIndicator = value; }
+    }
+
+    public bool CanDisplayResourceTypeColorIndicator
+    {
+        get { return canDisplayResourceTypeColorIndicator; }
+        set { canDisplayResourceTypeColorIndicator = value; }
+    }
 
     public void SetCardFlavorText(string _flavorText)
     {
