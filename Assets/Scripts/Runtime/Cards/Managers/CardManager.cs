@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using UnityEditor;
 #endif
 using UnityEngine;
+using UnityEngine.Rendering;
 [ExecuteAlways]
 public class CardManager : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class CardManager : MonoBehaviour
 #if UNITY_EDITOR
 	private void OnDrawGizmos()
 	{
+		Handles.zTest = CompareFunction.LessEqual;
 		foreach (CardCreator _card in allCards)
 		{
 			Gizmos.color = Color.cyan;

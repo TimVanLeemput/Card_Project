@@ -1,9 +1,9 @@
 {
   "dependencies": {
     "com.domybest.mybox": {
-      "version": "file:C:/Users/timmo/Downloads/MyBox-master/MyBox-master",
+      "version": "file:MyBox",
       "depth": 0,
-      "source": "local",
+      "source": "embedded",
       "dependencies": {
         "com.unity.ugui": "1.0.0"
       }
@@ -96,11 +96,11 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.profiling.core": "1.0.0-pre.1",
-        "com.unity.nuget.newtonsoft-json": "2.0.0",
-        "com.unity.nuget.mono-cecil": "1.10.1",
         "com.unity.collections": "1.1.0",
-        "com.unity.modules.uielements": "1.0.0"
+        "com.unity.profiling.core": "1.0.0-pre.1",
+        "com.unity.nuget.mono-cecil": "1.10.1",
+        "com.unity.modules.uielements": "1.0.0",
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
       },
       "url": "https://packages.unity.com"
     },
@@ -109,8 +109,8 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.nuget.mono-cecil": "1.10.1",
-        "com.unity.transport": "1.4.0"
+        "com.unity.transport": "1.4.0",
+        "com.unity.nuget.mono-cecil": "1.10.1"
       },
       "url": "https://packages.unity.com"
     },
@@ -205,9 +205,9 @@
       "depth": 0,
       "source": "registry",
       "dependencies": {
+        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.director": "1.0.0",
         "com.unity.modules.animation": "1.0.0",
-        "com.unity.modules.audio": "1.0.0",
         "com.unity.modules.particlesystem": "1.0.0"
       },
       "url": "https://packages.unity.com"
@@ -217,8 +217,8 @@
       "depth": 1,
       "source": "registry",
       "dependencies": {
-        "com.unity.collections": "1.2.4",
         "com.unity.burst": "1.6.6",
+        "com.unity.collections": "1.2.4",
         "com.unity.mathematics": "1.2.6"
       },
       "url": "https://packages.unity.com"

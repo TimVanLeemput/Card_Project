@@ -29,13 +29,31 @@ public class CardCreator : MonoBehaviour
 	public event Action<bool> onInitWithBool = null;
 
 	public CardInfo CardInfo => cardInfo;
-
+	MaterialPropertyBlock mpb;
+	public Color cardColorProperty = Color.white;
+	public MaterialPropertyBlock Mpb 
+	{
+		get {
+			if(mpb == null)
+				mpb = new MaterialPropertyBlock();
+			return mpb;}
+		set {mpb = value;}
+	}
 	private void OnEnable()
 	{
 		CardManager.allCards.Add(this);
 		// Shader _shader = Shader.Find("Universal Render Pipeline/Lit");
 		// Material _mat = new Material(_shader);
-		// gameObject.GetComponentInChildren<MeshRenderer>().sharedMaterial = _mat;
+		ApplyColor();
+	}
+	void ApplyColor()
+	{
+		Mpb.SetColor(Shader.PropertyToID("_BaseColor"),cardColorProperty);
+		MeshRenderer _renderer = gameObject.GetComponentInChildren<MeshRenderer>();
+		_renderer.SetPropertyBlock(Mpb);
+	}
+	private void OnValidate() {
+		ApplyColor();
 	}
 	private void OnDisable()
 	{
